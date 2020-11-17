@@ -27,3 +27,43 @@
     border-radius: 4px;
     cursor: pointer;
 }
+
+.tbox {
+    width: 300px;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, 0)
+}
+
+.tb1 {
+    font-size: 16px;
+}
+
+.tb2 {
+    color: #5473FF;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.tb3 {
+    margin-top: 30px;
+}
+
+.ttb3 span {
+    width: 80px;
+    display: inline-block;
+}
+
+.moneyNow {
+    background-color: #5473FF;
+    color: #fff;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    width: 230px;
+    margin-top: 30px;
+    border-radius: 4px;
+}
