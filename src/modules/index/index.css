@@ -1,0 +1,116 @@
+.topTitle {
+    width: 100%;
+    height: 75px;
+    background: '#fff!important';
+    border-bottom: '1px solid #ededed'
+}
+
+.topTitle .s1 {
+    display: inline-block;
+    height: 28px;
+    border-left: 10px solid #5473FF;
+    color: #5A5B65;
+    font-size: 27px;
+    line-height: 28px;
+    margin-top: 24px;
+    margin-left: 59px;
+    padding-left: 20px;
+}
+
+.topTitle .s2 {
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 608px;
+}
+
+.topTitle .s2 img {
+    width: 14px;
+    margin-left: 10px;
+    margin-top: -4px;
+}
+
+.topTitle .s2 .us {
+    color: #5473FF;
+    margin-left: 13px;
+}
+
+.topTitle .s2 .loginout {
+    color: #5473FF;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.username {
+    color: #5473FF;
+    font-size: 20px;
+    font-weight: bold;
+    width: 200px;
+    height: 106px;
+    text-align: center;
+    line-height: 106px;
+    border-bottom: 1px solid #ededed;
+    border-right: 1px solid #ededed;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #5473FF!important;
+}
+
+.ant-menu-inline .ant-menu-item::after {
+    border-right: 0px!important;
+}
+
+.ant-menu-item-selected>a {
+    color: #fff!important;
+}
+
+.ant-menu-item {
+    padding-left: 0px!important;
+}
+
+.ant-menu-inline .ant-menu-item {
+    margin-top: 0px!important;
+}
+
+.ant-menu-item>a {
+    text-align: center;
+}
+
+.menuBox {
+    height: 230px;
+    overflow: hidden;
+}
+
+.ercode {
+    width: 180px;
+    height: 140px;
+    margin-left: 30px;
+}
+
+.ercode .ertitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(84, 115, 255, 1);
+    margin-bottom: 20px;
+    padding-left: 40px;
+}
+
+.ercode .erimg {
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 10px 0px rgba(38, 52, 115, 0.51);
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.ant-layout-sider {
+    height: 100vh;
+    border-right: 1px solid #ededed;
+}
+.ant-menu-item{
+    border-bottom:1px solid #ededed!important;
+    margin-bottom:0px!important;
+}

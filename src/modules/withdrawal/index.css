@@ -1,0 +1,29 @@
+.bankbox {
+    width: 600px;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 0);
+}
+
+.bankbox .bank {
+    height: 50px;
+}
+
+.bankbox .bank .title {
+    display: inline-block;
+    width: 150px;
+}
+
+.addSubmite {
+    background-color: #5473FF;
+    color: #fff;
+    width: 70%;
+    margin-left: 15%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+}

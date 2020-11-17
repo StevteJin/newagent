@@ -1,0 +1,24 @@
+const menu = [{
+    path: '/index',
+    key: 'index',
+    name: '主页',
+}, {
+    path: '/plan',
+    key: 'plan',
+    name: '资金方案'
+}, {
+    path: '/topup',
+    key: 'topup',
+    name: '充值'
+}, {
+    path: '/withdrawal',
+    key: 'withdrawal',
+    name: '提现'
+}, {
+    path: '/moneyWater',
+    key: 'moneyWater',
+    name: '资金流水',
+    filter: [],
+    needTime: { key: 'create_time', value: 'RANGE' }
+}];
+export const MENU = menu;

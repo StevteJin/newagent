@@ -1,0 +1,150 @@
+.usercenter {}
+
+.usercenter .topuser {
+    width: 1188px;
+    height: 109px;
+    border: 1px solid #D6D6D6;
+    margin-left: 164px;
+    margin-top: 179px;
+    margin-bottom: 100px;
+    overflow: hidden;
+}
+
+.usercenter .topuser .u1 {
+    float: left;
+    margin-right: 120px;
+    overflow: hidden;
+}
+
+.usercenter .topuser .r3 {
+    float: right;
+    margin-right: 80px;
+}
+
+.usercenter .topuser .r3 span {
+    float: left;
+    margin-left: 40px;
+    height: 109px;
+    line-height: 109px;
+}
+
+.usercenter .topuser .r3 .rr1 {
+    color: #5473FF;
+    cursor: pointer;
+}
+
+.usercenter .topuser .r3 .rr2 {
+    color: #212C32;
+}
+
+.usercenter .topuser .r3 .rr3 {
+    color: #5473FF;
+    cursor: pointer;
+}
+
+.usercenter .topuser .img {
+    width: 40px;
+    margin-top: 33px;
+    margin-left: 49px;
+    margin-right: 27px;
+}
+
+.usercenter .topuser .u1 .t1 {
+    color: #212C32;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 32px;
+}
+
+.usercenter .topuser .u1 .t2 {
+    color: rgb(151, 151, 151);
+    font-size: 13px;
+    margin-top: -6px;
+}
+
+.usercenter .topuser .u1 .s1 {
+    color: #212C32;
+    font-size: 16px;
+    display: inline-block;
+    height: 109px;
+    line-height: 109px;
+}
+
+.usercenter .topuser .u1 .s2 {
+    color: #5473FF;
+    font-size: 25px;
+    display: inline-block;
+    height: 109px;
+    line-height: 109px;
+    margin-left: 30px;
+}
+
+.usercenter .topuser .level {
+    width: 68px;
+    height: 18px;
+    background-color: #F05330;
+    text-align: center;
+    color: #fff;
+    margin-top: 30px;
+    margin-left: 80px;
+    line-height: 18px;
+}
+
+.usercenter .topuser .level1 {
+    width: 68px;
+    height: 18px;
+    background-color: #5473FF;
+    text-align: center;
+    color: #fff;
+    margin-left: 80px;
+    margin-top: 4px;
+    line-height: 18px;
+}
+
+.usercenter .bottomuser {
+    margin-left: 165px;
+}
+
+.usercenter .bottomuser .userbox {
+    width: 384px;
+    height: 176px;
+    margin-bottom: 20px;
+    border: 1px solid #EDEDED;
+    float: left;
+    margin-right: 18px;
+}
+
+.usercenter .bottomuser .userbox:last-child {
+    margin-right: 0px;
+}
+
+.usercenter .bottomuser .userbox .b1 {
+    color: #212C32;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.usercenter .bottomuser .userbox .b2 {
+    width: 157px;
+    height: 19px;
+    color: #fff;
+    background-color: #5473FF;
+    font-size: 12px;
+    text-align: center;
+    margin-left: 113.5px;
+    margin-top: 18px;
+    margin-bottom: 23px;
+}
+
+.usercenter .bottomuser .userbox .b3 {
+    color: #404040;
+    font-size: 20px;
+    text-align: center;
+    width: 278px;
+    margin-left: 53px;
+    line-height: 20px;
+    border-bottom: 1px solid #EDEDED;
+    padding-bottom: 20px;
+}
