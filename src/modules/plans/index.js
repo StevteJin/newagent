@@ -23,11 +23,17 @@ class UserCenter extends React.Component {
             manageFee: "",//管理费
             separateFeeRate: "",//分成比例
             jjje: "",//警戒线
-            zsje: ""//平仓线
+            zsje: "",//平仓线
+            allottedScale: ""
         };
     }
     //请求表格数据的操作
     componentDidMount = () => {
+        this.getInfo();
+        this.getfinanceScheme();
+    }
+
+    getfinanceScheme() {
         let url = '/tn/tntg/financeScheme', method = 'post', options = null;
         let that = this;
         httpAxios(url, method, false, options).then(res => {
@@ -40,12 +46,20 @@ class UserCenter extends React.Component {
         });
     }
 
-    // getManageFee() {
-    //     let url = '/tn/tntg/theManageFee', method = 'post', options = null;
-    //     httpAxios(url, method, false, options).then(res => {
+    getInfo() {
+        let url = '/tn/tntg/capital', method = 'post', options = null;
+        httpAxios(url, method, false, options).then(res => {
+            this.setState({
+                allottedScale: res.allottedScale,
+                type: res.financePeriod,
+                financeRatio: res.financeRatio,
+                makeFeeRate: 0,
+                financeFee: 0,
+                totalScale: res.totalScale
+            })
+        })
+    }
 
-    //     });
-    // }
     deposit() {
         let url = '/tn/tntg/capital', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
@@ -66,13 +80,69 @@ class UserCenter extends React.Component {
                 if (resd.success == true) {
                     this.props.history.push('/index');
                 } else {
-                    alert(res.resultInfo);
                 }
             });
         });
-
-
     }
+
+    add(type) {
+        let expandScale;
+        if (this.state.allottedScale === '0') {
+            expandScale = true;
+        } else {
+            expandScale = false;
+        }
+        if (type) { // 增配
+            this.fee = parseInt(this.state.totalScale, 0) - parseInt(this.state.allottedScale, 0);
+            // if (this.fee < 0) {
+            //     this.fee = Math.abs(this.fee);
+            //     this.confirm = true;
+            //     this.msgText = `预补足的费用为${this.fee}元，是否在本次增配中自动补足`;
+            // } else {
+            //     this.isAddFn();
+            // }
+            let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
+                newStrategy: this.state.allottedScale !== '0' ? false : true,
+                financeRatio: this.state.financeRatio,
+                financePeriod: this.state.type,
+                amount: this.state.amount,
+                expandScale: expandScale
+            };;
+            httpAxios(urld, methodd, false, optionsd).then(resd => {
+                if (resd.success == true) {
+                    this.props.history.push('/index');
+                } else {
+                    
+                }
+            });
+        } else { // 非增配
+            // if (this.money <= 0 || this.data.Decimal(this.money) > 2) {
+            //     layer.open({
+            //         content: '非增配入金金额必须大于0,且不能超过两位小数'
+            //         , skin: 'msg'
+            //         , time: 2
+            //     });
+            // } else {
+            //     this.msgText = '是否确定入金';
+            //     this.confirm = true;
+            // }
+            let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
+                newStrategy: this.state.allottedScale !== '0' ? false : true,
+                financeRatio: this.state.financeRatio,
+                financePeriod: this.state.type,
+                amount: this.state.amount,
+                expandScale: expandScale
+            };;
+            httpAxios(urld, methodd, false, optionsd).then(resd => {
+                if (resd.success == true) {
+                    this.props.history.push('/index');
+                } else {
+                   
+                }
+            });
+        }
+    }
+
     plans(type) {
         this.setState({
             type: type
@@ -127,40 +197,61 @@ class UserCenter extends React.Component {
 
     }
     render() {
-        const { type, financeRatio, amount, day, month, single, makeFeeRate, financeFee, manageFee, separateFeeRate, jjje, zsje } = this.state;
+        const { type, financeRatio, amount, day, month, single, makeFeeRate, financeFee, manageFee, separateFeeRate, jjje, zsje, allottedScale } = this.state;
         let plandom;
         if (type == 'day') {
-            plandom = day.map(item => (
-                <div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'day')}>
-                    <div className="m1">
-                        <span className="mm1">{item.financeRatio}</span>倍
-                    </div>
-                    <div className="m2">
-                        <span className="mm2">{item.financeRatio * amount}元</span>
-                    </div>
+            plandom = day.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'day')}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+            </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
                 </div>
+            </div>) : (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+                    </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
+                </div>
+            </div>)
+
             ))
         } else if (type == 'month') {
-            plandom = month.map(item => (
-                <div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'month')}>
-                    <div className="m1">
-                        <span className="mm1">{item.financeRatio}</span>倍
-                    </div>
-                    <div className="m2">
-                        <span className="mm2">{item.financeRatio * amount}元</span>
-                    </div>
+            plandom = month.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'month')}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+            </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
                 </div>
+            </div>) : (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+                    </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
+                </div>
+            </div>)
+
             ))
         } else if (type == 'single') {
-            plandom = single.map(item => (
-                <div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'single')}>
-                    <div className="m1">
-                        <span className="mm1">{item.financeRatio}</span>倍
-                    </div>
-                    <div className="m2">
-                        <span className="mm2">{item.financeRatio * amount}元</span>
-                    </div>
+            plandom = single.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'single')}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+            </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
                 </div>
+            </div>) : (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+                    </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
+                </div>
+            </div>)
+
             ))
         }
         return (
@@ -170,18 +261,30 @@ class UserCenter extends React.Component {
              */
             <div>
                 <div className="planmenu">
-                    <span onClick={() => this.plans('day')}>
+                    {allottedScale == 0 ? (<div><span onClick={() => this.plans('day')}>
                         <div className={this.state.type === 'day' ? 'active' : ''} ></div>
                         <span className="a">日方案</span>
                     </span>
-                    <span onClick={() => this.plans('month')}>
-                        <div className={this.state.type === 'month' ? 'active1' : ''}></div>
-                        <span className="a1">月方案</span>
-                    </span>
-                    <span onClick={() => this.plans('single')}>
-                        <div className={this.state.type === 'single' ? 'active2' : ''}></div>
-                        <span className="a2">单票方案</span>
-                    </span>
+                        <span onClick={() => this.plans('month')}>
+                            <div className={this.state.type === 'month' ? 'active1' : ''}></div>
+                            <span className="a1">月方案</span>
+                        </span>
+                        <span onClick={() => this.plans('single')}>
+                            <div className={this.state.type === 'single' ? 'active2' : ''}></div>
+                            <span className="a2">单票方案</span>
+                        </span></div>) : (<div><span>
+                            <div className={this.state.type === 'day' ? 'active' : ''} ></div>
+                            <span className="a">日方案</span>
+                        </span>
+                            <span>
+                                <div className={this.state.type === 'month' ? 'active1' : ''}></div>
+                                <span className="a1">月方案</span>
+                            </span>
+                            <span>
+                                <div className={this.state.type === 'single' ? 'active2' : ''}></div>
+                                <span className="a2">单票方案</span>
+                            </span></div>)}
+
                 </div>
                 <div className="titlebox">
                     <div className="tbox">
@@ -197,42 +300,44 @@ class UserCenter extends React.Component {
                     <div className="tbox">
                         <div className="toptitle3">3.方案详情</div>
                         <div className="strg">
-                            <div>
+                            {allottedScale == 0 ? (<div>
                                 <span className="sleft">操盘资金</span>
                                 <span className="sright">{financeRatio * amount}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">保证金</span>
+                            </div>) : ""}
+                            <div>{allottedScale == 0 ? (<span className="sleft">保证金</span>) : (<span className="sleft">新增保证金</span>)}
                                 <span className="sright">{amount}</span>
                             </div>
                             <div>
                                 <span className="sleft">建仓费率</span>
                                 <span className="sright">{makeFeeRate}</span>
                             </div>
-                            <div>
+                            {allottedScale == 0 ? (<div><div>
                                 <span className="sleft">管理费率</span>
                                 <span className="sright">{financeFee}</span>
                             </div>
-                            <div>
-                                <span className="sleft">管理费</span>
-                                <span className="sright">{manageFee}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">分成比例</span>
-                                <span className="sright">{separateFeeRate}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">警戒线比例</span>
-                                <span className="sright">{jjje}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">平仓线比例</span>
-                                <span className="sright">{zsje}</span>
-                            </div>
+                                <div>
+                                    <span className="sleft">管理费</span>
+                                    <span className="sright">{manageFee}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">分成比例</span>
+                                    <span className="sright">{separateFeeRate}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">警戒线比例</span>
+                                    <span className="sright">{jjje}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">平仓线比例</span>
+                                    <span className="sright">{zsje}</span>
+                                </div>
+                            </div>) : ""}
+
                         </div>
                     </div>
                     <div className="tbox">
-                        <div className="apply" onClick={() => this.deposit()}>立即申请</div>
+                        {allottedScale == 0 ? (<div className="apply" onClick={() => this.deposit()}>立即申请</div>) : (<div className="apply1"><span className="applya" onClick={() => this.add('true')}>加配</span>
+                            <span className="applyb" onClick={() => this.add('false')}>补仓</span></div>)}
                     </div>
                 </div>
             </div>
