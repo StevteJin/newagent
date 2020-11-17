@@ -18,26 +18,33 @@
 .addSubmite {
     background-color: #5473FF;
     color: #fff;
-    width: 70%;
-    margin-left: 15%;
+    width: 400px;
+    margin-left: 180px;
     height: 40px;
     line-height: 40px;
     font-size: 14px;
     text-align: center;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 100px;
 }
 
 .tbox {
-    width: 300px;
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, 0)
+    margin-left: 148px;
+    margin-top: 100px;
 }
 
-.tb1 {
-    font-size: 16px;
+.tb1 {}
+
+.tb1 .tt1 {
+    color: #5A5B65;
+    font-size: 14px;
+}
+
+.tb1 .tt2 {
+    color: #5A5B65;
+    font-size: 33px;
+    font-weight: bold;
 }
 
 .tb2 {
@@ -51,19 +58,20 @@
     margin-top: 30px;
 }
 
-.ttb3 span {
-    width: 80px;
-    display: inline-block;
+.ttb3 .tt1 {
+    color: #5A5B65;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 37px;
 }
 
 .moneyNow {
+    width: 221px;
+    height: 31px;
     background-color: #5473FF;
     color: #fff;
-    height: 40px;
-    line-height: 40px;
+    line-height: 31px;
     text-align: center;
     cursor: pointer;
-    width: 230px;
-    margin-top: 30px;
-    border-radius: 4px;
+    margin-top: 20px;
 }

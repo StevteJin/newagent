@@ -307,14 +307,14 @@ class UserCenter extends React.Component {
                 </div>) : (
                         <div className="tbox">
                             <div className="tb1">
-                                <span>人民币提现:</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span>账户余额：{balance}</span>
+                                <div className="tt1">可提现金额：</div>
+                                <div className="tt2">{balance}</div>
                             </div>
                             <div className="tb2" onClick={() => this.bandCard()}>绑定提现银行卡</div>
                             <div className="tb3">
                                 <div className="ttb3">
-                                    <span>提现金额:</span>
-                                    <Input style={{ width: 150 }} placeholder="请输入提现金额" onChange={e => this.setState({ liftScale: e.target.value })} />
+                                    <div className="tt1">请输入您想要提现的金额:</div>
+                                    <Input style={{ width: 221 }} placeholder="请输入提现金额" onChange={e => this.setState({ liftScale: e.target.value })} />
                                 </div>
                                 <div className="moneyNow" onClick={() => this.moneyNow()}>申请提现</div>
                             </div>

@@ -1,0 +1,39 @@
+.title {
+    width: 210px;
+    height: 16px;
+    font-size: 16px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #5A5B65;
+    margin-left: 149px;
+    margin-top: 106px;
+    margin-bottom: 37px;
+}
+
+.money {
+    margin-left: 149px;
+}
+
+.title2 {
+    width: 79px;
+    height: 16px;
+    font-size: 16px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #5A5B65;
+    margin-left: 149px;
+    margin-top: 51px;
+    margin-bottom: 32px;
+}
+
+.sureMoney {
+    width: 221px;
+    height: 31px;
+    background: #5473FF;
+    color: #fff;
+    line-height: 31px;
+    text-align: center;
+    margin-left: 149px;
+    margin-top: 42px;
+    cursor: pointer;
+}

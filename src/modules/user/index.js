@@ -33,7 +33,12 @@ class UserCenter extends React.Component {
             this.username(this.state.accountName);
         });
     }
-
+    chongzhi() {
+        this.props.history.push('/topup');
+    }
+    tixian() {
+        this.props.history.push('/withdrawal');
+    }
     username(username) {
         //store.dispatch（）是View发出Action的唯一方法。携带一个Action对象作为参数，将它发送出去。
         store.dispatch({
@@ -65,9 +70,9 @@ class UserCenter extends React.Component {
                         <span className='s2'>{totalScale}</span>
                     </div>
                     <div className="r3">
-                        <span className="rr1">充值</span>
+                        <span className="rr1" onClick={() => this.chongzhi()}>充值</span>
                         <span className="rr2">/</span>
-                        <span className="rr3">提现</span>
+                        <span className="rr3" onClick={() => this.tixian()}>提现</span>
                     </div>
                     {/* <div className="u1">
                         <div className="level">上级用户</div>

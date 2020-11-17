@@ -17,6 +17,7 @@ import U from '../user/index';
 import A from '../list/index';
 import plan from '../plans/index';
 import withdrawal from '../withdrawal/index';
+import topup from '../topup/index';
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -88,6 +89,8 @@ class MainContent extends React.Component {
                 item.where = plan
             } else if (item.path == '/withdrawal') {
                 item.where = withdrawal
+            } else if (item.path == '/topup') {
+                item.where = topup
             } else {
                 item.where = A
             }
