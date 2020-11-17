@@ -37,3 +37,36 @@
     margin-top: 42px;
     cursor: pointer;
 }
+
+.zjbank {
+    width: 400px;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 0);
+}
+
+.bigtitle {
+    color: #5A5B65;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.bbox {}
+
+.bbox span {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 40px;
+    height: 40px;
+}
+
+.pay {
+    width: 221px;
+    height: 31px;
+    background: #5473FF;
+    color: #fff;
+    text-align: center;
+    line-height: 31px;
+    cursor: pointer;
+}

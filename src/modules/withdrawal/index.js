@@ -305,7 +305,7 @@ class UserCenter extends React.Component {
                     </div>
                     <div className="addSubmite" onClick={() => this.submite()}>完成</div>
                 </div>) : (
-                        <div className="tbox">
+                        <div className="txbox">
                             <div className="tb1">
                                 <div className="tt1">可提现金额：</div>
                                 <div className="tt2">{balance}</div>
