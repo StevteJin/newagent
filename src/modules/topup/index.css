@@ -40,19 +40,25 @@
 
 .zjbank {
     width: 400px;
-    position: absolute;
-    left: 50%;
-    top: 20%;
-    transform: translate(-50%, 0);
+    margin-top: 106px;
+    margin-left: 149px;
 }
 
 .bigtitle {
     color: #5A5B65;
     font-size: 16px;
     font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .bbox {}
+
+.bbbox {
+    color: #5A5B65;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 20px;
+}
 
 .bbox span {
     display: inline-block;
@@ -69,4 +75,8 @@
     text-align: center;
     line-height: 31px;
     cursor: pointer;
+}
+
+.zhu {
+    margin-bottom: 30px;
 }

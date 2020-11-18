@@ -39,6 +39,9 @@
     -o-transform: skew(50deg);
     -ms-transform: skew(50deg);
     background-color: #fff;
+    position: absolute;
+    left: 160px;
+    top: 1px;
 }
 
 .planmenu .a1 {
@@ -52,6 +55,9 @@
     border-left: 30px solid transparent;
     width: 162px;
     transform: rotateX(180deg);
+    position: absolute;
+    left: 330px;
+    top: 1px;
 }
 
 .planmenu .a2 {
@@ -179,7 +185,7 @@
 }
 
 .apply1 {
-    margin-top:30px;
+    margin-top: 30px;
 }
 
 .apply1 span {
@@ -189,7 +195,7 @@
     line-height: 31px;
     color: #fff;
     text-align: center;
-    margin-right:20px;
+    margin-right: 20px;
     cursor: pointer;
 }
 

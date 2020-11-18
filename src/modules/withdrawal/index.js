@@ -6,8 +6,7 @@ import store from '../../store/store'
 //引入请求接口
 import httpAxios from '../../helpers/request';
 import './index.css';
-import { Input } from 'antd';
-import { Select } from 'antd';
+import { Input, Select, Modal } from 'antd';
 const { Option } = Select;
 
 class UserCenter extends React.Component {
@@ -42,7 +41,9 @@ class UserCenter extends React.Component {
             paging: "",
             bankShow: false,
             balance: "",
-            liftScale: ""
+            liftScale: "",
+            visible: "",
+            msg: ""
         };
     }
     //请求表格数据的操作
@@ -61,14 +62,46 @@ class UserCenter extends React.Component {
         });
     }
     moneyNow() {
-        let options = {
-            liftScale: this.state.liftScale
+        if (this.state.liftScale > 0) {
+            let options = {
+                liftScale: this.state.liftScale
+            }
+            let url = '/tn/tntg/lift', method = 'post';
+            httpAxios(url, method, false, options).then(res => {
+                this.getBalance();
+            }, error => {
+                console.log(error.response)
+                if (error.response.status == 400) {
+                    let data = JSON.stringify(error.response.data.resultInfo);
+                    this.setState({
+                        visible: true,
+                        msg: data
+                    })
+                }
+            });
+        } else {
+            this.setState({
+                visible: true,
+                msg: '"提现金额不可为空"'
+            })
         }
-        let url = '/tn/tntg/lift', method = 'post';
-        httpAxios(url, method, false, options).then(res => {
-            this.getBalance();
-        });
+
     }
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
     bandCard() {
         this.setState({
             bankShow: true
@@ -199,37 +232,59 @@ class UserCenter extends React.Component {
     }
 
     submite() {
-        let options = {
-            accountCode: this.state.accountCode,
-            accountName: this.state.accountName,
-            bankId: this.state.bankId,
-            bankName: this.state.bankName,
-            beginRowNum: this.state.beginRowNum,
-            cardNo: this.state.cardNo,
-            cityId: this.state.cityId,
-            cityName: this.state.cityName,
-            createTime: this.state.createTime,
-            id: this.state.id,
-            identityNo: this.state.identityNo,
-            mobile: this.state.mobile,
-            order: this.state.order,
-            pageNo: this.state.pageNo,
-            pageSize: this.state.pageSize,
-            paging: this.state.paging,
-            provinceId: this.state.provinceId,
-            provinceName: this.state.provinceName,
-            subBranchId: this.state.subBranchId,
-            subBranchName: this.state.subBranchName,
-            userName: this.state.userName,
-        }
-        let url = '/tn/tn/bind/card', method = 'post';
-        httpAxios(url, method, false, options).then(res => {
-            if (res.success == true) {
-                this.setState({
-                    bankShow: false
-                })
+        if (this.state.identityNo.length != 18) {
+            this.setState({
+                visible: true,
+                msg: '"请输入正确的身份证号"'
+            })
+        } else if (this.state.mobile.length != 11) {
+            this.setState({
+                visible: true,
+                msg: '"请输入正确的手机号码"'
+            })
+        } else {
+            let options = {
+                accountCode: this.state.accountCode,
+                accountName: this.state.accountName,
+                bankId: this.state.bankId,
+                bankName: this.state.bankName,
+                beginRowNum: this.state.beginRowNum,
+                cardNo: this.state.cardNo,
+                cityId: this.state.cityId,
+                cityName: this.state.cityName,
+                createTime: this.state.createTime,
+                id: this.state.id,
+                identityNo: this.state.identityNo,
+                mobile: this.state.mobile,
+                order: this.state.order,
+                pageNo: this.state.pageNo,
+                pageSize: this.state.pageSize,
+                paging: this.state.paging,
+                provinceId: this.state.provinceId,
+                provinceName: this.state.provinceName,
+                subBranchId: this.state.subBranchId,
+                subBranchName: this.state.subBranchName,
+                userName: this.state.userName,
             }
-        });
+            let url = '/tn/tn/bind/card', method = 'post';
+            httpAxios(url, method, false, options).then(res => {
+                if (res.success == true) {
+                    this.setState({
+                        bankShow: false
+                    })
+                }
+            }, error => {
+                console.log(error.response)
+                if (error.response.status == 400) {
+                    let data = JSON.stringify(error.response.data.resultInfo);
+                    this.setState({
+                        visible: true,
+                        msg: data
+                    })
+                }
+            });
+        }
+
     }
 
 
@@ -262,6 +317,16 @@ class UserCenter extends React.Component {
 
         return (
             <div>
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <p>{this.state.msg}</p>
+                </Modal>
                 {bankShow == true ? (<div className='bankbox'>
                     <div className="bank">
                         <span className="title">开户银行</span>
@@ -314,7 +379,7 @@ class UserCenter extends React.Component {
                             <div className="tb3">
                                 <div className="ttb3">
                                     <div className="tt1">请输入您想要提现的金额:</div>
-                                    <Input style={{ width: 221 }} placeholder="请输入提现金额" onChange={e => this.setState({ liftScale: e.target.value })} />
+                                    <Input type="number" style={{ width: 221 }} placeholder="请输入提现金额" onChange={e => this.setState({ liftScale: e.target.value })} />
                                 </div>
                                 <div className="moneyNow" onClick={() => this.moneyNow()}>申请提现</div>
                             </div>

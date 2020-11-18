@@ -19,8 +19,10 @@ class login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '100001210',
-            password: '001210',
+            // username: '100001210',
+            // password: '001210',
+            username: '',
+            password: '',
             visible: false,
             msg: '',
             loadingTime: 10,
@@ -44,7 +46,7 @@ class login extends React.Component {
                 localStorage.setItem('token', resultInfo.token);
                 localStorage.setItem('is_agent', resultInfo.is_agent);
                 localStorage.setItem('uri', resultInfo.uri);
-                localStorage.setItem('username',this.state.username);
+                localStorage.setItem('username', this.state.username);
                 var num = 10;
                 let that = this;
                 var t = setInterval(function () {
@@ -61,11 +63,16 @@ class login extends React.Component {
                     }
                 }, 100);
             } else {
+
+            }
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
                 this.setState({
                     visible: true,
-                    msg: '账户名或密码错误'
-                }, () => {
-                });
+                    msg: data
+                })
             }
         });
     }

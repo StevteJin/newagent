@@ -1,9 +1,5 @@
 .bankbox {
     width: 600px;
-    position: absolute;
-    left: 50%;
-    top: 20%;
-    transform: translate(-50%, 0);
 }
 
 .bankbox .bank {
@@ -18,13 +14,12 @@
 .addSubmite {
     background-color: #5473FF;
     color: #fff;
-    width: 400px;
-    margin-left: 180px;
+    width: 450px;
+    margin-left: 150px;
     height: 40px;
     line-height: 40px;
     font-size: 14px;
     text-align: center;
-    border-radius: 4px;
     cursor: pointer;
     margin-top: 100px;
 }

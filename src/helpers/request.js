@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ORIGIN } from '../constants/index'
-
+import React from 'react';
+import { Table, Pagination, Modal, Input, Button, DatePicker, Select, Tooltip, Popover } from 'antd';
 // 添加一个请求拦截器
 axios.interceptors.request.use(config => {
   //如果存在token,请求头里面设置
@@ -21,7 +22,6 @@ axios.interceptors.response.use(response => {
   console.log(error.response)
   if (error.response.status === 400) {
     let data = JSON.stringify(error.response.data.resultInfo);
-    alert(data);
   }
   // ......在做别的统一处理
   return Promise.reject(error);

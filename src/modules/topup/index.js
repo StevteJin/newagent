@@ -65,27 +65,81 @@ class EditableTable extends React.Component {
     };
 
     getCardInfo() {
-        httpAxios('/tn/tntg/payCardInfo', 'post', false, null).then(res => {
-            this.setState({
-                cardInfo: res
-            }, () => {
-                console.log('我是数据', this.state.cardInfo);
+        if (this.state.totalAmount > 0) {
+            httpAxios('/tn/tntg/payCardInfo', 'post', false, null).then(res => {
                 this.setState({
-                    showInfo: true
+                    cardInfo: res
+                }, () => {
+                    console.log('我是数据', this.state.cardInfo);
+                    this.setState({
+                        showInfo: true
+                    })
                 })
+            });
+        } else {
+            this.setState({
+                visible: true,
+                msg: '"金额不可为空"'
             })
-        });
+        }
+
     }
     payNow() {
         let options = {
             totalAmount: this.state.totalAmount
         }
-        httpAxios('/tn/tntg/submitBankTrans/BANK', 'post', false, options).then(res => {
-            if (res.success == true) {
-                alert("充值已提交，请尽快充值，等待后台审核");
-            }
-        });
+        if (this.state.value == 'bank') {
+            httpAxios('/tn/tntg/submitBankTrans/BANK', 'post', false, options).then(res => {
+                if (res.success == true) {
+                    this.setState({
+                        visible: true,
+                        msg: '充值已提交，请尽快充值，等待后台审核'
+                    })
+                }
+            }, error => {
+                console.log(error.response)
+                if (error.response.status == 400) {
+                    let data = JSON.stringify(error.response.data.resultInfo);
+                    this.setState({
+                        visible: true,
+                        msg: data
+                    })
+                }
+            });
+        } else {
+            httpAxios('/tn/tntg/submitBankTrans/ALIPAY', 'post', false, options).then(res => {
+                if (res.success == true) {
+                    this.setState({
+                        visible: true,
+                        msg: '充值已提交，请尽快充值，等待后台审核'
+                    })
+                }
+            }, error => {
+                console.log(error.response)
+                if (error.response.status == 400) {
+                    let data = JSON.stringify(error.response.data.resultInfo);
+                    this.setState({
+                        visible: true,
+                        msg: data
+                    })
+                }
+            });
+        }
+
     }
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
     render() {
         const { resultInfo, value, showInfo, totalAmount, cardInfo } = this.state;
         let infoArray = resultInfo.map(item => {
@@ -104,11 +158,21 @@ class EditableTable extends React.Component {
 
         return (
             <div>
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <p>{this.state.msg}</p>
+                </Modal>
                 {
                     showInfo == false ? (<div>
                         <div>
                             <div className="title">1.请输入您想要充值的金额</div>
-                            <Input className='money' style={{ width: 221 }} placeholder="充值金额" onChange={e => this.setState({ totalAmount: e.target.value })} />
+                            <Input className='money' type="number" style={{ width: 221 }} placeholder="充值金额" onChange={e => this.setState({ totalAmount: e.target.value })} />
                         </div>
                         <div>
                             <div className="title2">2.充值方式</div>
@@ -123,23 +187,23 @@ class EditableTable extends React.Component {
                                     value == 'bank' ? (<div className="zjbank">
                                         <div className="bigtitle">充值信息确认</div>
                                         <div className="bbox">
-                                            <span>收款银行：</span>
+                                            <span className="bbbox">收款银行：</span>
                                             <span>{cardInfo.bankName}</span>
                                         </div>
                                         <div className="bbox">
-                                            <span>收款人姓名：</span>
+                                            <span className="bbbox">收款人姓名：</span>
                                             <span>{cardInfo.bankAccountName}</span>
                                         </div>
                                         <div className="bbox">
-                                            <span>收款账号：</span>
+                                            <span className="bbbox">收款账号：</span>
                                             <span>{cardInfo.bankCardNo}</span>
                                         </div>
                                         <div className="bbox">
-                                            <span>开户行：</span>
+                                            <span className="bbbox">开户行：</span>
                                             <span>{cardInfo.bankBranch}</span>
                                         </div>
                                         <div className="bbox">
-                                            <span>充值金额：</span>
+                                            <span className="bbbox">充值金额：</span>
                                             <span>{totalAmount}</span>
                                         </div>
                                         <div className="pay" onClick={() => this.payNow()}>去转账</div>
@@ -147,19 +211,19 @@ class EditableTable extends React.Component {
                                             <div className="zjbank">
                                                 <div className="bigtitle">充值信息确认</div>
                                                 <div className="bbox">
-                                                    <span>支付宝账号：</span>
+                                                    <span className="bbbox">支付宝账号：</span>
                                                     <span>{cardInfo.aliyPay}</span>
                                                 </div>
                                                 <div className="bbox">
-                                                    <span>收款人姓名：</span>
+                                                    <span className="bbbox">收款人姓名：</span>
                                                     <span>{cardInfo.aliyPayName}</span>
                                                 </div>
                                                 <div className="bbox">
-                                                    <span>充值金额：</span>
+                                                    <span className="bbbox">充值金额：</span>
                                                     <span>{totalAmount}</span>
                                                 </div>
                                                 <div className="bbox">
-                                                    <span>支付宝收款码：</span>
+                                                    <span className="bbbox">支付宝收款码：</span>
                                                     <div className='erimg'>
                                                         <QRCode
                                                             value={'https://' + cardInfo.aliyPayCodeUrl.split('//')[1]}
@@ -168,7 +232,8 @@ class EditableTable extends React.Component {
                                                         />
                                                     </div>
                                                 </div><br />
-                                                <div className="pay">请用支付宝扫码上面的收款码支付</div>
+                                                <div className="zhu">注：提交申请后扫码付款</div>
+                                                <div className="pay" onClick={() => this.payNow()}>提交申请</div>
                                             </div>
                                         )
                                 }

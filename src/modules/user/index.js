@@ -7,6 +7,7 @@ import store from '../../store/store'
 //引入请求接口
 import httpAxios from '../../helpers/request';
 import './index.css';
+import { Modal } from 'antd';
 
 class UserCenter extends React.Component {
     constructor(props) {
@@ -15,6 +16,9 @@ class UserCenter extends React.Component {
     }
     //请求表格数据的操作
     componentDidMount = () => {
+        this.getPerson();
+    }
+    getPerson() {
         let url = '/tn/tntg/capital', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
             this.setState({
@@ -39,6 +43,42 @@ class UserCenter extends React.Component {
     tixian() {
         this.props.history.push('/withdrawal');
     }
+    jiean() {
+        let url = '/tn/tntg/Strategy', method = 'post', options = null;
+        httpAxios(url, method, false, options).then(res => {
+            if (res.success == true) {
+                this.setState({
+                    visible: true,
+                    msg: '结案成功'
+                })
+                this.getPerson();
+            }
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                this.setState({
+                    visible: true,
+                    msg: data
+                })
+            }
+        });
+    }
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
     username(username) {
         //store.dispatch（）是View发出Action的唯一方法。携带一个Action对象作为参数，将它发送出去。
         store.dispatch({
@@ -54,6 +94,16 @@ class UserCenter extends React.Component {
              * columns为表格的描述配置，列明什么之类的
              */
             <div className="usercenter">
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <p>{this.state.msg}</p>
+                </Modal>
                 {/* <div>
                     <button onClick={this.decrement}>-</button>
                     {this.state.count}
@@ -73,6 +123,8 @@ class UserCenter extends React.Component {
                         <span className="rr1" onClick={() => this.chongzhi()}>充值</span>
                         <span className="rr2">/</span>
                         <span className="rr3" onClick={() => this.tixian()}>提现</span>
+                        {allottedScale != 0 ? (<span className="rr2">/</span>) : ''}
+                        {allottedScale != 0 ? (<span className="rr3" onClick={() => this.jiean()}>结案</span>) : ''}
                     </div>
                     {/* <div className="u1">
                         <div className="level">上级用户</div>

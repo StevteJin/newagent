@@ -6,7 +6,7 @@ import store from '../../store/store'
 //引入请求接口
 import httpAxios from '../../helpers/request';
 import './index.css';
-import { Input } from 'antd';
+import { Input, Modal } from 'antd';
 
 class UserCenter extends React.Component {
     constructor(props) {
@@ -24,7 +24,9 @@ class UserCenter extends React.Component {
             separateFeeRate: "",//分成比例
             jjje: "",//警戒线
             zsje: "",//平仓线
-            allottedScale: ""
+            allottedScale: "",
+            visible: "",
+            msg: ""
         };
     }
     //请求表格数据的操作
@@ -49,45 +51,85 @@ class UserCenter extends React.Component {
     getInfo() {
         let url = '/tn/tntg/capital', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
-            this.setState({
-                allottedScale: res.allottedScale,
-                type: res.financePeriod,
-                financeRatio: res.financeRatio,
-                makeFeeRate: 0,
-                financeFee: 0,
-                totalScale: res.totalScale
-            })
+            if (res.allottedScale != 0) {
+                this.setState({
+                    allottedScale: res.allottedScale,
+                    type: res.financePeriod,
+                    financeRatio: res.financeRatio,
+                    makeFeeRate: 0,
+                    financeFee: 0,
+                    totalScale: res.totalScale
+                })
+            }
         })
     }
 
     deposit() {
-        let url = '/tn/tntg/capital', method = 'post', options = null;
-        httpAxios(url, method, false, options).then(res => {
-            let expandScale = true;
-            if (res['allottedScale'] === '0') {
-                expandScale = true;
+        if (this.state.amount % 1000 !== 0 || this.state.amount === null || this.state.amount <= 0) {
+            this.setState({
+                visible: true,
+                msg: '"投入金额必须是1000的倍数，且大于0"'
+            })
+        } else {
+            if (!this.state.financeRatio) {
+                this.setState({
+                    visible: true,
+                    msg: '"请先选择策略方案"'
+                })
             } else {
-                expandScale = false;
+                let url = '/tn/tntg/capital', method = 'post', options = null;
+                httpAxios(url, method, false, options).then(res => {
+                    let expandScale = true;
+                    if (res['allottedScale'] === '0') {
+                        expandScale = true;
+                    } else {
+                        expandScale = false;
+                    }
+                    let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
+                        newStrategy: res['allottedScale'] !== '0' ? false : true,
+                        financeRatio: this.state.financeRatio,
+                        financePeriod: this.state.type,
+                        amount: this.state.amount,
+                        expandScale: expandScale
+                    };;
+                    httpAxios(urld, methodd, false, optionsd).then(resd => {
+                        if (resd.success == true) {
+                            this.props.history.push('/index');
+                        } else {
+                        }
+                    });
+                }, error => {
+                    console.log(error.response)
+                    if (error.response.status == 400) {
+                        let data = JSON.stringify(error.response.data.resultInfo);
+                        this.setState({
+                            visible: true,
+                            msg: data
+                        })
+                    }
+                });
             }
-            let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
-                newStrategy: res['allottedScale'] !== '0' ? false : true,
-                financeRatio: this.state.financeRatio,
-                financePeriod: this.state.type,
-                amount: this.state.amount,
-                expandScale: expandScale
-            };;
-            httpAxios(urld, methodd, false, optionsd).then(resd => {
-                if (resd.success == true) {
-                    this.props.history.push('/index');
-                } else {
-                }
-            });
-        });
+
+        }
     }
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
 
     add(type) {
         let expandScale;
-        if (this.state.allottedScale === '0') {
+        if (type == true) {
             expandScale = true;
         } else {
             expandScale = false;
@@ -112,7 +154,7 @@ class UserCenter extends React.Component {
                 if (resd.success == true) {
                     this.props.history.push('/index');
                 } else {
-                    
+
                 }
             });
         } else { // 非增配
@@ -137,7 +179,7 @@ class UserCenter extends React.Component {
                 if (resd.success == true) {
                     this.props.history.push('/index');
                 } else {
-                   
+
                 }
             });
         }
@@ -151,7 +193,8 @@ class UserCenter extends React.Component {
     getFinanceRatio(financeRatio, who) {
         let that = this;
         this.setState({
-            financeRatio: financeRatio
+            financeRatio: financeRatio,
+            type: who
         }, () => {
             if (who == 'day') {
                 this.state.day.forEach(element => {
@@ -260,6 +303,16 @@ class UserCenter extends React.Component {
              * columns为表格的描述配置，列明什么之类的
              */
             <div>
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <p>{this.state.msg}</p>
+                </Modal>
                 <div className="planmenu">
                     {allottedScale == 0 ? (<div><span onClick={() => this.plans('day')}>
                         <div className={this.state.type === 'day' ? 'active' : ''} ></div>
@@ -289,7 +342,7 @@ class UserCenter extends React.Component {
                 <div className="titlebox">
                     <div className="tbox">
                         <div className="toptitle1">1：请输入您的风险保证金 金额</div>
-                        <Input className="topinput" onChange={e => this.setState({ amount: e.target.value })} placeholder="金额" />
+                        <Input type="number" className="topinput" onChange={e => this.setState({ amount: e.target.value })} placeholder="金额" />
                     </div>
                     <div className="tbox">
                         <div className="toptitle2">2.请选择方案</div>
