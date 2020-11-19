@@ -173,6 +173,14 @@
     margin-left: 56px;
 }
 
+.ty {
+    margin-top: 10px;
+}
+.tiaoyue {
+    color:#5473FF;
+    text-decoration: underline;
+    cursor: pointer;
+}
 .apply {
     width: 221px;
     height: 31px;
@@ -180,12 +188,12 @@
     color: #fff;
     text-align: center;
     line-height: 31px;
-    margin-top: 30px;
+    margin-top: 10px;
     cursor: pointer;
 }
 
 .apply1 {
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .apply1 span {

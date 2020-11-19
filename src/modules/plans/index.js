@@ -6,7 +6,7 @@ import store from '../../store/store'
 //引入请求接口
 import httpAxios from '../../helpers/request';
 import './index.css';
-import { Input, Modal } from 'antd';
+import { Input, Modal, Radio, Checkbox } from 'antd';
 
 class UserCenter extends React.Component {
     constructor(props) {
@@ -25,8 +25,10 @@ class UserCenter extends React.Component {
             jjje: "",//警戒线
             zsje: "",//平仓线
             allottedScale: "",
-            visible: "",
-            msg: ""
+            visible: false,
+            msg: "",
+            tiaoyue: false,
+            tiaoyue1: false
         };
     }
     //请求表格数据的操作
@@ -64,6 +66,20 @@ class UserCenter extends React.Component {
         })
     }
 
+    onChange = e => {
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({
+            tiaoyue: `${e.target.checked}`
+        })
+    }
+    changeBool() {
+        let bool = this.state.tiaoyue1;
+        bool = !bool;
+        this.setState({
+            tiaoyue1: bool
+        })
+    }
+
     deposit() {
         if (this.state.amount % 1000 !== 0 || this.state.amount === null || this.state.amount <= 0) {
             this.setState({
@@ -75,6 +91,13 @@ class UserCenter extends React.Component {
                 this.setState({
                     visible: true,
                     msg: '"请先选择策略方案"'
+                })
+            } else if (
+                this.state.tiaoyue != true
+            ) {
+                this.setState({
+                    visible: true,
+                    msg: '"请先勾选操盘规则"'
                 })
             } else {
                 let url = '/tn/tntg/capital', method = 'post', options = null;
@@ -124,6 +147,20 @@ class UserCenter extends React.Component {
         console.log(e);
         this.setState({
             visible: false,
+        });
+    };
+
+    handleOk1 = e => {
+        console.log(e);
+        this.setState({
+            tiaoyue1: false,
+        });
+    };
+
+    handleCancel1 = e => {
+        console.log(e);
+        this.setState({
+            tiaoyue1: false,
         });
     };
 
@@ -313,6 +350,28 @@ class UserCenter extends React.Component {
                 >
                     <p>{this.state.msg}</p>
                 </Modal>
+                <Modal
+                    title="操盘规则"
+                    visible={this.state.tiaoyue1}
+                    onOk={this.handleOk1}
+                    onCancel={this.handleCancel1}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <p>注意事项：</p>
+                    <p>1.不得购买S、ST、*ST、S*ST、SST、以及被交易所特别处理的股票；</p>
+                    <p>2.当操盘资金低于亏损警戒线时，需尽快补足风险保证金，且不能买入股票；</p>
+                    <p>3.当操盘资金低于平仓线下时，我们有权将您账户里的股票实行卖出处理；</p>
+                    <p>4.客户有停牌股票，可以继续支付账户管理费延续账户直至停牌结束，
+      并在停牌股票持有的当天算起3天内追加停牌股票市值30%的保证金；</p>
+                    <p>5.客户有停牌股票，不再补缴保证金，且不支付账户管理费，
+      默认为放弃该账户权益，账户盈亏和客户无关，不退还任何资金；</p>
+                    <p>6.操盘手提供劣后资金，可用资金为资金方提供的授信可用优先资金，当后台账户资不够时，即使操盘人在可用资金额度内提交新的买入委托可能会出现买入失败；
+                    </p>
+                    <p>7.合作过程中出现亏损全部由操盘手负责并从劣后资金中扣除，如果劣后资金不够扣除亏损则由操盘手日内补足</p>
+                    <p>8.利润分配：合作期间按免息盈利分成，账户持有个股在卖出时有盈利则分，无盈利则不分成；</p>
+                    <p>9.结算期限及费用：免息日结算前清仓的，不收取管理费，如到时操盘手未清仓的，资金方将按天收取持仓市值的管理费；</p>
+                </Modal>
                 <div className="planmenu">
                     {allottedScale == 0 ? (<div><span onClick={() => this.plans('day')}>
                         <div className={this.state.type === 'day' ? 'active' : ''} ></div>
@@ -389,6 +448,10 @@ class UserCenter extends React.Component {
                         </div>
                     </div>
                     <div className="tbox">
+                        <div className="ty">
+                            <Checkbox onChange={this.onChange}></Checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span className="tiaoyue" onClick={() => this.changeBool()}>已阅读并同意操盘规则</span>
+                        </div>
                         {allottedScale == 0 ? (<div className="apply" onClick={() => this.deposit()}>立即申请</div>) : (<div className="apply1"><span className="applya" onClick={() => this.add('true')}>加配</span>
                             <span className="applyb" onClick={() => this.add('false')}>补仓</span></div>)}
                     </div>
