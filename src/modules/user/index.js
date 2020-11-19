@@ -57,6 +57,7 @@ class UserCenter extends React.Component {
             console.log(error.response)
             if (error.response.status == 400) {
                 let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
                 this.setState({
                     visible: true,
                     msg: data

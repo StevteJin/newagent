@@ -111,8 +111,8 @@ class EditableTable extends React.Component {
     },
     {
       title: "备注",
-      dataIndex: "payeeInfo",
-      key: "payeeInfo",
+      dataIndex: "remark",
+      key: "remark",
       align: 'center'
     },
     {

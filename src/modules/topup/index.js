@@ -79,7 +79,7 @@ class EditableTable extends React.Component {
         } else {
             this.setState({
                 visible: true,
-                msg: '"金额不可为空"'
+                msg: '金额不可为空'
             })
         }
 
@@ -100,6 +100,7 @@ class EditableTable extends React.Component {
                 console.log(error.response)
                 if (error.response.status == 400) {
                     let data = JSON.stringify(error.response.data.resultInfo);
+                    data = data.replace(/^(\s|")+|(\s|")+$/g, '');
                     this.setState({
                         visible: true,
                         msg: data
@@ -118,6 +119,7 @@ class EditableTable extends React.Component {
                 console.log(error.response)
                 if (error.response.status == 400) {
                     let data = JSON.stringify(error.response.data.resultInfo);
+                    data = data.replace(/^(\s|")+|(\s|")+$/g, '');
                     this.setState({
                         visible: true,
                         msg: data

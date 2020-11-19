@@ -73,6 +73,7 @@ class UserCenter extends React.Component {
                 console.log(error.response)
                 if (error.response.status == 400) {
                     let data = JSON.stringify(error.response.data.resultInfo);
+                    data = data.replace(/^(\s|")+|(\s|")+$/g, '');
                     this.setState({
                         visible: true,
                         msg: data
@@ -82,7 +83,7 @@ class UserCenter extends React.Component {
         } else {
             this.setState({
                 visible: true,
-                msg: '"提现金额不可为空"'
+                msg: '提现金额不可为空'
             })
         }
 
@@ -143,40 +144,42 @@ class UserCenter extends React.Component {
     getCardInfo() {
         let url = '/tn/tn/query/card', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
-            this.setState({
-                cardInfo: res
-            }, () => {
-                console.log('卡数据', this.state.cardInfo);
+            console.log('数据', res)
+            this.getBankId();
+            if (res) {
                 this.setState({
-                    id: this.state.cardInfo.id,
-                    accountCode: this.state.cardInfo.accountCode,
-                    accountName: this.state.cardInfo.accountName,
-                    beginRowNum: this.state.cardInfo.beginRowNum,
-                    createTime: this.state.cardInfo.createTime,
-                    order: this.state.cardInfo.order,
-                    pageNo: this.state.cardInfo.pageNo,
-                    pageSize: this.state.cardInfo.pageSize,
-                    paging: this.state.cardInfo.paging,
-                    bankId: String(this.state.cardInfo.bankId),
-                    provinceId: String(this.state.cardInfo.provinceId),
-                    cityId: String(this.state.cardInfo.cityId),
-                    subBranchId: this.state.cardInfo.subBranchId,
-                    cardNo: this.state.cardInfo.cardNo,
-                    userName: this.state.cardInfo.userName,
-                    identityNo: this.state.cardInfo.identityNo,
-                    mobile: this.state.cardInfo.mobile,
-                    bankName: this.state.cardInfo.bankName,
-                    provinceName: this.state.cardInfo.provinceName,
-                    cityName: this.state.cardInfo.cityName,
-                    subBranchName: this.state.cardInfo.subBranchName,
-
+                    cardInfo: res
                 }, () => {
-                    this.getBankId();
-                    this.getProvinceId();
-                    this.getcityId();
-                    this.getsubBranchId();
+                    console.log('卡数据', this.state.cardInfo);
+                    this.setState({
+                        id: this.state.cardInfo.id,
+                        accountCode: this.state.cardInfo.accountCode,
+                        accountName: this.state.cardInfo.accountName,
+                        beginRowNum: this.state.cardInfo.beginRowNum,
+                        createTime: this.state.cardInfo.createTime,
+                        order: this.state.cardInfo.order,
+                        pageNo: this.state.cardInfo.pageNo,
+                        pageSize: this.state.cardInfo.pageSize,
+                        paging: this.state.cardInfo.paging,
+                        bankId: String(this.state.cardInfo.bankId),
+                        provinceId: String(this.state.cardInfo.provinceId),
+                        cityId: String(this.state.cardInfo.cityId),
+                        subBranchId: this.state.cardInfo.subBranchId,
+                        cardNo: this.state.cardInfo.cardNo,
+                        userName: this.state.cardInfo.userName,
+                        identityNo: this.state.cardInfo.identityNo,
+                        mobile: this.state.cardInfo.mobile,
+                        bankName: this.state.cardInfo.bankName,
+                        provinceName: this.state.cardInfo.provinceName,
+                        cityName: this.state.cardInfo.cityName,
+                        subBranchName: this.state.cardInfo.subBranchName,
+
+                    }, () => {
+
+                    })
                 })
-            })
+            }
+
         });
     }
 
@@ -235,12 +238,12 @@ class UserCenter extends React.Component {
         if (this.state.identityNo.length != 18) {
             this.setState({
                 visible: true,
-                msg: '"请输入正确的身份证号"'
+                msg: '请输入正确的身份证号'
             })
         } else if (this.state.mobile.length != 11) {
             this.setState({
                 visible: true,
-                msg: '"请输入正确的手机号码"'
+                msg: '请输入正确的手机号码'
             })
         } else {
             let options = {
@@ -277,6 +280,7 @@ class UserCenter extends React.Component {
                 console.log(error.response)
                 if (error.response.status == 400) {
                     let data = JSON.stringify(error.response.data.resultInfo);
+                    data = data.replace(/^(\s|")+|(\s|")+$/g, '');
                     this.setState({
                         visible: true,
                         msg: data

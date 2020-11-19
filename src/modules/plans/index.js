@@ -28,15 +28,42 @@ class UserCenter extends React.Component {
             visible: false,
             msg: "",
             tiaoyue: false,
-            tiaoyue1: false
+            tiaoyue1: false,
+            fwf: "",
+            cpje: "",
+            jjje: "",
+            zsje: "",
+            cordonLineRate: "",
+            flatLineRate: "",
+            date: "",
+            positionRatio: "",
+            secondBoardPositionRatio: ""
         };
     }
     //请求表格数据的操作
     componentDidMount = () => {
         this.getInfo();
         this.getfinanceScheme();
+        let date = this.getNowFormatDate();
+        this.setState({
+            date: date
+        })
     }
-
+    getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
     getfinanceScheme() {
         let url = '/tn/tntg/financeScheme', method = 'post', options = null;
         let that = this;
@@ -60,12 +87,20 @@ class UserCenter extends React.Component {
                     financeRatio: res.financeRatio,
                     makeFeeRate: 0,
                     financeFee: 0,
-                    totalScale: res.totalScale
+                    totalScale: res.totalScale,
+                    type: res.financePeriod
+                }, () => {
+                    this.getFinanceRatio(this.state.financeRatio, this.state.type)
                 })
             }
         })
     }
-
+    setmoney = e => {
+        console.log('我是钱', e.target.value);
+        this.setState({ amount: e.target.value }, () => {
+            this.getFinanceRatio(this.state.financeRatio, this.state.type)
+        })
+    }
     onChange = e => {
         console.log(`checked = ${e.target.checked}`);
         this.setState({
@@ -81,29 +116,30 @@ class UserCenter extends React.Component {
     }
 
     deposit() {
+        console.log('操盘规则', this.state.tiaoyue)
         if (this.state.amount % 1000 !== 0 || this.state.amount === null || this.state.amount <= 0) {
             this.setState({
                 visible: true,
-                msg: '"投入金额必须是1000的倍数，且大于0"'
+                msg: '投入金额必须是1000的倍数，且大于0'
             })
         } else {
             if (!this.state.financeRatio) {
                 this.setState({
                     visible: true,
-                    msg: '"请先选择策略方案"'
+                    msg: '请先选择策略方案'
                 })
             } else if (
-                this.state.tiaoyue != true
+                this.state.tiaoyue != 'true'
             ) {
                 this.setState({
                     visible: true,
-                    msg: '"请先勾选操盘规则"'
+                    msg: '请先勾选操盘规则'
                 })
             } else {
                 let url = '/tn/tntg/capital', method = 'post', options = null;
                 httpAxios(url, method, false, options).then(res => {
                     let expandScale = true;
-                    if (res['allottedScale'] === '0') {
+                    if (res['allottedScale'] == '0') {
                         expandScale = true;
                     } else {
                         expandScale = false;
@@ -125,6 +161,7 @@ class UserCenter extends React.Component {
                     console.log(error.response)
                     if (error.response.status == 400) {
                         let data = JSON.stringify(error.response.data.resultInfo);
+                        data = data.replace(/^(\s|")+|(\s|")+$/g, '');
                         this.setState({
                             visible: true,
                             msg: data
@@ -166,60 +203,58 @@ class UserCenter extends React.Component {
 
     add(type) {
         let expandScale;
-        if (type == true) {
+        if (type == 'true') {
             expandScale = true;
         } else {
             expandScale = false;
         }
-        if (type) { // 增配
-            this.fee = parseInt(this.state.totalScale, 0) - parseInt(this.state.allottedScale, 0);
-            // if (this.fee < 0) {
-            //     this.fee = Math.abs(this.fee);
-            //     this.confirm = true;
-            //     this.msgText = `预补足的费用为${this.fee}元，是否在本次增配中自动补足`;
-            // } else {
-            //     this.isAddFn();
-            // }
-            let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
-                newStrategy: this.state.allottedScale !== '0' ? false : true,
-                financeRatio: this.state.financeRatio,
-                financePeriod: this.state.type,
-                amount: this.state.amount,
-                expandScale: expandScale
-            };;
-            httpAxios(urld, methodd, false, optionsd).then(resd => {
-                if (resd.success == true) {
-                    this.props.history.push('/index');
-                } else {
+        console.log('我是对错', expandScale)
+        if (this.state.amount % 1000 !== 0 || this.state.amount === null || this.state.amount <= 0) {
+            this.setState({
+                visible: true,
+                msg: '投入金额必须是1000的倍数，且大于0'
+            })
+        } else if (
+            this.state.tiaoyue != 'true'
+        ) {
+            this.setState({
+                visible: true,
+                msg: '请先勾选操盘规则'
+            })
+        } else {
+            if (type) { // 增配
+                let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
+                    newStrategy: this.state.allottedScale !== '0' ? false : true,
+                    financeRatio: this.state.financeRatio,
+                    financePeriod: this.state.type,
+                    amount: this.state.amount,
+                    expandScale: expandScale
+                };;
+                httpAxios(urld, methodd, false, optionsd).then(resd => {
+                    if (resd.success == true) {
+                        this.props.history.push('/index');
+                    } else {
 
-                }
-            });
-        } else { // 非增配
-            // if (this.money <= 0 || this.data.Decimal(this.money) > 2) {
-            //     layer.open({
-            //         content: '非增配入金金额必须大于0,且不能超过两位小数'
-            //         , skin: 'msg'
-            //         , time: 2
-            //     });
-            // } else {
-            //     this.msgText = '是否确定入金';
-            //     this.confirm = true;
-            // }
-            let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
-                newStrategy: this.state.allottedScale !== '0' ? false : true,
-                financeRatio: this.state.financeRatio,
-                financePeriod: this.state.type,
-                amount: this.state.amount,
-                expandScale: expandScale
-            };;
-            httpAxios(urld, methodd, false, optionsd).then(resd => {
-                if (resd.success == true) {
-                    this.props.history.push('/index');
-                } else {
+                    }
+                });
+            } else { // 非增配
+                let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
+                    newStrategy: this.state.allottedScale !== '0' ? false : true,
+                    financeRatio: this.state.financeRatio,
+                    financePeriod: this.state.type,
+                    amount: this.state.amount,
+                    expandScale: expandScale
+                };;
+                httpAxios(urld, methodd, false, optionsd).then(resd => {
+                    if (resd.success == true) {
+                        this.props.history.push('/index');
+                    } else {
 
-                }
-            });
+                    }
+                });
+            }
         }
+
     }
 
     plans(type) {
@@ -234,6 +269,7 @@ class UserCenter extends React.Component {
             type: who
         }, () => {
             if (who == 'day') {
+                console.log('是我', this.state.day)
                 this.state.day.forEach(element => {
                     if (element['financeRatio'] == this.state.financeRatio) {
                         that.setState({
@@ -241,8 +277,32 @@ class UserCenter extends React.Component {
                             financeFee: element['financeFeeRate'],//管理费率
                             manageFee: element['makeFeeRate'],//管理费
                             separateFeeRate: element['separateFeeRate'],//分成比例
-                            jjje: element['cordonLineRate'],//警戒线
-                            zsje: element['flatLineRate']//平仓线
+                            cordonLineRate: element['cordonLineRate'],//警戒线
+                            flatLineRate: element['flatLineRate'],//平仓线
+                            positionRatio: element['positionRatio'],
+                            secondBoardPositionRatio: element['secondBoardPositionRatio']
+                        }, () => {
+                            let fwf = (Math.round(that.state.makeFeeRate * that.state.financeRatio * that.state.amount * 100) / 100).toFixed(2);
+                            that.setState({
+                                fwf: fwf
+                            }, () => {
+                            })
+                            let cpje, jjje, zsje;
+                            if (this.state.allottedScale == 0) {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) + that.state.allottedScale;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                            } else {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) * 2;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                            }
+                            that.setState({
+                                cpje: cpje,
+                                jjje: jjje,
+                                zsje: zsje
+                            }, () => {
+                            })
                         })
                     }
                 });
@@ -254,8 +314,32 @@ class UserCenter extends React.Component {
                             financeFee: element['financeFeeRate'],//管理费率
                             manageFee: element['makeFeeRate'],//管理费
                             separateFeeRate: element['separateFeeRate'],//分成比例
-                            jjje: element['cordonLineRate'],//警戒线
-                            zsje: element['flatLineRate']//平仓线
+                            cordonLineRate: element['cordonLineRate'],//警戒线
+                            flatLineRate: element['flatLineRate'],//平仓线
+                            positionRatio: element['positionRatio'],
+                            secondBoardPositionRatio: element['secondBoardPositionRatio']
+                        }, () => {
+                            let fwf = (Math.round(that.state.makeFeeRate * that.state.financeRatio * that.state.amount * 100) / 100).toFixed(2);
+                            that.setState({
+                                fwf: fwf
+                            }, () => {
+                            })
+                            let cpje, jjje, zsje;
+                            if (this.state.allottedScale == 0) {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) + that.state.allottedScale;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                            } else {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) * 2;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                            }
+                            that.setState({
+                                cpje: cpje,
+                                jjje: jjje,
+                                zsje: zsje
+                            }, () => {
+                            })
                         })
                     }
                 });
@@ -267,8 +351,32 @@ class UserCenter extends React.Component {
                             financeFee: element['financeFeeRate'],//管理费率
                             manageFee: element['makeFeeRate'],//管理费
                             separateFeeRate: element['separateFeeRate'],//分成比例
-                            jjje: element['cordonLineRate'],//警戒线
-                            zsje: element['flatLineRate']//平仓线
+                            cordonLineRate: element['cordonLineRate'],//警戒线
+                            flatLineRate: element['flatLineRate'],//平仓线
+                            positionRatio: element['positionRatio'],
+                            secondBoardPositionRatio: element['secondBoardPositionRatio']
+                        }, () => {
+                            let fwf = (Math.round(that.state.makeFeeRate * that.state.financeRatio * that.state.amount * 100) / 100).toFixed(2);
+                            that.setState({
+                                fwf: fwf
+                            }, () => {
+                            })
+                            let cpje, jjje, zsje;
+                            if (this.state.allottedScale == 0) {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) + that.state.allottedScale;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                            } else {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) * 2;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                            }
+                            that.setState({
+                                cpje: cpje,
+                                jjje: jjje,
+                                zsje: zsje
+                            }, () => {
+                            })
                         })
                     }
                 });
@@ -277,7 +385,7 @@ class UserCenter extends React.Component {
 
     }
     render() {
-        const { type, financeRatio, amount, day, month, single, makeFeeRate, financeFee, manageFee, separateFeeRate, jjje, zsje, allottedScale } = this.state;
+        const { type, financeRatio, amount, day, month, single, fwf, makeFeeRate, financeFee, manageFee, separateFeeRate, cpje, jjje, zsje, date, allottedScale, positionRatio, secondBoardPositionRatio } = this.state;
         let plandom;
         if (type == 'day') {
             plandom = day.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'day')}>
@@ -401,7 +509,7 @@ class UserCenter extends React.Component {
                 <div className="titlebox">
                     <div className="tbox">
                         <div className="toptitle1">1：请输入您的风险保证金 金额</div>
-                        <Input type="number" className="topinput" onChange={e => this.setState({ amount: e.target.value })} placeholder="金额" />
+                        <Input type="number" className="topinput" onChange={this.setmoney} placeholder="金额" />
                     </div>
                     <div className="tbox">
                         <div className="toptitle2">2.请选择方案</div>
@@ -412,39 +520,41 @@ class UserCenter extends React.Component {
                     <div className="tbox">
                         <div className="toptitle3">3.方案详情</div>
                         <div className="strg">
-                            {allottedScale == 0 ? (<div>
+                            <div>
                                 <span className="sleft">操盘资金</span>
-                                <span className="sright">{financeRatio * amount}</span>
-                            </div>) : ""}
+                                <span className="sright">{cpje}</span>
+                            </div>
                             <div>{allottedScale == 0 ? (<span className="sleft">保证金</span>) : (<span className="sleft">新增保证金</span>)}
                                 <span className="sright">{amount}</span>
                             </div>
                             <div>
+                                <span className="sleft">建仓费</span>
+                                <span className="sright">{fwf}</span>
+                            </div>
+                            <div>
                                 <span className="sleft">建仓费率</span>
-                                <span className="sright">{makeFeeRate}</span>
+                                {allottedScale == 0 ? (<span className="sright">{makeFeeRate}</span>) : (<span className="sright">0</span>)}
                             </div>
-                            {allottedScale == 0 ? (<div><div>
+                            <div>
                                 <span className="sleft">管理费率</span>
-                                <span className="sright">{financeFee}</span>
+                                {allottedScale == 0 ? (<span className="sright">{financeFee}</span>) : (<span className="sright">0</span>)}
                             </div>
-                                <div>
-                                    <span className="sleft">管理费</span>
-                                    <span className="sright">{manageFee}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">分成比例</span>
-                                    <span className="sright">{separateFeeRate}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">警戒线比例</span>
-                                    <span className="sright">{jjje}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">平仓线比例</span>
-                                    <span className="sright">{zsje}</span>
-                                </div>
-                            </div>) : ""}
-
+                            <div>
+                                <span className="sleft">警戒线</span>
+                                <span className="sright">{jjje}</span>
+                            </div>
+                            <div>
+                                <span className="sleft">平仓线</span>
+                                <span className="sright">{zsje}</span>
+                            </div>
+                            <div>
+                                <span className="sleft">开始交易</span>
+                                <span className="sright">{date}</span>
+                            </div>
+                            <div>
+                                <span className="sleft">持仓限制</span>
+                                <span className="sright">个股持仓比例：{positionRatio}&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;创业板持仓比例：{secondBoardPositionRatio}</span>
+                            </div>
                         </div>
                     </div>
                     <div className="tbox">
