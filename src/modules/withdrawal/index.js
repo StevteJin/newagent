@@ -42,7 +42,7 @@ class UserCenter extends React.Component {
             bankShow: false,
             balance: "",
             liftScale: "",
-            visible: "",
+            visible: false,
             msg: ""
         };
     }
@@ -334,7 +334,7 @@ class UserCenter extends React.Component {
                 {bankShow == true ? (<div className='bankbox'>
                     <div className="bank">
                         <span className="title">开户银行</span>
-                        <Select value={bankId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }} allowClear={true}>
+                        <Select value={bankId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }}>
                             {bankIdDom}
                         </Select>
                     </div>
