@@ -21,6 +21,7 @@ class UserCenter extends React.Component {
             makeFeeRate: "",//建仓费率
             financeFee: "",//管理费率
             manageFee: "",//管理费
+            monthManageFee: "",//本月管理费
             separateFeeRate: "",//分成比例
             jjje: "",//警戒线
             zsje: "",//平仓线
@@ -31,6 +32,7 @@ class UserCenter extends React.Component {
             tiaoyue1: false,
             fwf: "",
             cpje: "",
+            cpje1: "",
             jjje: "",
             zsje: "",
             cordonLineRate: "",
@@ -98,7 +100,7 @@ class UserCenter extends React.Component {
     setmoney = e => {
         console.log('我是钱', e.target.value);
         this.setState({ amount: e.target.value }, () => {
-            this.getFinanceRatio(this.state.financeRatio, this.state.type)
+            this.getFinanceRatio(this.state.financeRatio, this.state.type);
         })
     }
     onChange = e => {
@@ -260,7 +262,24 @@ class UserCenter extends React.Component {
     plans(type) {
         this.setState({
             type: type
+        }, () => {
+
         })
+    }
+    getMonthManageFee() {
+        if (this.state.type == 'month') {
+            let urld = '/tn/tntg/theManageFee', methodd = 'post', options = {
+                amount: this.state.amount,
+                financePeriod: "month",
+                financeRatio: this.state.financeRatio
+            };
+            httpAxios(urld, methodd, false, options).then(res => {
+                let monthManageFee = res.resultInfo.amount;
+                this.setState({
+                    monthManageFee: monthManageFee
+                })
+            });
+        }
     }
     getFinanceRatio(financeRatio, who) {
         let that = this;
@@ -287,7 +306,7 @@ class UserCenter extends React.Component {
                                 fwf: fwf
                             }, () => {
                             })
-                            let cpje, jjje, zsje;
+                            let cpje, cpje1, jjje, zsje;
                             if (this.state.allottedScale == 0) {
                                 cpje = that.state.amount * (that.state.financeRatio + 1) + that.state.allottedScale;
                                 jjje = cpje * that.state.cordonLineRate;
@@ -296,9 +315,11 @@ class UserCenter extends React.Component {
                                 cpje = that.state.amount * (that.state.financeRatio + 1) * 2;
                                 jjje = cpje * that.state.cordonLineRate;
                                 zsje = cpje * that.state.flatLineRate;
+                                cpje1 = parseInt(this.state.amount) + parseInt(this.state.financeRatio * this.state.amount) + parseInt(that.state.allottedScale)
                             }
                             that.setState({
                                 cpje: cpje,
+                                cpje1: cpje1,
                                 jjje: jjje,
                                 zsje: zsje
                             }, () => {
@@ -324,7 +345,7 @@ class UserCenter extends React.Component {
                                 fwf: fwf
                             }, () => {
                             })
-                            let cpje, jjje, zsje;
+                            let cpje, cpje1, jjje, zsje;
                             if (this.state.allottedScale == 0) {
                                 cpje = that.state.amount * (that.state.financeRatio + 1) + that.state.allottedScale;
                                 jjje = cpje * that.state.cordonLineRate;
@@ -333,13 +354,16 @@ class UserCenter extends React.Component {
                                 cpje = that.state.amount * (that.state.financeRatio + 1) * 2;
                                 jjje = cpje * that.state.cordonLineRate;
                                 zsje = cpje * that.state.flatLineRate;
+                                cpje1 = parseInt(this.state.amount) + parseInt(this.state.financeRatio * this.state.amount) + parseInt(that.state.allottedScale)
                             }
                             that.setState({
                                 cpje: cpje,
+                                cpje1: cpje1,
                                 jjje: jjje,
                                 zsje: zsje
                             }, () => {
                             })
+                            this.getMonthManageFee();
                         })
                     }
                 });
@@ -361,7 +385,7 @@ class UserCenter extends React.Component {
                                 fwf: fwf
                             }, () => {
                             })
-                            let cpje, jjje, zsje;
+                            let cpje, cpje1, jjje, zsje;
                             if (this.state.allottedScale == 0) {
                                 cpje = that.state.amount * (that.state.financeRatio + 1) + that.state.allottedScale;
                                 jjje = cpje * that.state.cordonLineRate;
@@ -370,9 +394,11 @@ class UserCenter extends React.Component {
                                 cpje = that.state.amount * (that.state.financeRatio + 1) * 2;
                                 jjje = cpje * that.state.cordonLineRate;
                                 zsje = cpje * that.state.flatLineRate;
+                                cpje1 = parseInt(this.state.amount) + parseInt(this.state.financeRatio * this.state.amount) + parseInt(that.state.allottedScale)
                             }
                             that.setState({
                                 cpje: cpje,
+                                cpje1: cpje1,
                                 jjje: jjje,
                                 zsje: zsje
                             }, () => {
@@ -385,7 +411,7 @@ class UserCenter extends React.Component {
 
     }
     render() {
-        const { type, financeRatio, amount, day, month, single, fwf, makeFeeRate, financeFee, manageFee, separateFeeRate, cpje, jjje, zsje, date, allottedScale, positionRatio, secondBoardPositionRatio } = this.state;
+        const { type, financeRatio, amount, day, month, single, fwf, makeFeeRate, financeFee, manageFee, separateFeeRate, cpje, cpje1, jjje, zsje, date, allottedScale, positionRatio, secondBoardPositionRatio, monthManageFee } = this.state;
         let plandom;
         if (type == 'day') {
             plandom = day.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'day')}>
@@ -522,7 +548,7 @@ class UserCenter extends React.Component {
                         <div className="strg">
                             <div>
                                 <span className="sleft">操盘资金</span>
-                                <span className="sright">{cpje}</span>
+                                {allottedScale == 0 ? (<span className="sright">{cpje}</span>) : (<span className="sright">{cpje1}</span>)}
                             </div>
                             <div>{allottedScale == 0 ? (<span className="sleft">保证金</span>) : (<span className="sleft">新增保证金</span>)}
                                 <span className="sright">{amount}</span>
@@ -539,6 +565,12 @@ class UserCenter extends React.Component {
                                 <span className="sleft">管理费率</span>
                                 {allottedScale == 0 ? (<span className="sright">{financeFee}</span>) : (<span className="sright">0</span>)}
                             </div>
+                            {type == 'month' ? (
+                                <div>
+                                    <span className="sleft">本月管理费</span>
+                                    <span className="sright">{monthManageFee}</span>
+                                </div>
+                            ) : ''}
                             <div>
                                 <span className="sleft">警戒线</span>
                                 <span className="sright">{jjje}</span>

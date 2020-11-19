@@ -17,7 +17,7 @@ import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 
 const { RangePicker } = DatePicker;
-
+const dateFormat = 'YYYY-MM-DD';
 //定义了一个来自React.Component的子类
 class EditableTable extends React.Component {
   constructor(props) {
@@ -25,11 +25,18 @@ class EditableTable extends React.Component {
     this.state = {
       createTimeStart: "",
       createTimeEnd: "",
-      data: []
+      data: [],
+      dateString: ""
     };
   }
 
   componentDidMount = () => {
+    let date = this.getNowFormatDate();
+    this.setState({
+      dateString: date
+    }, () => {
+    })
+
     this.getData();
   }
 
@@ -40,22 +47,68 @@ class EditableTable extends React.Component {
 
   //请求列表数据
   getData() {
-    let options = {
-      createTimeStart: this.state.createTimeStart,
-      createTimeEnd: this.state.createTimeEnd
-    }
-    httpAxios('/tn/tntg/fundStream/list', 'post', false, options).then(res => {
-      console.log(res);
-      if (res.success == true) {
-        this.setState({
-          data: res.resultInfo
-        })
-      } else {
+    let date = this.getNowFormatDate();
+    if (!this.state.createTimeStart) {
+      this.setState({
+        createTimeStart: date
+      }, () => {
+        if (!this.state.createTimeEnd) {
+          this.setState({
+            createTimeEnd: date
+          }, () => {
+            let username = localStorage.getItem("username");
+            let options = {
+              accountCode: username,
+              createTimeStart: this.state.createTimeStart,
+              createTimeEnd: this.state.createTimeEnd
+            }
+            httpAxios('/tn/tntg/fundStream/list', 'post', false, options).then(res => {
+              console.log(res);
+              if (res.success == true) {
+                this.setState({
+                  data: res.resultInfo
+                })
+              } else {
 
+              }
+            });
+          })
+        }
+      })
+    } else {
+      let username = localStorage.getItem("username");
+      let options = {
+        accountCode: username,
+        createTimeStart: this.state.createTimeStart,
+        createTimeEnd: this.state.createTimeEnd
       }
-    });
-  }
+      httpAxios('/tn/tntg/fundStream/list', 'post', false, options).then(res => {
+        console.log(res);
+        if (res.success == true) {
+          this.setState({
+            data: res.resultInfo
+          })
+        } else {
 
+        }
+      });
+    }
+  }
+  getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
+  }
   //时间改变
   onChangeTime = (value, dateString) => {
     console.log('我是时间', dateString)
@@ -89,7 +142,7 @@ class EditableTable extends React.Component {
   }
 
   render() {
-    const { data } = this.state;
+    const { data, dateString } = this.state;
     //这里数据得自己处理
     let columns = [{
       title: "充值类型",
@@ -127,6 +180,7 @@ class EditableTable extends React.Component {
       key: "auditResultDesc",
       align: 'center'
     }];
+
     return (
       <div>
         <div className="searchBox">
@@ -136,6 +190,7 @@ class EditableTable extends React.Component {
               onChange={this.onChangeTime}
               locale={locale}
               className='dateStyle'
+              placeholder={[dateString, dateString]}
             />
           </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
