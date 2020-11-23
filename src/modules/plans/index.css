@@ -1,5 +1,5 @@
 .planmenu {
-    height: 34px;
+    height: 31px;
     background-color: #E5E5E5;
     position: relative;
 }
@@ -9,7 +9,6 @@
     height: 30px;
     width: 162px;
     line-height: 30px;
-    margin-top: 1px;
     text-align: center;
     cursor: pointer;
 }
@@ -27,7 +26,7 @@
 .planmenu .a {
     position: absolute;
     left: 50px;
-    top: 5px;
+    top: 1px;
 }
 
 .planmenu .active1 {
@@ -41,13 +40,12 @@
     background-color: #fff;
     position: absolute;
     left: 160px;
-    top: 1px;
 }
 
 .planmenu .a1 {
     position: absolute;
     left: 220px;
-    top: 5px;
+    top: 1px;
 }
 
 .planmenu .active2 {
@@ -57,13 +55,13 @@
     transform: rotateX(180deg);
     position: absolute;
     left: 330px;
-    top: 1px;
+    top: 0px;
 }
 
 .planmenu .a2 {
     position: absolute;
     left: 390px;
-    top: 5px;
+    top: 1px;
 }
 
 .titlebox {
@@ -176,11 +174,13 @@
 .ty {
     margin-top: 10px;
 }
+
 .tiaoyue {
-    color:#5473FF;
+    color: #5473FF;
     text-decoration: underline;
     cursor: pointer;
 }
+
 .apply {
     width: 221px;
     height: 31px;
@@ -213,4 +213,35 @@
 
 .apply1 .applyb {
     background: #5473FF;
+}
+
+.scrollbox {
+    height: 850px;
+    overflow-y: scroll;
+}
+
+.minscroll {
+    min-height: 900px;
+}
+
+.scrollbox::-webkit-scrollbar {
+    width: 4px;
+    height: 7px;
+    /* background-color: rgb(81, 81, 81) */
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+
+.scrollbox::-webkit-scrollbar-track {
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+    border-radius: 10px;
+    /* background-color: rgb(81, 81, 81); */
+}
+
+/*定义滑块 内阴影+圆角*/
+
+.scrollbox::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3); */
+    background: #D6DDE2;
 }

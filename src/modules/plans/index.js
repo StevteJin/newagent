@@ -508,6 +508,7 @@ class UserCenter extends React.Component {
             <div>
                 <Modal
                     title="提示"
+                    centered
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
@@ -518,6 +519,7 @@ class UserCenter extends React.Component {
                 </Modal>
                 <Modal
                     title="操盘规则"
+                    centered
                     visible={this.state.tiaoyue1}
                     onOk={this.handleOk1}
                     onCancel={this.handleCancel1}
@@ -564,70 +566,72 @@ class UserCenter extends React.Component {
                             </span></div>)}
 
                 </div>
-                <div className="titlebox">
-                    <div className="tbox">
-                        <div className="toptitle1">1：请输入您的风险保证金 金额</div>
-                        <Input type="number" className="topinput" onChange={this.setmoney} placeholder="金额" />
-                    </div>
-                    <div className="tbox">
-                        <div className="toptitle2">2.请选择方案</div>
-                        <div>
-                            {plandom}
+                <div className="titlebox scrollbox">
+                    <div className="minscroll">
+                        <div className="tbox">
+                            <div className="toptitle1">1：请输入您的风险保证金 金额</div>
+                            <Input type="number" className="topinput" onChange={this.setmoney} placeholder="金额" />
                         </div>
-                    </div>
-                    <div className="tbox">
-                        <div className="toptitle3">3.方案详情</div>
-                        <div className="strg">
+                        <div className="tbox">
+                            <div className="toptitle2">2.请选择方案</div>
                             <div>
-                                <span className="sleft">操盘资金</span>
-                                {allottedScale == 0 ? (<span className="sright">{cpje}</span>) : (<span className="sright">{cpje1}</span>)}
+                                {plandom}
                             </div>
-                            <div>{allottedScale == 0 ? (<span className="sleft">保证金</span>) : (<span className="sleft">新增保证金</span>)}
-                                <span className="sright">{amount}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">建仓费</span>
-                                <span className="sright">{fwf}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">建仓费率</span>
-                                {allottedScale == 0 ? (<span className="sright">{makeFeeRate}</span>) : (<span className="sright">0</span>)}
-                            </div>
-                            <div>
-                                <span className="sleft">管理费率</span>
-                                {allottedScale == 0 ? (<span className="sright">{financeFee}</span>) : (<span className="sright">0</span>)}
-                            </div>
-                            {type == 'month' ? (
+                        </div>
+                        <div className="tbox">
+                            <div className="toptitle3">3.方案详情</div>
+                            <div className="strg">
                                 <div>
-                                    <span className="sleft">本月管理费</span>
-                                    <span className="sright">{monthManageFee}</span>
+                                    <span className="sleft">操盘资金</span>
+                                    {allottedScale == 0 ? (<span className="sright">{cpje}</span>) : (<span className="sright">{cpje1}</span>)}
                                 </div>
-                            ) : ''}
-                            <div>
-                                <span className="sleft">警戒线</span>
-                                <span className="sright">{jjje}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">平仓线</span>
-                                <span className="sright">{zsje}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">开始交易</span>
-                                <span className="sright">{date}</span>
-                            </div>
-                            <div>
-                                <span className="sleft">持仓限制</span>
-                                <span className="sright">个股持仓比例：{positionRatio}&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;创业板持仓比例：{secondBoardPositionRatio}</span>
+                                <div>{allottedScale == 0 ? (<span className="sleft">保证金</span>) : (<span className="sleft">新增保证金</span>)}
+                                    <span className="sright">{amount}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">建仓费</span>
+                                    <span className="sright">{fwf}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">建仓费率</span>
+                                    {allottedScale == 0 ? (<span className="sright">{makeFeeRate}</span>) : (<span className="sright">0</span>)}
+                                </div>
+                                <div>
+                                    <span className="sleft">管理费率</span>
+                                    {allottedScale == 0 ? (<span className="sright">{financeFee}</span>) : (<span className="sright">0</span>)}
+                                </div>
+                                {type == 'month' ? (
+                                    <div>
+                                        <span className="sleft">本月管理费</span>
+                                        <span className="sright">{monthManageFee}</span>
+                                    </div>
+                                ) : ''}
+                                <div>
+                                    <span className="sleft">警戒线</span>
+                                    <span className="sright">{jjje}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">平仓线</span>
+                                    <span className="sright">{zsje}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">开始交易</span>
+                                    <span className="sright">{date}</span>
+                                </div>
+                                <div>
+                                    <span className="sleft">持仓限制</span>
+                                    <span className="sright">个股持仓比例：{positionRatio}&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;创业板持仓比例：{secondBoardPositionRatio}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="tbox">
-                        <div className="ty">
-                            <Checkbox onChange={this.onChange}></Checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div className="tbox">
+                            <div className="ty">
+                                <Checkbox onChange={this.onChange}></Checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
                             <span className="tiaoyue" onClick={() => this.changeBool()}>已阅读并同意操盘规则</span>
+                            </div>
+                            {allottedScale == 0 ? (<div className="apply" onClick={() => this.deposit()}>立即申请</div>) : (<div className="apply1"><span className="applya" onClick={() => this.add('true')}>加配</span>
+                                <span className="applyb" onClick={() => this.add('false')}>补仓</span></div>)}
                         </div>
-                        {allottedScale == 0 ? (<div className="apply" onClick={() => this.deposit()}>立即申请</div>) : (<div className="apply1"><span className="applya" onClick={() => this.add('true')}>加配</span>
-                            <span className="applyb" onClick={() => this.add('false')}>补仓</span></div>)}
                     </div>
                 </div>
             </div>

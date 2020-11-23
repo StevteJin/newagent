@@ -99,6 +99,7 @@ class login extends React.Component {
             <div>
                 <Modal
                     title="提示"
+                    centered
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}

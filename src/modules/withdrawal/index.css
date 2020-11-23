@@ -12,16 +12,15 @@
 }
 
 .addSubmite {
-    background-color: #5473FF;
+    width: 221px;
+    height: 31px;
+    background: #5473FF;
     color: #fff;
-    width: 450px;
-    margin-left: 150px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 14px;
+    line-height: 31px;
     text-align: center;
+    margin-left: 149px;
+    margin-top: 102px;
     cursor: pointer;
-    margin-top: 100px;
 }
 
 .txbox {

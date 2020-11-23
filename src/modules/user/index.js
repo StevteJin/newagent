@@ -110,6 +110,7 @@ class UserCenter extends React.Component {
             <div className="usercenter">
                 <Modal
                     title="提示"
+                    centered
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
