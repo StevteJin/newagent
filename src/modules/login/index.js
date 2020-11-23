@@ -80,6 +80,9 @@ class login extends React.Component {
 
     handleOk = e => {
         console.log(e);
+        if (this.state.msg == '请重新登录') {
+            this.props.history.push('/login');
+        }
         this.setState({
             visible: false,
         });

@@ -76,6 +76,18 @@ class UserCenter extends React.Component {
                 month: resultInfo.month,
                 single: resultInfo.single
             }, () => { })
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                }, () => {
+
+                })
+            }
         });
     }
 
@@ -95,7 +107,19 @@ class UserCenter extends React.Component {
                     this.getFinanceRatio(this.state.financeRatio, this.state.type)
                 })
             }
-        })
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                }, () => {
+
+                })
+            }
+        });
     }
     setmoney = e => {
         console.log('我是钱', e.target.value);
@@ -167,6 +191,8 @@ class UserCenter extends React.Component {
                         this.setState({
                             visible: true,
                             msg: data
+                        }, () => {
+
                         })
                     }
                 });
@@ -176,7 +202,10 @@ class UserCenter extends React.Component {
     }
 
     handleOk = e => {
-        console.log(e);
+        console.log(this.state.msg);
+        if (this.state.msg == '请重新登录') {
+            this.props.history.push('/login');
+        }
         this.setState({
             visible: false,
         });
@@ -191,6 +220,9 @@ class UserCenter extends React.Component {
 
     handleOk1 = e => {
         console.log(e);
+        if (this.state.msg == '请重新登录') {
+            this.props.history.push('/login');
+        }
         this.setState({
             tiaoyue1: false,
         });

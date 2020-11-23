@@ -35,6 +35,16 @@ class UserCenter extends React.Component {
             console.log('我是信息', this.state);
             //这里拿到的username要发出订阅出去，redux订阅
             this.username(this.state.accountName);
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                })
+            }
         });
     }
     chongzhi() {
@@ -68,6 +78,9 @@ class UserCenter extends React.Component {
 
     handleOk = e => {
         console.log(e);
+        if (this.state.msg == '请重新登录') {
+            this.props.history.push('/login');
+        }
         this.setState({
             visible: false,
         });

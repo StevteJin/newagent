@@ -59,6 +59,16 @@ class UserCenter extends React.Component {
             this.setState({
                 balance: res.balance
             });
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                })
+            }
         });
     }
     moneyNow() {
@@ -91,6 +101,9 @@ class UserCenter extends React.Component {
 
     handleOk = e => {
         console.log(e);
+        if (this.state.msg == '请重新登录') {
+            this.props.history.push('/login');
+        }
         this.setState({
             visible: false,
         });
@@ -205,9 +218,9 @@ class UserCenter extends React.Component {
         if (!this.state.bankId) {
             this.state.bankId = 0
         }
-        if (!this.state.provinceId) {
-            this.state.provinceId = 0
-        }
+        // if (!this.state.provinceId) {
+        //     this.state.provinceId = 0
+        // }
         let url = '/tn/tn/banks/' + this.state.bankId + '/province/' + this.state.provinceId + '/cities', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
             this.setState({
