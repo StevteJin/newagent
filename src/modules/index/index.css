@@ -17,9 +17,10 @@
     padding-right: 0px;
 }
 
-.ant-modal-content{
+.ant-modal-content {
     border-radius: 8px;
 }
+
 .topTitle {
     width: 100%;
     height: 75px;
@@ -44,7 +45,6 @@
     display: inline-block;
     font-size: 14px;
     margin-left: 608px;
-    font-weight: bold;
 }
 
 .topTitle .s2 img {
@@ -56,12 +56,15 @@
 .topTitle .s2 .us {
     color: #5473FF;
     margin-left: 13px;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .topTitle .s2 .loginout {
     color: #5473FF;
     cursor: pointer;
     margin-left: 20px;
+    font-size: 12px;
 }
 
 .username {

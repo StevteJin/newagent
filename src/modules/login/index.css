@@ -18,12 +18,13 @@
 .topLogin {
     height: 546px;
     margin-left: 10px;
-    margin-top: 50px;
+    padding-top: 40px;
+    margin-top: 10px;
     overflow: hidden;
-    background-image: url(./img/m1.png);
+    background-image: url(./img/m11.png);
     background-repeat: no-repeat;
-    background-size: 369px 546px;
-    background-position: 0px 0px;
+    background-size: 528px 603px;
+    background-position: -155px -30px;
 }
 
 .topLogin .t1 {
@@ -162,6 +163,7 @@
 
 .ant-progress-inner {
     border-radius: 0px;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .ant-progress-inner .ant-progress-bg {

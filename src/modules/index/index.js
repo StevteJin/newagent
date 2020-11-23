@@ -110,7 +110,7 @@ class MainContent extends React.Component {
             <Layout>
                 <div className="topTitle">
                     <span className="s1">资管后台管理系统</span>
-                    <span className="s2">HELLO,<img src={b2} alt="" />
+                    <span className="s2"><span className='us'>HELLO</span>,<img src={b2} alt="" />
                         <span className='us'>{this.state.username}</span>{this.state.username ? <span className='loginout' onClick={() => this.loginOut()}>退出</span> : ''}</span>
                 </div>
                 <Layout>
