@@ -1,7 +1,6 @@
 .biglogin {
     width: 1282px;
     height: 719px;
-    background-image: url(./img/bigbg.png);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     position: absolute;
@@ -9,6 +8,9 @@
     transform: translate(-50%, -50%);
     top: 50%;
     overflow: hidden;
+    border-radius: 30px;
+    background-color: #000;
+    box-shadow: 0px 0px 10px 0px rgba(38, 52, 115, 1);
 }
 
 .leftLogin {
@@ -53,7 +55,9 @@
     margin-left: 42px;
 }
 
-.bottomLogin {}
+.bottomLogin {
+    margin-top:70px;
+}
 
 .bottomLogin .b1 {
     margin-left: 80px;
@@ -89,6 +93,7 @@
     margin-top: 46px;
     margin-right: 89px;
     float: right;
+    border-radius: 4px;
 }
 
 .loginbox .title {
@@ -97,16 +102,16 @@
     color: #333333;
     margin-left: 57px;
     margin-top: 67px;
+    margin-bottom: 80px;
 }
 
 .loginbox .in1 {
-    height: 49px;
-    line-height: 49px;
+    height: 30px;
+    line-height: 30px;
     border: 0px;
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 2px solid #EDEDED;
     width: 397px;
     margin-left: 57px;
-    margin-top: 70px;
     font-size: 16px;
     outline: none;
 }
@@ -116,10 +121,10 @@
 }
 
 .loginbox .in2 {
-    height: 49px;
-    line-height: 49px;
+    height: 30px;
+    line-height: 30px;
     border: 0px;
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 2px solid #EDEDED;
     width: 397px;
     margin-left: 57px;
     font-size: 16px;
@@ -155,6 +160,7 @@
 .loginbox .loginButton {
     width: 397px;
     height: 57px;
+    border-radius: 28.5px;
     font-size: 22px;
     color: #fff;
     line-height: 47px;
@@ -169,4 +175,15 @@
 .ant-progress-inner .ant-progress-bg {
     height: 3px!important;
     border-radius: 0px!important;
+}
+
+.aaab {
+    color: #666666;
+    font-size: 16px;
+    margin-left: 60px;
+    margin-top: 27px;
+}
+
+.bbba{
+    font-size:16px;
 }

@@ -124,16 +124,18 @@ class login extends React.Component {
                                 <span>仁信</span>
                             </div> */}
                             <div className="loading">
-                                {this.state.loadingTime == 10 ? <div>Not logged in</div> :
-                                    <div>Loading is running in the background...</div>}
+                                {this.state.loadingTime == 10 ? <div className="bbba">Not logged in</div> :
+                                    <div className="bbba">Loading is running in the background...</div>}
                                 <Progress percent={this.state.loadingTime} showInfo={false} strokeColor='#5473FF' width='2' />
                             </div>
                         </div>
                     </div>
                     <div className="loginbox">
                         <div className="title">登录</div>
-                        <Input className="in1" value={this.state.username} placeholder="用户账号" onChange={e => this.setState({ username: e.target.value })} /><br /><br />
-                        <Input type="password" className="in2" value={this.state.password} placeholder="用户密码" onChange={e => this.setState({ password: e.target.value })} /><br /><br />
+                        <div className="aaab"> 用户账号</div>
+                        <Input className="in1" value={this.state.username} onChange={e => this.setState({ username: e.target.value })} />
+                        <div className="aaab"> 用户密码</div>
+                        <Input type="password" className="in2" value={this.state.password} onChange={e => this.setState({ password: e.target.value })} /><br /><br />
                         <div className="mbox">
                             <img className="m5" src={m5} alt="" />
                             <Button className="loginButton" type="primary" onClick={() => this.loginNow()}>登录</Button>
