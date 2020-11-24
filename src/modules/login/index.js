@@ -132,10 +132,8 @@ class login extends React.Component {
                     </div>
                     <div className="loginbox">
                         <div className="title">登录</div>
-                        <div className="aaab"> 用户账号</div>
-                        <Input className="in1" value={this.state.username} onChange={e => this.setState({ username: e.target.value })} />
-                        <div className="aaab"> 用户密码</div>
-                        <Input type="password" className="in2" value={this.state.password} onChange={e => this.setState({ password: e.target.value })} /><br /><br />
+                        <Input className="in1" placeholder="用户账号" value={this.state.username} onChange={e => this.setState({ username: e.target.value })} />
+                        <Input type="password" className="in2" placeholder="用户密码" value={this.state.password} onChange={e => this.setState({ password: e.target.value })} /><br /><br />
                         <div className="mbox">
                             <img className="m5" src={m5} alt="" />
                             <Button className="loginButton" type="primary" onClick={() => this.loginNow()}>登录</Button>
