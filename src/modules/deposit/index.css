@@ -1,0 +1,29 @@
+.strategy-tabs {
+    background: #fff;
+    justify-content: space-around;
+    overflow: hidden;
+}
+
+.strategy-tabs>div {
+    float: left;
+    text-align: center;
+    width: 110px;
+    height: 70px;
+    margin-left: 13px;
+}
+
+.strategy-tabs>div .num {
+    font-size: 11px;
+    margin-top: 11px;
+    margin-bottom: 12px;
+}
+
+.strategy-tabs>div .interest {
+    margin-top: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.strategy-tabs>div .amount-num {
+    font-size: 13px;
+}

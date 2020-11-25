@@ -25,7 +25,8 @@ class deposit extends React.Component {
                 amount: 1000
             }],
             nameMsg: "",
-            data: []
+            data: [],
+            staticData: []
         }
     }
     componentDidMount = () => {
@@ -39,32 +40,65 @@ class deposit extends React.Component {
 
     }
 
-    // generalTrend() {
-    //     httpAxios('/tn/tn/quota/generalTrend', 'post', false, null).then(res => {
-    //         this.setState({
-    //             list: res
-    //         })
-    //         setTimeout(() => {
-    //             this.generalTrend();
-    //         }, 60000);
-    //     }, error => {
-    //         console.log(error.response)
-    //         if (error.response.status == 400) {
-    //             let data = JSON.stringify(error.response.data.resultInfo);
-    //             data = data.replace(/^(\s|")+|(\s|")+$/g, '');
-    //             this.setState({
-    //                 visible: true,
-    //                 msg: data
-    //             })
-    //         }
-    //     });
-    // }
-
     back() {
         this.props.history.push('/plan');
     }
     selectType(id, money) {
 
+    }
+    finance(){
+
+    }
+    financeScheme() {
+        let goId = this.props.match.params.id;
+        httpAxios('/tn/tntg/financeScheme', 'post', false, null).then(res => {
+            const data = {
+                id: 0,
+                mul: 1
+            };
+            this.setState({
+                staticData: res['resultInfo']
+            }, () => {
+                if (goId == 0) {
+                    this.setState({
+                        financeData: this.state.staticData['day'],
+                        nameMsg: '按使用金额收取固定收益'
+                    })
+                } else if (goId == 1) {
+                    this.setState({
+                        financeData: this.state.staticData['week']
+                    })
+                } else if (goId == 2) {
+                    this.setState({
+                        financeData: this.state.staticData['month'],
+                        nameMsg: '按申请金额收取固定收益'
+                    })
+                } else {
+                    this.setState({
+                        financeData: this.state.staticData['single'],
+                        nameMsg: '按个股盈利分成'
+                    })
+                }
+                this.finance();
+                // if (this.userInfo.allottedScale === '0') {
+                //     this.mulType = this.detail[0].mul;
+                // } else {
+                //     this.mulType = this.userInfo.financeRatio;
+                // }
+            })
+
+
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                })
+            }
+        });
     }
     render() {
         const { typeList, nameMsg } = this.state;
