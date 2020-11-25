@@ -129,13 +129,15 @@ class MainContent extends React.Component {
             if (item.path == '/index') {
                 item.where = U
             } else if (item.path == '/plan') {
-                item.where = plan
+                if (isPc) {
+                    item.where = plan
+                } else {
+                    item.where = mIndex
+                }
             } else if (item.path == '/withdrawal') {
                 item.where = withdrawal
             } else if (item.path == '/topup') {
                 item.where = topup
-            } else if (item.path == '/mIndex') {
-                item.where = mIndex
             } else {
                 item.where = A
             }
