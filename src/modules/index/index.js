@@ -7,6 +7,8 @@ import httpAxios from '../../helpers/request';
 import { MENU } from '../../constants/menudata'
 //图
 import b2 from './img/b2.png';
+import index from './img/index.png';
+import gerem from './img/gerem.png';
 //引入表格，布局，导航
 import { Layout, Menu } from 'antd';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
@@ -18,6 +20,7 @@ import A from '../list/index';
 import plan from '../plans/index';
 import withdrawal from '../withdrawal/index';
 import topup from '../topup/index';
+import mIndex from '../mIndex/index';
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -35,15 +38,23 @@ class MainContent extends React.Component {
             current: "",
             username: '',
             qrUrl: '',
-            qrUrl1: ''
+            qrUrl1: '',
+            isPc: false,
+            where: "index"
         }
     }
     // componentWillMount()一般用的比较少，它更多的是在服务端渲染时使用。它代表的过程是组件已经经历了constructor()初始化数据后，但是还未渲染DOM时。
     componentWillMount = () => {
 
     }
+    box = () => {
+        this.browserRedirect();
+    }
     // 组件第一次渲染完成，此时dom节点已经生成，可以在这里调用ajax请求，返回数据setState后组件会重新渲染
     componentDidMount = () => {
+        this.browserRedirect();
+        let that = this;
+        window.addEventListener('resize', that.box);
         let moren = this.props.location.pathname;
         this.setState({
             current: moren.substring(moren.lastIndexOf("/") + 1, moren.lenth)
@@ -66,8 +77,32 @@ class MainContent extends React.Component {
             console.log('图啊', this.state.username, this.state.invite_code_desc)
         });
     }
+    browserRedirect() {
+        let isPc;
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        if (!(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM)) {
+            isPc = true
+        } else {
+            isPc = false
+        }
+        this.setState({
+            isPc: isPc
+        })
+        console.log('哪一端', isPc);
+        return isPc;
+    }
     // 在此处完成组件的卸载和数据的销毁。
     componentWillUnmount = () => {
+        let that = this;
+        window.removeEventListener('resize', that.box);
         this.setState = (state, callback) => {
             return;
         };
@@ -76,7 +111,15 @@ class MainContent extends React.Component {
         localStorage.clear();
         this.props.history.push('/login')
     }
+
+    toWhere(who) {
+        console.log('哪里', who);
+        this.setState({
+            where: who
+        })
+    }
     render() {
+        const { isPc, where } = this.state;
         let menuData = MENU;
         let menuDom = menuData.map((item, index) => (<Menu.Item key={item.key}>
             <Link to={item.path}><span>{item.name}</span></Link>
@@ -91,6 +134,8 @@ class MainContent extends React.Component {
                 item.where = withdrawal
             } else if (item.path == '/topup') {
                 item.where = topup
+            } else if (item.path == '/mIndex') {
+                item.where = mIndex
             } else {
                 item.where = A
             }
@@ -106,62 +151,82 @@ class MainContent extends React.Component {
             />)
         ))
         return (<div>
-
-            <Layout>
-                <div className="topTitle">
-                    <span className="s1">资管后台管理系统</span>
-                    <span className="s2"><span className='us'>HELLO</span>,<img src={b2} alt="" />
-                        <span className='us'>{this.state.username}</span>{this.state.username ? <span className='loginout' onClick={() => this.loginOut()}>退出</span> : ''}</span>
-                </div>
-                <Layout>
-                    <Sider width={200} style={{ background: '#fff' }}>
-                        <div className="username">{this.state.username}</div>
-                        <div className='menuBox'>
-                            <Menu
-                                mode="inline"
-                                selectedKeys={[this.state.current]}
-                                style={{ height: '100%' }}
-                            >
-                                {menuDom}
-                            </Menu>
-                        </div>
-                        {this.state.qrUrl1 ?
-                            <div className='ercode'>
-                                <div className='ertitle'>我的推广码</div>
-                                <div className='erimg'>
-                                    <QRCode
-                                        value={this.state.qrUrl1}
-                                        size={110}
-                                        fgColor="#000000"
-                                    />
-                                </div>
-                            </div> : <div className='ercode'>
-                                <div className='ertitle'>我的邀请码</div>
-                                <div className='erimg'>
-                                    <QRCode
-                                        value={this.state.qrUrl}
-                                        size={110}
-                                        fgColor="#000000"
-                                    />
-                                </div>
-                            </div>}
-                    </Sider>
+            {isPc ? (
+                <div>
                     <Layout>
-                        <Content
-                            style={{
-                                background: '#fff',
-                                padding: 24,
-                                margin: 0,
-                                minHeight: 280,
-                            }}
-                        >
-                            <Switch>
-                                {routeDom}
-                            </Switch>
-                        </Content>
+                        <div className="topTitle">
+                            <span className="s1">资管后台管理系统</span>
+                            <span className="s2"><span className='us'>HELLO</span>,<img src={b2} alt="" />
+                                <span className='us'>{this.state.username}</span>{this.state.username ? <span className='loginout' onClick={() => this.loginOut()}>退出</span> : ''}</span>
+                        </div>
+                        <Layout>
+                            <Sider width={200} style={{ background: '#fff' }}>
+                                <div className="username">{this.state.username}</div>
+                                <div className='menuBox'>
+                                    <Menu
+                                        mode="inline"
+                                        selectedKeys={[this.state.current]}
+                                        style={{ height: '100%' }}
+                                    >
+                                        {menuDom}
+                                    </Menu>
+                                </div>
+                                {this.state.qrUrl1 ?
+                                    <div className='ercode'>
+                                        <div className='ertitle'>我的推广码</div>
+                                        <div className='erimg'>
+                                            <QRCode
+                                                value={this.state.qrUrl1}
+                                                size={110}
+                                                fgColor="#000000"
+                                            />
+                                        </div>
+                                    </div> : <div className='ercode'>
+                                        <div className='ertitle'>我的邀请码</div>
+                                        <div className='erimg'>
+                                            <QRCode
+                                                value={this.state.qrUrl}
+                                                size={110}
+                                                fgColor="#000000"
+                                            />
+                                        </div>
+                                    </div>}
+                            </Sider>
+                            <Layout>
+                                <Content
+                                    style={{
+                                        background: '#fff',
+                                        padding: 24,
+                                        margin: 0,
+                                        minHeight: 280,
+                                    }}
+                                >
+                                    <Switch>
+                                        {routeDom}
+                                    </Switch>
+                                </Content>
+                            </Layout>
+                        </Layout>
                     </Layout>
-                </Layout>
-            </Layout>
+                </div>
+            ) : (
+                    <div>
+                        {routeDom}
+                        <div className="footer1" id="footer1">
+                            <div className="small-footer">
+                                <div className={where === "index" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('index')}>
+                                    <div className="icon index"></div>
+                                    <p>首页</p>
+                                </div>
+                                <div className={where === "geren" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('geren')}>
+                                    <div className="icon geren"></div>
+                                    <p>个人</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
         </div>);
     }
 }

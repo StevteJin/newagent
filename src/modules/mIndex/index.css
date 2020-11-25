@@ -1,0 +1,91 @@
+.navigation {
+    position: relative;
+    top: 0;
+    width: 100vw;
+    text-align: center;
+    height: 44px;
+    line-height: 44px;
+    background-color: #ffffff;
+    color: #5A5B65;
+    font-size: 18px;
+}
+
+.navigation-title {
+    margin-bottom: 44px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 44px;
+    font-size: 18px;
+    color: #5A5B65;
+    background-color: #fff;
+}
+
+.navigation .back {
+    width: 8px;
+    height: 13px;
+    background: url(./img/back.png) no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    margin-top: 16px;
+    margin-left: 15px;
+    z-index: 10;
+}
+
+.index-page {
+    background-color: #fff;
+}
+
+.topbanner {
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 5px solid rgb(246, 246, 246);
+}
+
+.topbanner img {
+    width: 100%;
+}
+
+.tabs {
+    display: flex;
+    width: 100vw;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background: #fff;
+    border-bottom: 5px solid rgb(246, 246, 246);
+}
+
+.tabs .tabs-div2 {
+    flex: 1;
+    text-align: center;
+    color: #333333;
+    font-size: 11px;
+}
+
+.tabs .tabs-div2 p {
+    margin: 0;
+}
+
+.tabs .tabs-div2 p:nth-child(2) {
+    font-weight: bold;
+    font-size: 16px;
+    /* margin: 5px 0; */
+}
+
+.tabs .tabs-div2 p:nth-child(3) {
+    font-size: 10px;
+}
+
+.tabs .tabs-div2 p:last-child {
+    color: #666666;
+    font-size: 10px;
+}
+
+.red {
+    color: #F05330 !important;
+}
+
+.green {
+    color: #27B054 !important;
+}

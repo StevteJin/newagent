@@ -142,3 +142,60 @@
     border-bottom: 1px solid #ededed!important;
     margin-bottom: 0px!important;
 }
+
+.footer1 {
+    text-align: center;
+    position: fixed!important;
+    bottom: 0;
+    z-index: 10;
+    background: #fff;
+    border-top: solid 1px #e6e6e6;
+    width: 100vw;
+    /* padding-bottom: constant(safe-area-inset-bottom); */
+}
+
+.footer1 .small-footer {
+    display: flex;
+    height: 48px;
+}
+
+.footer-div {
+    flex: 1;
+    padding-top: 3px;
+}
+
+.footer-div p {
+    font-size: .8rem;
+    margin-top: 4px;
+    color: #898989;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    background-size: 194%;
+    background-position: -9px -9px;
+}
+
+.index {
+    background: url(./img/index.png) no-repeat;
+    background-size: 194%;
+    background-position: -9px -9px;
+}
+
+.geren {
+    background: url(./img/gerem.png) no-repeat;
+    background-size: 194%;
+    background-position: -9px -9px;
+}
+
+.icon-active .icon {
+    background-position: -9px -48px;
+}
+
+.icon-active p {
+    background: linear-gradient(to right top, #5775FF, #5775FF);
+    -webkit-background-clip: text;
+    color: transparent;
+}

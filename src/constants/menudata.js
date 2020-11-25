@@ -20,5 +20,9 @@ const menu = [{
     name: '资金流水',
     filter: [],
     needTime: { key: 'create_time', value: 'RANGE' }
+}, {
+    path: '/mIndex',
+    key: 'mIndex',
+    name: '首页',
 }];
 export const MENU = menu;
