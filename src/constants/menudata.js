@@ -24,5 +24,9 @@ const menu = [{
     path: '/mIndex',
     key: 'mIndex',
     name: '首页',
+}, {
+    path: '/deposit/:id',
+    key: 'deposit',
+    name: '策略',
 }];
 export const MENU = menu;

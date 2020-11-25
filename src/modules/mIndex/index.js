@@ -87,7 +87,8 @@ class mIndex extends React.Component {
                 // diText: '无资金限制'
             }],
             addId: 0,
-            newslist: []
+            newslist: [],
+            goId: ""
         }
     }
     componentDidMount = () => {
@@ -135,7 +136,11 @@ class mIndex extends React.Component {
         })
     }
     goto(id) {
-
+        this.setState({
+            goId: id
+        }, () => {
+            this.props.history.push('/deposit/' + id);
+        })
     }
     goto2(id) {
 
