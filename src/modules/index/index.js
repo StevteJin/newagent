@@ -42,7 +42,8 @@ class MainContent extends React.Component {
             qrUrl: '',
             qrUrl1: '',
             isPc: false,
-            where: "index"
+            where: "index",
+            path: ""
         }
     }
     // componentWillMount()一般用的比较少，它更多的是在服务端渲染时使用。它代表的过程是组件已经经历了constructor()初始化数据后，但是还未渲染DOM时。
@@ -54,11 +55,14 @@ class MainContent extends React.Component {
     }
     // 组件第一次渲染完成，此时dom节点已经生成，可以在这里调用ajax请求，返回数据setState后组件会重新渲染
     componentDidMount = () => {
+        let path = this.props.location.pathname;
+        console.log('我是当前路由', path);
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
         let moren = this.props.location.pathname;
         this.setState({
+            path: path,
             current: moren.substring(moren.lastIndexOf("/") + 1, moren.lenth)
         });
         this.props.history.listen((event) => {
@@ -121,7 +125,7 @@ class MainContent extends React.Component {
         })
     }
     render() {
-        const { isPc, where } = this.state;
+        const { isPc, where, path } = this.state;
         let menuData = MENU;
         let menuDom = menuData.map((item, index) => (<Menu.Item key={item.key}>
             <Link to={item.path}><span>{item.name}</span></Link>
@@ -220,21 +224,23 @@ class MainContent extends React.Component {
             ) : (
                     <div>
                         {routeDom}
-                        <div className="footer1" id="footer1">
-                            <div className="small-footer">
-                                <div className={where === "index" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('index')}>
-                                    <div className="icon index"></div>
-                                    <p>首页</p>
-                                </div>
-                                <div className={where === "geren" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('geren')}>
-                                    <div className="icon geren"></div>
-                                    <p>个人</p>
+                        {path == '/plan' ? (
+                            <div className="footer1" id="footer1">
+                                <div className="small-footer">
+                                    <div className={where === "index" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('index')}>
+                                        <div className="icon index"></div>
+                                        <p>首页</p>
+                                    </div>
+                                    <div className={where === "geren" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('geren')}>
+                                        <div className="icon geren"></div>
+                                        <p>个人</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ) : ""}
+
                     </div>
                 )}
-
         </div>);
     }
 }
