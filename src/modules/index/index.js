@@ -22,6 +22,7 @@ import withdrawal from '../withdrawal/index';
 import topup from '../topup/index';
 import mIndex from '../mIndex/index';
 import deposit from '../deposit/index';
+import strategy from '../strategy/index';
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -141,6 +142,8 @@ class MainContent extends React.Component {
                 item.where = topup
             } else if (item.path == '/deposit/:id') {
                 item.where = deposit
+            } else if (item.path == '/strategy/:id') {
+                item.where = strategy
             } else {
                 item.where = A
             }

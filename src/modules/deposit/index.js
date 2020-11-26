@@ -31,7 +31,13 @@ class deposit extends React.Component {
             mulType: "",
             tabs: 0,
             money: 1000,
-            allottedScale: ""
+            allottedScale: "",
+            visible: false,
+            msg: "",
+            type: "",
+            addType: "",
+            fee: "",
+            financeData: ""
         }
     }
     componentDidMount = () => {
@@ -91,6 +97,9 @@ class deposit extends React.Component {
     }
     financeScheme() {
         let goId = this.props.match.params.id;
+        this.setState({
+            type: goId
+        })
         httpAxios('/tn/tntg/financeScheme', 'post', false, null).then(res => {
             const data = {
                 id: 0,
@@ -185,11 +194,119 @@ class deposit extends React.Component {
             tabs: tabs
         })
     }
-    goto(id, mul, financeFeeRate) {
-
+    judge() {
+        if (this.state.money % 1000 !== 0 || this.state.money == null || this.state.money <= 0) {
+            this.setState({
+                visible: true,
+                msg: '投入金额必须是1000的倍数，且大于0'
+            })
+            return false;
+        } else {
+            return true;
+        }
     }
-    add(val) {
+    goto(id, mul, fee) {
+        let username = localStorage.getItem("username");
+        let goId = this.props.match.params.id;
+        if (username) {
+            if (this.judge()) {
+                const data = {
+                    type: this.state.type.toString(),
+                    mulType: mul,
+                    money: this.state.money,
+                    cordonLineRate: this.state.financeData[id]['cordonLineRate'],
+                    flatLineRate: this.state.financeData[id]['flatLineRate'],
+                    positionRatio: this.state.financeData[id]['positionRatio'],
+                    secondBoardPositionRatio: this.state.financeData[id]['secondBoardPositionRatio'],
+                    fee
+                };
+                console.log(data);
+                localStorage.setItem("strategyData", JSON.stringify(data));
+                if (this.state.userInfo.allottedScale == 0) {
+                    this.setState({
+                        mulType: id
+                    })
+                    localStorage.setItem("isAdd", false);
+                    localStorage.setItem("allottedScale2", 0);
+                    //跳转到策略
+                    this.props.history.push('/strategy/' + goId);
+                }
+            }
+        } else {
+            this.props.history.push('/login');
+        }
+    }
 
+    /**
+   * 判断有几位小数
+   */
+    Decimal(num) {
+        num = num + '';
+        if (num.indexOf('.') !== -1) {
+            return num.split('.')[1].length;
+        } else {
+            return 0;
+        }
+    }
+
+    isAddFn() {
+        let id = 0;
+        this.state.financeData.forEach((element, index) => {
+            if (element['financeRatio'] === this.state.mulType) {
+                return id = index;
+            }
+        });
+        const data = {
+            type: this.state.type.toString(),
+            mulType: this.mulType,
+            money: this.state.money,
+            cordonLineRate: this.state.financeData[id]['cordonLineRate'],
+            flatLineRate: this.state.financeData[id]['flatLineRate'],
+            positionRatio: this.state.financeData[id]['positionRatio'],
+            secondBoardPositionRatio: this.state.financeData[id]['secondBoardPositionRatio'],
+        };
+        // this.data.setSession('strategyData', JSON.stringify(data));
+        // this.data.setSession('allottedScale2', this.userInfo.allottedScale);
+        // this.data.goto('strategy');
+    }
+
+    add(type) {
+        this.setState({
+            addType: type
+        }, () => {
+            // this.data.setSession('isAdd', type);
+            if (type) { // 增配
+                if (this.judge()) {
+                    let fee = parseInt(this.userInfo.totalScale, 0) - parseInt(this.userInfo.allottedScale, 0);
+                    this.setState({
+                        fee: fee
+                    }, () => {
+                        if (this.state.fee < 0) {
+                            this.state.fee = Math.abs(this.state.fee);
+                            this.setState({
+                                visible: true,
+                                msg: `预补足的费用为${this.state.fee}元，是否在本次增配中自动补足`
+                            })
+                        } else {
+                            this.isAddFn();
+                        }
+                    })
+                }
+            } else { // 非增配
+                if (this.state.money <= 0 || this.Decimal(this.state.money) > 2) {
+                    this.setState({
+                        visible: true,
+                        msg: '非增配入金金额必须大于0,且不能超过两位小数'
+                    })
+                } else {
+                    this.setState({
+                        visible: true,
+                        msg: '是否确定入金'
+                    })
+                    //入金的操作
+                }
+            }
+        })
     }
     render() {
         const { typeList, nameMsg, detail, userInfo, mulType, tabs, allottedScale } = this.state;

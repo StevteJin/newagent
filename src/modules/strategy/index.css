@@ -1,0 +1,129 @@
+.banner img {
+    width: 100vw;
+}
+
+.banner p {
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    width: 100vw;
+    font-size: 1.1rem;
+    margin-top: 29px;
+}
+
+.banner p:nth-child(2) {
+    margin-top: 66px;
+    font-size: 2.2rem;
+    font-weight: bold;
+}
+
+.cell-list {
+    border-top: solid 1px #e5e5e5;
+    border-bottom: solid 1px #e5e5e5;
+    background: #fff;
+    color: #333;
+    text-align: left;
+}
+
+.cell-list .list-item:last-child {
+    border-bottom: none !important;
+}
+
+.list-item {
+    height: 45px;
+    font-size: 14px;
+    line-height: 45px;
+    background: #fff;
+    border-bottom: solid 1px #f1f1f1;
+    overflow: hidden;
+}
+
+.list-item select {
+    width: 65%;
+    position: absolute;
+    height: 45px;
+    z-index: 10;
+    background: none;
+    border: none;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.list-item input {
+    height: 36px;
+    width: 60%;
+    margin-left: 3px;
+    font-size: 15px;
+    border: none;
+}
+
+.list-item .span-title {
+    display: inline-block;
+    width: 30%;
+}
+
+.list-item .right-icon {
+    width: 15px;
+    height: 15px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 15px;
+}
+
+.list-item span:nth-child(1) {
+    margin-left: 15px;
+}
+
+.list-item div {
+    float: right;
+    margin-right: 10px;
+}
+
+.list-item div span:nth-child(1) {
+    color: #9a9a9a;
+}
+
+.list-item:active {
+    background: rgb(245, 245, 245);
+}
+
+.list-item-content {
+    color: #8E9399;
+    float: right;
+    margin-right: 15px;
+}
+
+.list-item-name {
+    color: #5A5B65;
+}
+
+.list-item-name img {
+    width: 15px;
+    margin-top: 11px;
+    margin-left: 5px;
+    vertical-align: top;
+}
+
+.submit {
+    display: block;
+    width: 90vw;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    background: #5473FF;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    margin: 1rem auto 20px;
+    border: none;
+}
+
+.content {
+    height: calc(100vh - 198px);
+    overflow-y: auto;
+}

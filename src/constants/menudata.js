@@ -28,5 +28,9 @@ const menu = [{
     path: '/deposit/:id',
     key: 'deposit',
     name: '策略',
+}, {
+    path: '/strategy/:id',
+    key: 'strategy',
+    name: '策略',
 }];
 export const MENU = menu;
