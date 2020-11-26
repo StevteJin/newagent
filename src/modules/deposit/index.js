@@ -109,7 +109,6 @@ class deposit extends React.Component {
                 staticData: res['resultInfo']
             }, () => {
                 if (goId == 0) {
-                    console.log('6666688888888888');
                     this.setState({
                         financeData: this.state.staticData['day'],
                         nameMsg: '按使用金额收取固定收益'
@@ -364,7 +363,7 @@ class deposit extends React.Component {
                     ) : ""}
                     {tabs == 1 ? (
                         <div className='tab-content'>
-
+                            功能暂未开通
                         </div>
                     ) : ""}
 

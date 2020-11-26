@@ -121,6 +121,7 @@
     border: none;
     margin: 1rem auto 20px;
     border: none;
+    outline: none;
 }
 
 .content {

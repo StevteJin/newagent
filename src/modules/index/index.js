@@ -145,9 +145,17 @@ class MainContent extends React.Component {
             } else if (item.path == '/topup') {
                 item.where = topup
             } else if (item.path == '/deposit/:id') {
-                item.where = deposit
+                if (isPc) {
+                    item.where = plan
+                } else {
+                    item.where = deposit
+                }
             } else if (item.path == '/strategy/:id') {
-                item.where = strategy
+                if (isPc) {
+                    item.where = plan
+                } else {
+                    item.where = strategy
+                }
             } else {
                 item.where = A
             }
