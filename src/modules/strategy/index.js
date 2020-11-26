@@ -25,28 +25,175 @@ class strategy extends React.Component {
                 tradeDay: "",
                 zsje: 4400
             },
+            tradeDay: "",
             isAdd: "",
             makeFeeRate: "",
             financeFee: "",
             manageFee: "",
             strategyType: "",
-            typetype: "",
-            separateFeeRate: ""
+            separateFeeRate: "",
+            peiziData: "",
+            financeData: "",
+            dateText: "",
+            dayType: ['day', 'week', 'month', 'single']
         }
     }
     componentDidMount = () => {
         let goId = this.props.match.params.id;
         let isAdd = localStorage.getItem("isAdd");
+        let peiziData = JSON.parse(localStorage.getItem("strategyData"));
+        let strategyType = peiziData.type;
+        let tradeDay = this.getNowFormatDate();
         this.setState({
             goId: goId,
             isAdd: isAdd,
-            tradeDay: this.getNowFormatDate()
+            peiziData: peiziData,
+            strategyType: strategyType,
+            tradeDay: tradeDay
+        }, () => {
+            if (this.state.isAdd == true) {
+                let url = '/tn/tntg/userInfo', method = 'post', options = null;
+                httpAxios(url, method, false, options).then(res => {
+                    let separateFeeRate = res['separateFeeRate'];
+                    let fwf = (Math.round(res['manageMakeFeeRate'] * this.state.peiziData.mulType * this.state.peiziData.money * 100) / 100).toFixed(2);
+                    this.setState({
+                        separateFeeRate: separateFeeRate
+                    })
+                    this.state.info.fwf = fwf;
+                }, error => {
+                    console.log(error.response)
+                    if (error.response.status == 400) {
+                        let data = JSON.stringify(error.response.data.resultInfo);
+                        data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                        this.setState({
+                            visible: true,
+                            msg: data
+                        })
+                    }
+                });
+            } else {
+                let url = '/tn/tntg/financeScheme', method = 'post', options = null;
+                httpAxios(url, method, false, options).then(res => {
+                    if (this.state.peiziData.type == 0) {
+                        this.setState({
+                            financeData: res['resultInfo']['day']
+                        }, () => {
+                            this.state.financeData.forEach(element => {
+                                if (element['financeRatio'] == this.state.peiziData.mulType) {
+                                    this.setState({
+                                        financeFee: element['financeFeeRate'],
+                                        makeFeeRate: element['makeFeeRate'],
+                                        separateFeeRate: element['separateFeeRate']
+                                    }, () => {
+                                        let fwf = (Math.round(this.state.makeFeeRate * this.state.peiziData.mulType * this.state.peiziData.money * 100) / 100).toFixed(2);
+                                        console.log('我建仓费', this.state.makeFeeRate, '707', this.state.peiziData.mulType, '808', this.state.peiziData.money);
+                                        this.state.info.fwf = fwf;
+                                    })
+                                }
+                            });
+                        })
+                    } else if (this.state.peiziData.type == 1) {
+                        this.setState({
+                            financeData: res['resultInfo']['week']
+                        }, () => {
+                            this.state.financeData.forEach(element => {
+                                if (element['financeRatio'] == this.state.peiziData.mulType) {
+                                    this.setState({
+                                        financeFee: element['financeFeeRate'],
+                                        makeFeeRate: element['makeFeeRate'],
+                                        separateFeeRate: element['separateFeeRate']
+                                    }, () => {
+                                        let fwf = (Math.round(this.state.makeFeeRate * this.state.peiziData.mulType * this.state.peiziData.money * 100) / 100).toFixed(2);
+                                        this.state.info.fwf = fwf;
+                                    })
+                                }
+                            });
+                        })
+                    } else if (this.state.peiziData.type == 2) {
+                        this.setState({
+                            financeData: res['resultInfo']['month']
+                        }, () => {
+                            this.state.financeData.forEach(element => {
+                                if (element['financeRatio'] == this.state.peiziData.mulType) {
+                                    this.setState({
+                                        financeFee: element['financeFeeRate'],
+                                        makeFeeRate: element['makeFeeRate'],
+                                        separateFeeRate: element['separateFeeRate']
+                                    }, () => {
+                                        let fwf = (Math.round(this.state.makeFeeRate * this.state.peiziData.mulType * this.state.peiziData.money * 100) / 100).toFixed(2);
+                                        this.state.info.fwf = fwf;
+                                    })
+                                }
+                            });
+                        })
+                    } else {
+                        this.setState({
+                            financeData: res['resultInfo']['single']
+                        }, () => {
+                            this.state.financeData.forEach(element => {
+                                if (element['financeRatio'] == this.state.peiziData.mulType) {
+                                    this.setState({
+                                        financeFee: element['financeFeeRate'],
+                                        makeFeeRate: element['makeFeeRate'],
+                                        separateFeeRate: element['separateFeeRate']
+                                    }, () => {
+                                        let fwf = (Math.round(this.state.makeFeeRate * this.state.peiziData.mulType * this.state.peiziData.money * 100) / 100).toFixed(2);
+                                        this.state.info.fwf = fwf;
+                                    })
+                                }
+                            });
+                        })
+                    }
+                }, error => {
+                    console.log(error.response)
+                    if (error.response.status == 400) {
+                        let data = JSON.stringify(error.response.data.resultInfo);
+                        data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                        this.setState({
+                            visible: true,
+                            msg: data
+                        })
+                    }
+                });
+            }
+
+            this.state.info.bzj = this.state.peiziData.money;
+            this.state.info.cpje = this.state.peiziData.money * (this.state.peiziData.mulType + 1) + parseInt(localStorage.getItem('allottedScale2'), 0);
+            this.setState({
+                dateText: this.state.dayType[this.state.strategyType]
+            }, () => {
+                const manageFee = {
+                    financeRatio: this.state.peiziData.mulType,
+                    financePeriod: this.state.dateText,
+                    amount: this.state.peiziData.money
+                };
+
+                let url = '/tn/tntg/theManageFee', method = 'post', options = manageFee;
+                httpAxios(url, method, false, options).then(res2 => {
+                    this.setState({
+                        manageFee: res2['resultInfo']['amount']
+                    })
+                }, error => {
+                    console.log(error.response)
+                    if (error.response.status == 400) {
+                        let data = JSON.stringify(error.response.data.resultInfo);
+                        data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                        this.setState({
+                            visible: true,
+                            msg: data
+                        })
+                    }
+                });
+            })
+            this.state.info.jjje = this.state.info.cpje * this.state.peiziData.cordonLineRate;
+            this.state.info.zsje = this.state.info.cpje * this.state.peiziData.flatLineRate;
         });
+
     }
     componentWillUnmount = () => {
 
     }
-    
+
     getNowFormatDate() {
         var date = new Date();
         var seperator1 = "-";
@@ -75,7 +222,7 @@ class strategy extends React.Component {
 
     }
     render() {
-        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, typetype, separateFeeRate } = this.state;
+        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, separateFeeRate, tradeDay } = this.state;
         return (
             <div>
                 <div className="navigation">
@@ -132,7 +279,7 @@ class strategy extends React.Component {
                                 </span>
                                 </div>
                             ) : ""}
-                            {typetype == 3 ? (
+                            {goId == 3 ? (
                                 <div className="list-item">
                                     <span className="list-item-name">
                                         分成比例
@@ -166,7 +313,7 @@ class strategy extends React.Component {
                                     开始交易
                                 </span>
                                 <span className="list-item-content">
-                                    {info.tradeDay}
+                                    {tradeDay}
                                 </span>
                             </div>
                             <div className="list-item" onClick={() => this.chicang()}>
