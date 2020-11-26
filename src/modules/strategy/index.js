@@ -35,7 +35,10 @@ class strategy extends React.Component {
             peiziData: "",
             financeData: "",
             dateText: "",
-            dayType: ['day', 'week', 'month', 'single']
+            dayType: ['day', 'week', 'month', 'single'],
+            chicangShow: false,
+            positionRatio: "",
+            secondBoardPositionRatio: ""
         }
     }
     componentDidMount = () => {
@@ -49,7 +52,9 @@ class strategy extends React.Component {
             isAdd: isAdd,
             peiziData: peiziData,
             strategyType: strategyType,
-            tradeDay: tradeDay
+            tradeDay: tradeDay,
+            positionRatio: peiziData.positionRatio,
+            secondBoardPositionRatio: peiziData.secondBoardPositionRatio
         }, () => {
             if (this.state.isAdd == true) {
                 let url = '/tn/tntg/userInfo', method = 'post', options = null;
@@ -216,15 +221,41 @@ class strategy extends React.Component {
 
     }
     chicang() {
-
+        this.setState({
+            chicangShow: true
+        })
+    }
+    chino() {
+        this.setState({
+            chicangShow: false
+        })
     }
     submit() {
 
     }
     render() {
-        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, separateFeeRate, tradeDay } = this.state;
+        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, separateFeeRate, tradeDay, chicangShow, positionRatio, secondBoardPositionRatio } = this.state;
         return (
             <div>
+                {chicangShow == true ? (
+                    <div className="chicang">
+                        <div className="chibox">
+                            <div className="chititle">单股持仓</div>
+                            <div className="chibox1">
+                                <div className="chi chileft">
+                                    <div className="chi1">个股持仓比例</div>
+                                    <div className="chi2">{positionRatio}</div>
+                                </div>
+                                <div className="chi chiright">
+                                    <div className="chi1">创业板持仓比例</div>
+                                    <div className="chi2">{secondBoardPositionRatio}</div>
+                                </div>
+                            </div>
+                            <div className="chiknow" onClick={() => this.chino()}>我知道了</div>
+                        </div>
+                    </div>
+                ) : ""}
+
                 <div className="navigation">
                     <div className="back" onClick={() => this.back()}></div>
                     <p className="navigation-title">策略</p>

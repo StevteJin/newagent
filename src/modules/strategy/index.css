@@ -127,3 +127,64 @@
     height: calc(100vh - 198px);
     overflow-y: auto;
 }
+
+.chicang {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 20000;
+}
+
+.chibox {
+    width: 60%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.chititle {
+    font-size: 16px;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 10px;
+}
+
+.chibox1 {
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.chi {
+    float: left;
+    width: 50%;
+}
+
+.chi .chi1 {
+    text-align: center;
+    font-size: 12px;
+}
+
+.chi .chi2 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.chiknow {
+    background-color: #5473FF;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #fff;
+    text-align: center;
+}
