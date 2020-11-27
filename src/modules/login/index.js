@@ -70,7 +70,7 @@ class login extends React.Component {
                     }, () => {
                     });
                     if (num > 90) {
-                        if (this.state.isPc) {
+                        if (that.state.isPc) {
                             that.props.history.push('/index');
                         } else {
                             that.props.history.push('/plan');

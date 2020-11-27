@@ -227,7 +227,6 @@ class deposit extends React.Component {
                     })
                     localStorage.setItem("isAdd", false);
                     localStorage.setItem("allottedScale2", 0);
-                    //跳转到策略
                     this.props.history.push('/strategy/' + goId);
                 }
             }
@@ -257,7 +256,7 @@ class deposit extends React.Component {
         });
         const data = {
             type: this.state.type.toString(),
-            mulType: this.mulType,
+            mulType: this.state.mulType,
             money: this.state.money,
             cordonLineRate: this.state.financeData[id]['cordonLineRate'],
             flatLineRate: this.state.financeData[id]['flatLineRate'],
@@ -266,7 +265,12 @@ class deposit extends React.Component {
         };
         // this.data.setSession('strategyData', JSON.stringify(data));
         // this.data.setSession('allottedScale2', this.userInfo.allottedScale);
+        localStorage.setItem("strategyData", JSON.stringify(data));
+        localStorage.setItem("allottedScale2", this.state.userInfo.allottedScale);
+        let goId = this.props.match.params.id;
+        this.props.history.push('/strategy/' + goId);
         // this.data.goto('strategy');
+
     }
 
     add(type) {
@@ -276,17 +280,20 @@ class deposit extends React.Component {
             // this.data.setSession('isAdd', type);
             if (type) { // 增配
                 if (this.judge()) {
-                    let fee = parseInt(this.userInfo.totalScale, 0) - parseInt(this.userInfo.allottedScale, 0);
+
+                    let fee = parseInt(this.state.userInfo.totalScale, 0) - parseInt(this.state.userInfo.allottedScale, 0);
                     this.setState({
                         fee: fee
                     }, () => {
                         if (this.state.fee < 0) {
+                            console.log('我执行了没');
                             this.state.fee = Math.abs(this.state.fee);
                             this.setState({
                                 visible: true,
                                 msg: `预补足的费用为${this.state.fee}元，是否在本次增配中自动补足`
                             })
                         } else {
+                            console.log('我没执行');
                             this.isAddFn();
                         }
                     })
@@ -300,13 +307,59 @@ class deposit extends React.Component {
                 } else {
                     this.setState({
                         visible: true,
-                        msg: '是否确定入金'
+                        msg: '是否确认入金'
                     })
-                    //入金的操作
                 }
             }
         })
     }
+
+    handleOk = e => {
+        console.log(this.state.msg);
+        if (this.state.msg == '请重新登录') {
+            this.props.history.push('/login');
+        }
+        if (this.state.msg == '是否确认入金') {console.log("我执行了");
+            if (this.state.addType) { // 增配
+                this.isAddFn();
+            } else { // 非增配
+                const data = {
+                    newStrategy: false,
+                    financeRatio: this.state.userInfo.financeRatio,
+                    financePeriod: this.state.userInfo.financePeriod,
+                    amount: this.state.money,
+                    expandScale: false
+                };
+                httpAxios("/tn/tntg/deposit", 'post', false, data).then(res2 => {
+                    this.setState({
+                        visible: true,
+                        msg: "申请成功"
+                    })
+                }, error => {
+                    console.log(error.response)
+                    if (error.response.status == 400) {
+                        let data = JSON.stringify(error.response.data.resultInfo);
+                        data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                        this.setState({
+                            visible: true,
+                            msg: '账户余额不足，请充值'
+                        })
+                    }
+                })
+            }
+        }
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
     render() {
         const { typeList, nameMsg, detail, userInfo, mulType, tabs, allottedScale } = this.state;
         let typeListDom = typeList.map((item, index) => (
@@ -332,6 +385,16 @@ class deposit extends React.Component {
         ))
         return (
             <div>
+                <Modal
+                    title="提示"
+                    centered
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消">
+                    <p>{this.state.msg}</p>
+                </Modal>
                 <div className="navigation">
                     <div className="back" onClick={() => this.back()}></div>
                     <p className="navigation-title">策略</p>
