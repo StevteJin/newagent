@@ -1,0 +1,81 @@
+.date-div {
+    height: 50px;
+    line-height: 50px;
+    background: #ffffff;
+    padding: 0 15px;
+    color: #5A5B65;
+    font-size: 13px;
+}
+
+/* .date-div input {
+    width: 30%;
+    height: 30px;
+    line-height: 30px;
+    opacity: 0;
+    margin-left: 15px;
+    margin-top: 10px;
+    position: absolute;
+    z-index: 10;
+} */
+
+.date-div span {
+    float: left;
+}
+
+.date-div .timedate {
+    width: 60%;
+    margin-top: 10px;
+}
+
+.flow-content {
+    background: #fff;
+    border-bottom: solid 1px #f1f1f1;
+    border-top: solid 1px #f1f1f1;
+    height: calc(100vh - 106px);
+    overflow-y: auto;
+}
+
+.flow-list {
+    margin-left: 10px;
+    display: flex;
+    border-bottom: solid 1px #f1f1f1;
+    padding: 10px;
+}
+
+.flow-list:last-child {
+    border-bottom: none;
+}
+
+.flow-list div:nth-child(1) {
+    flex: 3;
+    font-size: .85rem;
+}
+
+.flow-list div:nth-child(2) p {
+    margin: 7px 0;
+}
+
+.flow-list .flow-icon span {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 50px;
+    border: solid 1px #F05330;
+    border-radius: 50%;
+    color: #F05330;
+    font-size: .8rem;
+}
+
+.status {
+    float: right;
+}
+
+.green {
+    color: #27B054 !important;
+}
+
+.blue {
+    color: #5473FF !important;
+}

@@ -218,7 +218,7 @@ class usercenter extends React.Component {
                             <img src={financingDetails} />
                             <div>个人详情</div>
                         </div>
-                        <div>
+                        <div onClick={() => this.toWhere('/capitalflow')}>
                             <img src={capitalFlow} />
                             <div>资金流水</div>
                         </div>

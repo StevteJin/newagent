@@ -130,87 +130,87 @@ class userdetail extends React.Component {
         const { isPc, detail, typeNum } = this.state;
         return (
             <div>
-                <div class="navigation">
-                    <div class="back" onClick={() => this.back()}></div>
-                    <p class="navigation-title">个人详情</p>
+                <div className="navigation">
+                    <div className="back" onClick={() => this.back()}></div>
+                    <p className="navigation-title">个人详情</p>
                 </div>
-                <div class="content">
-                    <div class="cell-list">
-                        <div class="list-item">
-                            <span class="list-item-name">保证金</span>
-                            <span class="list-item-content">
+                <div className="content">
+                    <div className="cell-list">
+                        <div className="list-item">
+                            <span className="list-item-name">保证金</span>
+                            <span className="list-item-content">
                                 {detail.cashScale}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 管理费率
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.manageFeeRate}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 建仓费率
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.manageMakeFeeRate}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 警戒线
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.cordonLine}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 平仓线
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.flatLine}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 单票持仓比例
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.positionRatio}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 创业板持仓比例
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.secondBoardPositionRatio}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 策略方案
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.financeRatio}倍
                         </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 策略周期
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {typeNum}
                             </span>
                         </div>
-                        <div class="list-item">
-                            <span class="list-item-name">
+                        <div className="list-item">
+                            <span className="list-item-name">
                                 策略开始日期
                         </span>
-                            <span class="list-item-content">
+                            <span className="list-item-content">
                                 {detail.financeStartDate}
                             </span>
                         </div>
