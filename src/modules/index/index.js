@@ -26,6 +26,8 @@ import strategy from '../strategy/index';
 import usercenter from '../usercenter/index';
 import userdetail from '../userdetail/index';
 import capitalflow from '../capitalflow/index';
+import card from '../card/index';
+
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -184,6 +186,12 @@ class MainContent extends React.Component {
                     item.where = A
                 } else {
                     item.where = capitalflow
+                }
+            } else if (item.path == '/card') {
+                if (isPc) {
+                    item.where = withdrawal
+                } else {
+                    item.where = card
                 }
             } else {
                 item.where = A

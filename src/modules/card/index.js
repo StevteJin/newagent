@@ -1,15 +1,21 @@
-//此为主页
+//此为列表页
 import React from 'react';
-//redux
-//步骤一
-import store from '../../store/store'
+import { Input, Button, Modal, Progress, DatePicker, Select } from 'antd';
+//antd样式
+import 'antd/dist/antd.css';
+//公共样式
+import './index.css';
 //引入请求接口
 import httpAxios from '../../helpers/request';
-import './index.css';
-import { Input, Select, Modal } from 'antd';
-const { Option } = Select;
+import locale from 'antd/es/date-picker/locale/zh_CN';
 
-class UserCenter extends React.Component {
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
+const { RangePicker } = DatePicker;
+const dateFormat = 'YYYY-MM-DD';
+const { Option } = Select;
+class card extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,60 +50,28 @@ class UserCenter extends React.Component {
             liftScale: "",
             visible: false,
             msg: ""
-        };
+        }
     }
-    //请求表格数据的操作
     componentDidMount = () => {
+        this.browserRedirect();
+        let that = this;
+        window.addEventListener('resize', that.box);
         this.getBalance();
         this.getCardInfo();
         this.getBankId();
     }
-
-    getBalance() {
-        let url = '/tn/tntg/capital', method = 'post', options = null;
-        httpAxios(url, method, false, options).then(res => {
-            this.setState({
-                balance: res.balance
-            });
-        }, error => {
-            console.log(error.response)
-            if (error.response.status == 400) {
-                let data = JSON.stringify(error.response.data.resultInfo);
-                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
-                this.setState({
-                    visible: true,
-                    msg: data
-                })
-            }
-        });
+    componentWillUnmount = () => {
+        let that = this;
+        window.removeEventListener('resize', that.box);
+        this.setState = (state, callback) => {
+            return;
+        };
     }
-    moneyNow() {
-        if (this.state.liftScale > 0) {
-            let options = {
-                liftScale: this.state.liftScale
-            }
-            let url = '/tn/tntg/lift', method = 'post';
-            httpAxios(url, method, false, options).then(res => {
-                this.getBalance();
-            }, error => {
-                console.log(error.response)
-                if (error.response.status == 400) {
-                    let data = JSON.stringify(error.response.data.resultInfo);
-                    data = data.replace(/^(\s|")+|(\s|")+$/g, '');
-                    this.setState({
-                        visible: true,
-                        msg: data
-                    })
-                }
-            });
-        } else {
-            this.setState({
-                visible: true,
-                msg: '提现金额不可为空'
-            })
-        }
-
+    box = () => {
+        this.browserRedirect();
     }
+
+
 
     handleOk = e => {
         console.log(e);
@@ -115,13 +89,6 @@ class UserCenter extends React.Component {
             visible: false,
         });
     };
-
-    bandCard() {
-        this.setState({
-            bankShow: true
-        })
-    }
-
     handelChangeOther = (value, event, who) => {
         console.log('数据', value, event, who);
         if (who == 'bankId') {
@@ -153,7 +120,6 @@ class UserCenter extends React.Component {
             })
         }
     }
-
     getCardInfo() {
         let url = '/tn/tn/query/card', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
@@ -195,7 +161,24 @@ class UserCenter extends React.Component {
 
         });
     }
-
+    getBalance() {
+        let url = '/tn/tntg/capital', method = 'post', options = null;
+        httpAxios(url, method, false, options).then(res => {
+            this.setState({
+                balance: res.balance
+            });
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                })
+            }
+        });
+    }
     getBankId() {
         let url = '/tn/tn/banks', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
@@ -213,7 +196,6 @@ class UserCenter extends React.Component {
             })
         });
     }
-
     getcityId() {
         if (!this.state.bankId) {
             this.state.bankId = 0
@@ -246,7 +228,31 @@ class UserCenter extends React.Component {
             })
         });
     }
-
+    browserRedirect() {
+        let isPc;
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        if (!(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM)) {
+            isPc = true
+        } else {
+            isPc = false
+        }
+        this.setState({
+            isPc: isPc
+        })
+        console.log('哪一端', isPc);
+        return isPc;
+    }
+    back() {
+        this.props.history.push('/usercenter');
+    }
     submite() {
         if (this.state.identityNo.length != 18) {
             this.setState({
@@ -286,8 +292,10 @@ class UserCenter extends React.Component {
             httpAxios(url, method, false, options).then(res => {
                 if (res.success == true) {
                     this.setState({
-                        bankShow: false
+                        visible: true,
+                        msg: '银行卡信息修改成功'
                     })
+                    this.props.history.push('/usercenter');
                 }
             }, error => {
                 console.log(error.response)
@@ -303,10 +311,8 @@ class UserCenter extends React.Component {
         }
 
     }
-
-
     render() {
-        const { cardInfo, bankIdList, provinceIdList, cityIdList, subBranchIdList, bankId, provinceId, cityId, subBranchId, bankName, provinceName, cityName, subBranchName, bankShow, balance } = this.state;
+        const { isPc, cardInfo, bankIdList, provinceIdList, cityIdList, subBranchIdList, bankId, provinceId, cityId, subBranchId, bankName, provinceName, cityName, subBranchName, bankShow, balance } = this.state;
         let bankIdDom, provinceIdDom, cityIdDom, subBranchIdDom;
         if (bankIdList && bankIdList.length > 0) {
             bankIdDom = bankIdList.map(item => (
@@ -331,7 +337,6 @@ class UserCenter extends React.Component {
                 <Option value={item.value} key={item.value}> {item.text} </Option>
             ))
         }
-
         return (
             <div>
                 <Modal
@@ -345,66 +350,56 @@ class UserCenter extends React.Component {
                 >
                     <p>{this.state.msg}</p>
                 </Modal>
-                {bankShow == true ? (<div className='bankbox'>
+                <div className="navigation">
+                    <div className="back" onClick={() => this.back()}></div>
+                    <p className="navigation-title">{cardInfo ? "银行卡信息" : "绑定银行卡"}</p>
+                </div>
+                <div className='bankbox1'>
                     <div className="bank">
                         <span className="title">开户银行</span>
-                        <Select value={bankId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }} disabled={cardInfo ? true : false}>
+                        <Select value={bankId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }} disabled={cardInfo ? true : false}>
                             {bankIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行省份</span>
-                        <Select value={provinceId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'provinceId') }} disabled={cardInfo ? true : false}>
+                        <Select value={provinceId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'provinceId') }} disabled={cardInfo ? true : false}>
                             {provinceIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行城市</span>
-                        <Select value={cityId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'cityId') }} disabled={cardInfo ? true : false}>
+                        <Select value={cityId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'cityId') }} disabled={cardInfo ? true : false}>
                             {cityIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行支行</span>
-                        <Select value={subBranchId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'subBranchId') }} disabled={cardInfo ? true : false}>
+                        <Select value={subBranchId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'subBranchId') }} disabled={cardInfo ? true : false}>
                             {subBranchIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">卡号</span>
-                        <Input style={{ width: 300 }} placeholder="请输入银行卡号" value={this.state.cardNo} onChange={e => this.setState({ cardNo: e.target.value })} disabled={cardInfo ? true : false} />
+                        <Input style={{ width: 240 }} placeholder="请输入银行卡号" value={this.state.cardNo} onChange={e => this.setState({ cardNo: e.target.value })} disabled={cardInfo ? true : false} />
                     </div>
                     <div className="bank">
                         <span className="title">户名</span>
-                        <Input style={{ width: 300 }} placeholder="请输入银行卡户名" value={this.state.userName} onChange={e => this.setState({ userName: e.target.value })} disabled={cardInfo ? true : false}/>
+                        <Input style={{ width: 240 }} placeholder="请输入银行卡户名" value={this.state.userName} onChange={e => this.setState({ userName: e.target.value })} disabled={cardInfo ? true : false}/>
                     </div>
                     <div className="bank">
                         <span className="title">身份证</span>
-                        <Input style={{ width: 300 }} placeholder="请输入身份证" value={this.state.identityNo} onChange={e => this.setState({ identityNo: e.target.value })} disabled={cardInfo ? true : false}/>
+                        <Input style={{ width: 240 }} placeholder="请输入身份证" value={this.state.identityNo} onChange={e => this.setState({ identityNo: e.target.value })} disabled={cardInfo ? true : false}/>
                     </div>
                     <div className="bank">
                         <span className="title">会员ID</span>
-                        <Input style={{ width: 300 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} disabled={cardInfo ? true : false} />
+                        <Input style={{ width: 240 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} disabled={cardInfo ? true : false}  />
                     </div>
-                    <div className="addSubmite" onClick={() => this.submite()}>完成</div>
-                </div>) : (
-                        <div className="txbox">
-                            <div className="tb1">
-                                <div className="tt1">可提现金额：</div>
-                                <div className="tt2">{balance}</div>
-                            </div>
-                            <div className="tb2" onClick={() => this.bandCard()}>绑定提现银行卡</div>
-                            <div className="tb3">
-                                <div className="ttb3">
-                                    <div className="tt1">请输入您想要提现的金额:</div>
-                                    <Input type="number" style={{ width: 221 }} placeholder="请输入提现金额" onChange={e => this.setState({ liftScale: e.target.value })} />
-                                </div>
-                                <div className="moneyNow" onClick={() => this.moneyNow()}>申请提现</div>
-                            </div>
-                        </div>)}
+                    <div className="addSubmite1" onClick={() => this.submite()}>完成</div>
+                </div>
             </div>
         );
     }
 }
 
-export default UserCenter;
+export default card;

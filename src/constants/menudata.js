@@ -44,6 +44,10 @@ const menu = [{
     path: '/capitalflow',
     key: 'capitalflow',
     name: '资金流水',
+}, {
+    path: '/card',
+    key: 'card',
+    name: '银行卡信息',
 }];
 
 export const MENU = menu;

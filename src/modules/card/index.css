@@ -1,0 +1,25 @@
+.bankbox1 {
+    width: 600px;
+}
+
+.bankbox1 .bank {
+    height: 50px;
+}
+
+.bankbox1 .bank .title {
+    display: inline-block;
+    width: 90px;
+    margin: 0px;
+    margin-left: 15px;
+}
+
+.addSubmite1 {
+    width: 330px;
+    height: 30px;
+    margin-left: 15px;
+    background: #5473FF;
+    color: #fff;
+    line-height: 31px;
+    text-align: center;
+    cursor: pointer;
+}

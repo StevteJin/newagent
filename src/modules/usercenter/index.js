@@ -223,7 +223,7 @@ class usercenter extends React.Component {
                             <div>资金流水</div>
                         </div>
                         <div>
-                            <img src={bankCard} />
+                            <img src={bankCard} onClick={() => this.toWhere('/card')} />
                             <div>银行卡修改</div>
                         </div >
                     </div >
