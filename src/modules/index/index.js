@@ -28,6 +28,7 @@ import userdetail from '../userdetail/index';
 import capitalflow from '../capitalflow/index';
 import card from '../card/index';
 import recharge from '../recharge/index';
+import bankcard from '../bankcard/index';
 
 //antd样式
 import 'antd/dist/antd.css';
@@ -198,6 +199,12 @@ class MainContent extends React.Component {
                 } else {
                     item.where = capitalflow
                 }
+            } else if (item.path == '/bankcard') {
+                if (isPc) {
+                    item.where = topup
+                } else {
+                    item.where = bankcard
+                }
             } else if (item.path == '/card') {
                 if (isPc) {
                     item.where = withdrawal
@@ -280,7 +287,7 @@ class MainContent extends React.Component {
             ) : (
                     <div>
                         {routeDom}
-                        {path == '/plan' || path == '/usercenter' ? (
+                        {path == '/plan' || path == '/mIndex' || path == '/usercenter' ? (
                             <div className="footer1" id="footer1">
                                 <div className="small-footer">
                                     <div className={where == "/plan" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('/plan')}>

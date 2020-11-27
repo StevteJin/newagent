@@ -1,0 +1,54 @@
+.copy {
+    display: inline-block;
+    width: 46px;
+    text-align: center;
+    height: 23px;
+    line-height: 23px;
+    background: #5473FF;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 13px;
+}
+
+.bottom-btn {
+    /* display: flex; */
+    width: 90%;
+    margin: 0 auto;
+}
+
+.bottom-btn div {
+    border-radius: 2px;
+    color: #fff;
+    font-size: 16px;
+    user-select: none;
+}
+
+.bottom-btn .main {
+    /* flex: 1; */
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    background: #5473FF;
+    border: solid 1px #5473FF;
+    /* margin: 3px 2vw; */
+}
+
+.bottom-btn .main:active {
+    background: #5473FF;
+}
+
+.bottom-btn .clear {
+    flex: 1;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #f8f8f8;
+    border: solid 1px #ddd;
+    color: #000;
+    margin: 0px 2vw;
+}
+
+.bottom-btn .clear:active {
+    background: #c9c9c9;
+}
