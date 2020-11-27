@@ -36,5 +36,9 @@ const menu = [{
     path: '/usercenter',
     key: 'usercenter',
     name: '个人中心',
+}, {
+    path: '/userdetail',
+    key: 'userdetail',
+    name: '个人详情',
 }];
 export const MENU = menu;

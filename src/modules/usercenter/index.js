@@ -39,7 +39,7 @@ class usercenter extends React.Component {
     }
 
     getInfo() {
-        let url = '/tn/tntg/capital', method = 'post', options = null;
+        let url = 'tntg/userInfo', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
             let freezaFee = parseFloat(res.lockScale) + parseFloat(res.freezeScale);
             let allottedScale = res.allottedScale;
@@ -106,6 +106,9 @@ class usercenter extends React.Component {
         console.log('哪一端', isPc);
         return isPc;
     }
+    toWhere(where) {
+        this.props.history.push(where);
+    }
     logout() {
 
     }
@@ -162,7 +165,7 @@ class usercenter extends React.Component {
                 <div className="lineline"></div>
                 <div className="user-center-bottom">
                     <div className="box box1">
-                        <div>
+                        <div onClick={() => this.toWhere('/userdetail')}>
                             <img src={financingDetails} />
                             <div>个人详情</div>
                         </div>
