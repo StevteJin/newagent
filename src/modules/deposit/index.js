@@ -405,7 +405,7 @@ class deposit extends React.Component {
                 <div className="zixuan-content">
                     <div className="tabs2">
                         <div onClick={() => this.changeTabs(0)} className={tabs == 0 ? 'tabs2-active' : ''}>申请操盘</div>
-                        <div onClick={() => this.changeTabs(1)} className={tabs == 1 ? 'tabs2-active' : ''}>我的持仓</div>
+                        {/* <div onClick={() => this.changeTabs(1)} className={tabs == 1 ? 'tabs2-active' : ''}>我的持仓</div> */}
                     </div>
                     {tabs == 0 ? (
                         <div className='tab-content'>
