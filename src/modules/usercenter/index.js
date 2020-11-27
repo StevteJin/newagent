@@ -7,18 +7,28 @@ import 'antd/dist/antd.css';
 import './index.css';
 //引入请求接口
 import httpAxios from '../../helpers/request';
+import financingDetails from './img/financing _details1.png';
+import capitalFlow from './img/capital_flow1.png';
+import bankCard from './img/bank_card1.png';
+import closeCase from './img/close_case1.png';
+import changePwd from './img/change_pwd1.png';
+
 
 class usercenter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isPc: false
+            isPc: false,
+            userInfo: "",
+            freezaFee: "",
+            allottedScale: 0
         }
     }
     componentDidMount = () => {
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
+        this.getInfo();
     }
     componentWillUnmount = () => {
         let that = this;
@@ -26,6 +36,31 @@ class usercenter extends React.Component {
         this.setState = (state, callback) => {
             return;
         };
+    }
+
+    getInfo() {
+        let url = '/tn/tntg/capital', method = 'post', options = null;
+        httpAxios(url, method, false, options).then(res => {
+            let freezaFee = parseFloat(res.lockScale) + parseFloat(res.freezeScale);
+            let allottedScale = res.allottedScale;
+            this.setState({
+                userInfo: res,
+                freezaFee: freezaFee,
+                allottedScale: allottedScale
+            })
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                }, () => {
+
+                })
+            }
+        });
     }
     box = () => {
         this.browserRedirect();
@@ -71,12 +106,88 @@ class usercenter extends React.Component {
         console.log('哪一端', isPc);
         return isPc;
     }
+    logout() {
 
+    }
     render() {
-        const { isPc } = this.state;
+        const { isPc, userInfo, freezaFee, allottedScale } = this.state;
         return (
-            <div>
-                个人中心
+            <div className="userbox">
+                <div className="user-center-top">
+                    <div className="user-center-header">
+                        <div className="user-name">{userInfo.accountName}</div>
+                        <div className="logout-box" onClick={() => this.logout()}>退出账户</div>
+                    </div>
+                    <div className="funds-container">
+                        <div className="total-assets">
+                            <div className="title">总资产</div>
+                        </div>
+                        <div className="total-assets-amount">{userInfo.totalScale}</div>
+                        <div className="funds-list">
+                            <div className="funds-item">
+                                <div>持仓权益</div>
+                                <div className="funds-amount">{userInfo.stockScale}</div>
+                            </div>
+                            <div className="funds-item">
+                                <div>冻结资金</div>
+                                <div className="funds-amount">{freezaFee}</div>
+                            </div>
+                            <div className="funds-item">
+                                <div>可用资金</div>
+                                <div className="funds-amount">{userInfo.ableScale}</div>
+                            </div>
+                            <div className="funds-item">
+                                <div>实际可用</div>
+                                <div className="funds-amount">{userInfo.limitAbleScale}</div>
+                            </div>
+                            <div className="funds-item">
+                                <div>初期规模</div>
+                                <div className="funds-amount">{userInfo.allottedScale}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="account-balance">
+                    <div className="account-balance-top">
+                        <div className="title">
+                            <span>账户余额</span>
+                            <span className="balance">{userInfo.balance}</span>
+                        </div>
+                        <div className="funds-operate">
+                            <div>充值</div>
+                            <div>提现</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="lineline"></div>
+                <div className="user-center-bottom">
+                    <div className="box box1">
+                        <div>
+                            <img src={financingDetails} />
+                            <div>个人详情</div>
+                        </div>
+                        <div>
+                            <img src={capitalFlow} />
+                            <div>资金流水</div>
+                        </div>
+                        <div>
+                            <img src={bankCard} />
+                            <div>银行卡修改</div>
+                        </div >
+                    </div >
+                    <div className="box box2">
+                        {allottedScale != 0 ? (
+                            <div >
+                                <img src={closeCase} />
+                                <div>结案</div>
+                            </div>
+                        ) : ""}
+                        <div>
+                            <img src={changePwd} />
+                            <div>修改密码</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
