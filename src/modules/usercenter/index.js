@@ -39,7 +39,7 @@ class usercenter extends React.Component {
     }
 
     getInfo() {
-        let url = 'tntg/userInfo', method = 'post', options = null;
+        let url = '/tn/tntg/capital', method = 'post', options = null;
         httpAxios(url, method, false, options).then(res => {
             let freezaFee = parseFloat(res.lockScale) + parseFloat(res.freezeScale);
             let allottedScale = res.allottedScale;
