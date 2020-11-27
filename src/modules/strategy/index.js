@@ -318,9 +318,10 @@ class strategy extends React.Component {
                         msg: "账户余额不足，请充值"
                     })
                     //跳转充值
-                    // setTimeout(() => {
-                    //     this.data.goto('recharge');
-                    // }, 1000);
+                    let that = this;
+                    setTimeout(() => {
+                        that.props.history.push('/recharge');
+                    }, 1000);
                 } else {
                     const data = {
                         newStrategy: res['allottedScale'] !== '0' ? false : true,

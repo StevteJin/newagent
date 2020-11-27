@@ -206,7 +206,7 @@ class usercenter extends React.Component {
                             <span className="balance">{userInfo.balance}</span>
                         </div>
                         <div className="funds-operate">
-                            <div>充值</div>
+                            <div onClick={() => this.toWhere('/recharge')}>充值</div>
                             <div>提现</div>
                         </div>
                     </div>

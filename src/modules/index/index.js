@@ -27,6 +27,7 @@ import usercenter from '../usercenter/index';
 import userdetail from '../userdetail/index';
 import capitalflow from '../capitalflow/index';
 import card from '../card/index';
+import recharge from '../recharge/index';
 
 //antd样式
 import 'antd/dist/antd.css';
@@ -156,7 +157,17 @@ class MainContent extends React.Component {
             } else if (item.path == '/withdrawal') {
                 item.where = withdrawal
             } else if (item.path == '/topup') {
-                item.where = topup
+                if (isPc) {
+                    item.where = topup
+                } else {
+                    item.where = recharge
+                }
+            } else if (item.path == '/recharge') {
+                if (isPc) {
+                    item.where = topup
+                } else {
+                    item.where = recharge
+                }
             } else if (item.path == '/deposit/:id') {
                 if (isPc) {
                     item.where = plan

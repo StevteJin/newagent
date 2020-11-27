@@ -48,6 +48,10 @@ const menu = [{
     path: '/card',
     key: 'card',
     name: '银行卡信息',
+}, {
+    path: '/recharge',
+    key: 'recharge',
+    name: '充值',
 }];
 
 export const MENU = menu;
