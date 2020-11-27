@@ -50,6 +50,7 @@ class usercenter extends React.Component {
                 freezaFee: freezaFee,
                 allottedScale: allottedScale
             })
+            localStorage.setItem('balance', res.balance);
         }, error => {
             console.log(error.response)
             if (error.response.status == 400) {
@@ -207,7 +208,7 @@ class usercenter extends React.Component {
                         </div>
                         <div className="funds-operate">
                             <div onClick={() => this.toWhere('/recharge')}>充值</div>
-                            <div>提现</div>
+                            <div onClick={() => this.toWhere('/tixian')}>提现</div>
                         </div>
                     </div>
                 </div>

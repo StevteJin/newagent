@@ -56,6 +56,14 @@ const menu = [{
     path: '/bankcard',
     key: 'bankcard',
     name: '充值信息确认',
+}, {
+    path: '/tixian',
+    key: 'tixian',
+    name: '提现',
+}, {
+    path: '/transfer',
+    key: 'transfer',
+    name: '人民币提现',
 }];
 
 export const MENU = menu;

@@ -29,6 +29,8 @@ import capitalflow from '../capitalflow/index';
 import card from '../card/index';
 import recharge from '../recharge/index';
 import bankcard from '../bankcard/index';
+import tixian from '../tixian/index';
+import transfer from '../transfer/index'
 
 //antd样式
 import 'antd/dist/antd.css';
@@ -156,7 +158,23 @@ class MainContent extends React.Component {
                     item.where = mIndex
                 }
             } else if (item.path == '/withdrawal') {
-                item.where = withdrawal
+                if (isPc) {
+                    item.where = withdrawal
+                } else {
+                    item.where = tixian
+                }
+            } else if (item.path == '/tixian') {
+                if (isPc) {
+                    item.where = withdrawal
+                } else {
+                    item.where = tixian
+                }
+            } else if (item.path == '/transfer') {
+                if (isPc) {
+                    item.where = withdrawal
+                } else {
+                    item.where = transfer
+                }
             } else if (item.path == '/topup') {
                 if (isPc) {
                     item.where = topup
