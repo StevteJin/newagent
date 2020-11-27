@@ -124,7 +124,7 @@ class transfer extends React.Component {
     render() {
         const { isPc, backableScale } = this.state;
         return (
-            <div>
+            <div className="huibg">
                 <Modal
                     title="提示"
                     centered

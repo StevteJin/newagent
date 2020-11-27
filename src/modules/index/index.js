@@ -30,8 +30,8 @@ import card from '../card/index';
 import recharge from '../recharge/index';
 import bankcard from '../bankcard/index';
 import tixian from '../tixian/index';
-import transfer from '../transfer/index'
-
+import transfer from '../transfer/index';
+import ercode from '../ercode/index';
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -229,6 +229,8 @@ class MainContent extends React.Component {
                 } else {
                     item.where = card
                 }
+            } else if (item.path == '/ercode') {
+                item.where = ercode
             } else {
                 item.where = A
             }

@@ -7,24 +7,25 @@ import 'antd/dist/antd.css';
 import './index.css';
 //引入请求接口
 import httpAxios from '../../helpers/request';
-import right from './img/right.png';
+import QRCode from 'qrcode.react';
 
-console.log(httpAxios)
-class tixian extends React.Component {
+
+class ercode extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isPc: false,
-            backableScale: ""
+            backableScale: "",
+            qrUrl: ""
         }
     }
     componentDidMount = () => {
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
-        let backableScale = localStorage.getItem('balance') || 0;
+        let qrUrl = window.location.href.split('#')[0] + localStorage.getItem('uri');
         this.setState({
-            backableScale: backableScale
+            qrUrl: qrUrl
         })
     }
     componentWillUnmount = () => {
@@ -86,28 +87,26 @@ class tixian extends React.Component {
         this.props.history.push(where);
     }
     render() {
-        const { isPc, backableScale } = this.state;
+        const { isPc, qrUrl } = this.state;
         return (
             <div className="huibg">
                 <div className="navigation">
                     <div className="back" onClick={() => this.back()} ></div>
-                    <p className="navigation-title">提现</p>
+                    <p className="navigation-title">邀请码</p>
                 </div>
-                <div className="list-item" onClick={() => this.goto("/transfer")} style={{ "marginTop": "10px" }}>
-                    <span>人民币提现</span>
-                    <img className="right-icon" src={right} alt="" />
-                    <div>
-                        <span>账户余额：</span>
-                        <span className="red">{backableScale}</span>
+                <div>
+                    <div className="ercode">
+                        <QRCode
+                            value={qrUrl}
+                            size={200}
+                            fgColor="#000000"
+                        />
                     </div>
-                </div>
-                <div className="list-item" onClick={() => this.goto("/card")} style={{ "marginTop": "10px" }}>
-                    <span>绑定提现银行卡</span>
-                    <img className="right-icon" src={right} alt="" />
+
                 </div>
             </div>
         );
     }
 }
 
-export default tixian;
+export default ercode;

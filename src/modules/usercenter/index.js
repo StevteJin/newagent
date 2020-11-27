@@ -12,7 +12,7 @@ import capitalFlow from './img/capital_flow1.png';
 import bankCard from './img/bank_card1.png';
 import closeCase from './img/close_case1.png';
 import changePwd from './img/change_pwd1.png';
-
+import ercode from './img/ercode.png';
 
 class usercenter extends React.Component {
     constructor(props) {
@@ -226,8 +226,12 @@ class usercenter extends React.Component {
                         <div>
                             <img src={bankCard} onClick={() => this.toWhere('/card')} />
                             <div>银行卡修改</div>
-                        </div >
-                    </div >
+                        </div>
+                        <div onClick={() => this.toWhere('/ercode')}>
+                            <img src={ercode} />
+                            <div>邀请码</div>
+                        </div>
+                    </div>
                     <div className="box box2">
                         {allottedScale != 0 ? (
                             <div onClick={() => this.submit()}>

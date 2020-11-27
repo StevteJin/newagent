@@ -64,6 +64,10 @@ const menu = [{
     path: '/transfer',
     key: 'transfer',
     name: '人民币提现',
+}, {
+    path: '/ercode',
+    key: 'ercode',
+    name: '邀请码',
 }];
 
 export const MENU = menu;
