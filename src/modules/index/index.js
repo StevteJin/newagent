@@ -23,6 +23,7 @@ import topup from '../topup/index';
 import mIndex from '../mIndex/index';
 import deposit from '../deposit/index';
 import strategy from '../strategy/index';
+import usercenter from '../usercenter/index';
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -42,7 +43,7 @@ class MainContent extends React.Component {
             qrUrl: '',
             qrUrl1: '',
             isPc: false,
-            where: "index",
+            where: "/plan",
             path: ""
         }
     }
@@ -57,6 +58,9 @@ class MainContent extends React.Component {
     componentDidMount = () => {
         let path = this.props.location.pathname;
         console.log('我是当前路由', path);
+        this.setState({
+            where: path
+        })
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
@@ -119,9 +123,10 @@ class MainContent extends React.Component {
     }
 
     toWhere(who) {
-        console.log('哪里', who);
         this.setState({
             where: who
+        }, () => {
+            this.props.history.push(this.state.where);
         })
     }
     render() {
@@ -133,7 +138,11 @@ class MainContent extends React.Component {
         let menuData1, routeDom;
         menuData1 = menuData.map((item, index) => {
             if (item.path == '/index') {
-                item.where = U
+                if (isPc) {
+                    item.where = U
+                } else {
+                    item.where = usercenter
+                }
             } else if (item.path == '/plan') {
                 if (isPc) {
                     item.where = plan
@@ -155,6 +164,12 @@ class MainContent extends React.Component {
                     item.where = plan
                 } else {
                     item.where = strategy
+                }
+            } else if (item.path == '/usercenter') {
+                if (isPc) {
+                    item.where = U
+                } else {
+                    item.where = usercenter
                 }
             } else {
                 item.where = A
@@ -232,14 +247,14 @@ class MainContent extends React.Component {
             ) : (
                     <div>
                         {routeDom}
-                        {path == '/plan' ? (
+                        {path == '/plan' || path == '/usercenter' ? (
                             <div className="footer1" id="footer1">
                                 <div className="small-footer">
-                                    <div className={where === "index" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('index')}>
+                                    <div className={where == "/plan" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('/plan')}>
                                         <div className="icon index"></div>
                                         <p>首页</p>
                                     </div>
-                                    <div className={where === "geren" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('geren')}>
+                                    <div className={where == "/usercenter" ? "footer-div icon-active" : "footer-div"} onClick={() => this.toWhere('/usercenter')}>
                                         <div className="icon geren"></div>
                                         <p>个人</p>
                                     </div>
