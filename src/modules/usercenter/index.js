@@ -21,7 +21,9 @@ class usercenter extends React.Component {
             isPc: false,
             userInfo: "",
             freezaFee: "",
-            allottedScale: 0
+            allottedScale: 0,
+            visible: false,
+            msg: ""
         }
     }
     componentDidMount = () => {
@@ -72,6 +74,29 @@ class usercenter extends React.Component {
         if (this.state.msg == '请重新登录') {
             this.props.history.push('/login');
         }
+        if (this.state.msg == '确定结案？') {
+            let url = '/tn/tntg/Strategy', method = 'post', options = null;
+            httpAxios(url, method, false, options).then(res => {
+                this.setState({
+                    visible: true,
+                    msg: '结案成功'
+                }, () => {
+                    this.getInfo();
+                })
+            }, error => {
+                console.log(error.response)
+                if (error.response.status == 400) {
+                    let data = JSON.stringify(error.response.data.resultInfo);
+                    data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                    this.setState({
+                        visible: true,
+                        msg: data
+                    }, () => {
+
+                    })
+                }
+            });
+        }
         this.setState({
             visible: false,
         });
@@ -110,12 +135,36 @@ class usercenter extends React.Component {
         this.props.history.push(where);
     }
     logout() {
-
+        localStorage.clear();
+        this.props.history.push('/login');
+    }
+    submit() {
+        if (this.state.allottedScale != 0) {
+            this.setState({
+                visible: true,
+                msg: '确定结案？'
+            })
+        } else {
+            this.setState({
+                visible: true,
+                msg: '此账户还没有申请策略，没有可结束的方案'
+            })
+        }
     }
     render() {
         const { isPc, userInfo, freezaFee, allottedScale } = this.state;
         return (
             <div className="userbox">
+                <Modal
+                    title="提示"
+                    centered
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消">
+                    <p>{this.state.msg}</p>
+                </Modal>
                 <div className="user-center-top">
                     <div className="user-center-header">
                         <div className="user-name">{userInfo.accountName}</div>
@@ -180,15 +229,11 @@ class usercenter extends React.Component {
                     </div >
                     <div className="box box2">
                         {allottedScale != 0 ? (
-                            <div >
+                            <div onClick={() => this.submit()}>
                                 <img src={closeCase} />
                                 <div>结案</div>
                             </div>
                         ) : ""}
-                        <div>
-                            <img src={changePwd} />
-                            <div>修改密码</div>
-                        </div>
                     </div>
                 </div>
             </div>
