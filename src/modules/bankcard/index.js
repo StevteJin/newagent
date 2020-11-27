@@ -133,6 +133,16 @@ class bankcard extends React.Component {
         const { isPc, payType, cardInfro, amount, remark, qrUrl } = this.state;
         return (
             <div>
+                <Modal
+                    title="提示"
+                    centered
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消">
+                    <p>{this.state.msg}</p>
+                </Modal>
                 <div className="navigation">
                     <div className="back" onClick={() => this.back()}></div>
                     <p className="navigation-title">充值信息确认</p>
