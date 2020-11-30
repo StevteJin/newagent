@@ -224,15 +224,15 @@ class usercenter extends React.Component {
                             <div>资金流水</div>
                         </div>
                         <div>
-                            <img src={bankCard} onClick={() => this.toWhere('/card')} />
+                            <img src={bankCard} onClick={() => this.toWhere('/card/usercenter')} />
                             <div>银行卡修改</div>
                         </div>
+                    </div>
+                    <div className="box box2">
                         <div onClick={() => this.toWhere('/ercode')}>
                             <img src={ercode} />
                             <div>邀请码</div>
                         </div>
-                    </div>
-                    <div className="box box2">
                         {allottedScale != 0 ? (
                             <div onClick={() => this.submit()}>
                                 <img src={closeCase} />

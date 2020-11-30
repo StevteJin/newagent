@@ -1,3 +1,5 @@
+//绑定银行卡，没绑的时候进来，可以写提交，绑了之后，修改银行卡进来仍旧是可以修改的
+
 //此为列表页
 import React from 'react';
 import { Input, Button, Modal, Progress, DatePicker, Select } from 'antd';
@@ -49,10 +51,15 @@ class card extends React.Component {
             balance: "",
             liftScale: "",
             visible: false,
-            msg: ""
+            msg: "",
+            pathpath: ""
         }
     }
     componentDidMount = () => {
+        let path = this.props.location.pathname;
+        this.setState({
+            pathpath: path
+        })
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
@@ -105,6 +112,10 @@ class card extends React.Component {
                 provinceName: event.children[1]
             }, () => {
                 this.getcityId();
+                this.setState({
+                    cityId: "",
+                    subBranchId: ""
+                })
             })
         } else if (who == 'cityId') {
             this.setState({
@@ -112,6 +123,9 @@ class card extends React.Component {
                 cityName: event.children[1]
             }, () => {
                 this.getsubBranchId();
+                this.setState({
+                    subBranchId: ""
+                })
             })
         } else if (who == 'subBranchId') {
             this.setState({
@@ -154,7 +168,9 @@ class card extends React.Component {
                         subBranchName: this.state.cardInfo.subBranchName,
 
                     }, () => {
-
+                        this.getProvinceId();
+                        this.getcityId();
+                        this.getsubBranchId();
                     })
                 })
             }
@@ -259,11 +275,6 @@ class card extends React.Component {
                 visible: true,
                 msg: '请输入正确的身份证号'
             })
-        } else if (this.state.mobile.length != 11) {
-            this.setState({
-                visible: true,
-                msg: '请输入正确的手机号码'
-            })
         } else {
             let options = {
                 accountCode: this.state.accountCode,
@@ -312,7 +323,7 @@ class card extends React.Component {
 
     }
     render() {
-        const { isPc, cardInfo, bankIdList, provinceIdList, cityIdList, subBranchIdList, bankId, provinceId, cityId, subBranchId, bankName, provinceName, cityName, subBranchName, bankShow, balance } = this.state;
+        const { isPc, cardInfo, bankIdList, provinceIdList, cityIdList, subBranchIdList, bankId, provinceId, cityId, subBranchId, bankName, provinceName, cityName, subBranchName, bankShow, balance, pathpath } = this.state;
         let bankIdDom, provinceIdDom, cityIdDom, subBranchIdDom;
         if (bankIdList && bankIdList.length > 0) {
             bankIdDom = bankIdList.map(item => (
@@ -357,45 +368,47 @@ class card extends React.Component {
                 <div className='bankbox1'>
                     <div className="bank">
                         <span className="title">开户银行</span>
-                        <Select value={bankId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }} disabled={cardInfo ? true : false}>
+                        <Select value={bankId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }} disabled={cardInfo && pathpath == '/card/tixian' ? true : false}>
                             {bankIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行省份</span>
-                        <Select value={provinceId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'provinceId') }} disabled={cardInfo ? true : false}>
+                        <Select value={provinceId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'provinceId') }} disabled={cardInfo && pathpath == '/card/tixian' ? true : false}>
                             {provinceIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行城市</span>
-                        <Select value={cityId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'cityId') }} disabled={cardInfo ? true : false}>
+                        <Select value={cityId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'cityId') }} disabled={cardInfo && pathpath == '/card/tixian' ? true : false}>
                             {cityIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行支行</span>
-                        <Select value={subBranchId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'subBranchId') }} disabled={cardInfo ? true : false}>
+                        <Select value={subBranchId} style={{ width: 240 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'subBranchId') }} disabled={cardInfo && pathpath == '/card/tixian' ? true : false}>
                             {subBranchIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">卡号</span>
-                        <Input style={{ width: 240 }} placeholder="请输入银行卡号" value={this.state.cardNo} onChange={e => this.setState({ cardNo: e.target.value })} disabled={cardInfo ? true : false} />
+                        <Input style={{ width: 240 }} placeholder="请输入银行卡号" value={this.state.cardNo} onChange={e => this.setState({ cardNo: e.target.value })} disabled={cardInfo && pathpath == '/card/tixian' ? true : false} />
                     </div>
                     <div className="bank">
                         <span className="title">户名</span>
-                        <Input style={{ width: 240 }} placeholder="请输入银行卡户名" value={this.state.userName} onChange={e => this.setState({ userName: e.target.value })} disabled={cardInfo ? true : false}/>
+                        <Input style={{ width: 240 }} placeholder="请输入银行卡户名" value={this.state.userName} onChange={e => this.setState({ userName: e.target.value })} disabled={cardInfo ? true : false} />
                     </div>
                     <div className="bank">
                         <span className="title">身份证</span>
-                        <Input style={{ width: 240 }} placeholder="请输入身份证" value={this.state.identityNo} onChange={e => this.setState({ identityNo: e.target.value })} disabled={cardInfo ? true : false}/>
+                        <Input style={{ width: 240 }} placeholder="请输入身份证" value={this.state.identityNo} onChange={e => this.setState({ identityNo: e.target.value })} disabled={cardInfo ? true : false} />
                     </div>
                     <div className="bank">
                         <span className="title">会员ID</span>
-                        <Input style={{ width: 240 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} disabled={cardInfo ? true : false}  />
+                        <Input style={{ width: 240 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} disabled={cardInfo ? true : false} />
                     </div>
-                    <div className="addSubmite1" onClick={() => this.submite()}>完成</div>
+                    {cardInfo && pathpath == '/card/tixian' ? "" : (
+                        <div className="addSubmite1" onClick={() => this.submite()}>完成</div>
+                    )}
                 </div>
             </div>
         );

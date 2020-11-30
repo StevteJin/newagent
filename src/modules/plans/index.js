@@ -100,9 +100,7 @@ class UserCenter extends React.Component {
                     type: res.financePeriod,
                     financeRatio: res.financeRatio,
                     makeFeeRate: 0,
-                    financeFee: 0,
-                    totalScale: res.totalScale,
-                    type: res.financePeriod
+                    financeFee: 0
                 }, () => {
                     this.getFinanceRatio(this.state.financeRatio, this.state.type)
                 })

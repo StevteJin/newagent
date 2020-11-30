@@ -97,12 +97,12 @@ class transfer extends React.Component {
         }
     }
     withdraw() {
-        if (this.state.liftScale === '' || parseFloat(this.state.liftScale) <= 0 || this.Decimal(this.state.liftScale) > 2) {
+        if (this.state.liftScale == '' || parseFloat(this.state.liftScale) <= 0 || this.Decimal(this.state.liftScale) > 2) {
             this.setState({
                 visible: true,
                 msg: "提现金额必须大于0，最多两位小数"
             });
-        } else if (this.state.liftScale > this.state.backableScale) {
+        } else if (Number(this.state.liftScale) > Number(this.state.backableScale)) {
             this.setState({
                 visible: true,
                 msg: "提现金额不能大于余额"
@@ -117,6 +117,19 @@ class transfer extends React.Component {
                     msg: "提现申请已提交"
                 });
                 this.props.history.push('/usercenter');
+            }, error => {
+                console.log(error.response)
+                if (error.response.status == 400) {
+                    console.log('我执行了啊');
+                    let data = JSON.stringify(error.response.data.resultInfo);
+                    data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                    this.setState({
+                        visible: true,
+                        msg: data
+                    }, () => {
+                        console.log('我为什么没执行呢')
+                    })
+                }
             });
         }
     }

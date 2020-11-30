@@ -45,7 +45,7 @@ const menu = [{
     key: 'capitalflow',
     name: '资金流水',
 }, {
-    path: '/card',
+    path: '/card/:id',
     key: 'card',
     name: '银行卡信息',
 }, {

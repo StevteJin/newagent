@@ -186,7 +186,7 @@ class capitalflow extends React.Component {
                         <span>
                             {item.orderTypeDesc}
                         </span>
-                        <span style={{ 'marginRight': '10px', color: '#333', 'marginLight': '20px' }}>
+                        <span style={{ 'marginRight': '10px', color: '#333', 'marginLeft': '20px' }}>
                             {item.sourceTypeDesc}
                         </span>
                         <span className={item.totalAmount >= 0 ? '' : 'blue'}>

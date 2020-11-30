@@ -52,7 +52,8 @@ class MainContent extends React.Component {
             qrUrl1: '',
             isPc: false,
             where: "/plan",
-            path: ""
+            path: "",
+            tiao: false
         }
     }
     // componentWillMount()一般用的比较少，它更多的是在服务端渲染时使用。它代表的过程是组件已经经历了constructor()初始化数据后，但是还未渲染DOM时。
@@ -64,6 +65,7 @@ class MainContent extends React.Component {
     }
     // 组件第一次渲染完成，此时dom节点已经生成，可以在这里调用ajax请求，返回数据setState后组件会重新渲染
     componentDidMount = () => {
+        this.isiPhone();
         let path = this.props.location.pathname;
         console.log('我是当前路由', path);
         this.setState({
@@ -137,8 +139,31 @@ class MainContent extends React.Component {
             this.props.history.push(this.state.where);
         })
     }
+
+    isiPhone() {
+        let isIphoneX = (() => {
+            if (typeof window !== 'undefined' && window) {
+                // console.log('userAgent>>',window.navigator.userAgent)
+                return /iphone/gi.test(window.navigator.userAgent) && window.screen.height >= 812;
+            }
+            return false;
+        })();
+
+        if (isIphoneX) {
+            this.setState({
+                tiao: true
+            })
+        }
+
+        function testUA(str) {
+
+            return navigator.userAgent.indexOf(str) > -1
+
+        }
+    }
+
     render() {
-        const { isPc, where, path } = this.state;
+        const { isPc, where, path, tiao } = this.state;
         let menuData = MENU;
         let menuDom = menuData.map((item, index) => (<Menu.Item key={item.key}>
             <Link to={item.path}><span>{item.name}</span></Link>
@@ -223,7 +248,7 @@ class MainContent extends React.Component {
                 } else {
                     item.where = bankcard
                 }
-            } else if (item.path == '/card') {
+            } else if (item.path == '/card/:id') {
                 if (isPc) {
                     item.where = withdrawal
                 } else {
@@ -307,6 +332,7 @@ class MainContent extends React.Component {
             ) : (
                     <div>
                         {routeDom}
+                        {tiao==true?(<div class="fix-iphonex-bottom"></div>):""}
                         {path == '/plan' || path == '/mIndex' || path == '/usercenter' ? (
                             <div className="footer1" id="footer1">
                                 <div className="small-footer">

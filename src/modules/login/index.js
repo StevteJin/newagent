@@ -84,11 +84,14 @@ class login extends React.Component {
         }, error => {
             console.log(error.response)
             if (error.response.status == 400) {
+                console.log('我执行了啊');
                 let data = JSON.stringify(error.response.data.resultInfo);
                 data = data.replace(/^(\s|")+|(\s|")+$/g, '');
                 this.setState({
                     visible: true,
                     msg: data
+                }, () => {
+                    console.log('我为什么没执行呢')
                 })
             }
         });
@@ -184,6 +187,17 @@ class login extends React.Component {
                     </div>
                 </div>) : (
                     <div className="login-div">
+                        <Modal
+                            title="提示"
+                            centered
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            onCancel={this.handleCancel}
+                            okText="确定"
+                            cancelText="取消"
+                        >
+                            <p>{this.state.msg}</p>
+                        </Modal>
                         <div className="input-div">
                             <p className="title">欢迎登录</p>
                             <p className="smalltitle">Welcome to login</p>

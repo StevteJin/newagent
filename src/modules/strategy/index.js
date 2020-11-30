@@ -26,7 +26,7 @@ class strategy extends React.Component {
                 zsje: 4400
             },
             tradeDay: "",
-            isAdd: "",
+            isAdd: false,
             makeFeeRate: "",
             financeFee: "",
             manageFee: "",
@@ -46,12 +46,14 @@ class strategy extends React.Component {
             a1: "",
             a2: "",
             a3: "",
-            tiaoyue1: false
+            tiaoyue1: false,
+            allottedScale: "",
+            type: ""
         }
     }
     componentDidMount = () => {
         let goId = this.props.match.params.id;
-        let isAdd = localStorage.getItem("isAdd");
+        let isAdd = Boolean(localStorage.getItem("isAdd"));
         let peiziData = JSON.parse(localStorage.getItem("strategyData"));
         let strategyType = peiziData.type;
         let tradeDay = this.getNowFormatDate();
@@ -64,13 +66,16 @@ class strategy extends React.Component {
             positionRatio: peiziData.positionRatio,
             secondBoardPositionRatio: peiziData.secondBoardPositionRatio
         }, () => {
+            console.log('我啊', this.state.isAdd == true)
             if (this.state.isAdd == true) {
+                this.getInfo();
                 let url = '/tn/tntg/userInfo', method = 'post', options = null;
                 httpAxios(url, method, false, options).then(res => {
                     let separateFeeRate = res['separateFeeRate'];
                     let fwf = (Math.round(res['manageMakeFeeRate'] * this.state.peiziData.mulType * this.state.peiziData.money * 100) / 100).toFixed(2);
                     this.setState({
-                        separateFeeRate: separateFeeRate
+                        separateFeeRate: separateFeeRate,
+                        type: res.financePeriod
                     })
                     this.state.info.fwf = fwf;
                 }, error => {
@@ -205,6 +210,31 @@ class strategy extends React.Component {
     }
     componentWillUnmount = () => {
 
+    }
+
+    getInfo() {
+        let url = '/tn/tntg/capital', method = 'post', options = null;
+        httpAxios(url, method, false, options).then(res => {
+            if (res.allottedScale != 0) {
+                this.setState({
+                    allottedScale: res.allottedScale
+                }, () => {
+
+                })
+            }
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                }, () => {
+
+                })
+            }
+        });
     }
 
     getNowFormatDate() {
@@ -406,7 +436,7 @@ class strategy extends React.Component {
     }
 
     render() {
-        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, separateFeeRate, tradeDay, chicangShow, positionRatio, secondBoardPositionRatio, a1, a2, a3, tiaoyue1 } = this.state;
+        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, separateFeeRate, tradeDay, chicangShow, positionRatio, secondBoardPositionRatio, a1, a2, a3, tiaoyue1, allottedScale,type } = this.state;
         return (
             <div>
                 <Modal
@@ -487,7 +517,7 @@ class strategy extends React.Component {
                         <div className="cell-list">
                             <div className="list-item">
                                 <span className="list-item-name">
-                                    {isAdd == 'true' ? "新增" : ""}保证金
+                                    {isAdd == true ? "新增" : ""}保证金
                                 </span>
                                 <span className="list-item-content">
                                     {info.bzj}元
@@ -505,22 +535,25 @@ class strategy extends React.Component {
                                 <span className="list-item-name">
                                     建仓费率
                                 </span>
-                                <span className="list-item-content">
-                                    {makeFeeRate}
-                                </span>
+                                {allottedScale == 0 ?
+                                    (
+                                        <span className="list-item-content">
+                                            {makeFeeRate}
+                                        </span>) : (<span className="list-item-content">0</span>)}
                             </div>
                             <div className="list-item">
                                 <span className="list-item-name">
                                     管理费率
                                 </span>
-                                <span className="list-item-content">
-                                    {financeFee}
-                                </span>
+                                {allottedScale == 0 ? (
+                                    <span className="list-item-content">
+                                        {financeFee}
+                                    </span>) : (<span className="list-item-content">0</span>)}
                             </div>
-                            {strategyType != 0 ? (
+                            {type == 'month' ? (
                                 <div className="list-item">
                                     <span className="list-item-name">
-                                        本{strategyType == 1 ? '周' : '月'}管理费
+                                        本月管理费
                                 </span>
                                     <span className="list-item-content">
                                         {manageFee}元

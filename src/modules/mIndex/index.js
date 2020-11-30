@@ -87,16 +87,65 @@ class mIndex extends React.Component {
                 // diText: '无资金限制'
             }],
             addId: 0,
+            shouldId: "",
             newslist: [],
-            goId: ""
+            goId: "",
+            allottedScale: "",
+            type: ""
         }
     }
     componentDidMount = () => {
+        this.getInfo();
         this.generalTrend();
         this.newsList();
     }
     componentWillUnmount = () => {
 
+    }
+
+    getInfo() {
+        let url = '/tn/tntg/capital', method = 'post', options = null;
+        httpAxios(url, method, false, options).then(res => {
+            if (res.allottedScale != 0) {
+                this.setState({
+                    allottedScale: res.allottedScale,
+                    type: res.financePeriod,
+                    shouldId: res.financePeriod,
+
+                    // financeRatio: res.financeRatio,
+                    // makeFeeRate: 0,
+                    // financeFee: 0,
+                    // totalScale: res.totalScale
+                }, () => {
+                    // this.getFinanceRatio(this.state.financeRatio, this.state.type)
+                    if (this.state.shouldId == 'day') {
+                        this.setState({
+                            addId: 0
+                        })
+                    } else if (this.state.shouldId == 'month') {
+                        this.setState({
+                            addId: 2
+                        })
+                    } else if (this.state.shouldId == 'single') {
+                        this.setState({
+                            addId: 3
+                        })
+                    }
+                })
+            }
+        }, error => {
+            console.log(error.response)
+            if (error.response.status == 400) {
+                let data = JSON.stringify(error.response.data.resultInfo);
+                data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                this.setState({
+                    visible: true,
+                    msg: data
+                }, () => {
+
+                })
+            }
+        });
     }
 
     generalTrend() {
@@ -131,6 +180,7 @@ class mIndex extends React.Component {
     }
 
     changeId(id) {
+        console.log('类型', id);
         this.setState({
             addId: id
         })
@@ -168,7 +218,7 @@ class mIndex extends React.Component {
     }
 
     render() {
-        const { list, title, detail, newslist } = this.state;
+        const { list, title, detail, newslist, shouldId } = this.state;
         let listDom = list.map((item, index) => (
             <div className="tabs-div2 " key={index}>
                 <p>{item.preClosePrice}</p>
@@ -177,11 +227,19 @@ class mIndex extends React.Component {
                 <p>{item.stockName}</p>
             </div>
         ))
-        let titleDom = title.map((item, index) => (
-            <div key={index} className="addTabs" onClick={() => this.changeId(item.id)}>
-                <span className={this.state.addId == item.id ? 'addIdStyle' : ''}>{item.text}</span>
-            </div>
-        ))
+        let titleDom = title.map((item, index) =>
+            shouldId ? (
+                <div key={index} className="addTabs">
+                    <span className={this.state.addId == item.id ? 'addIdStyle' : ''}>{item.text}</span>
+                </div>
+            ) : (
+                    <div key={index} className="addTabs" onClick={() => this.changeId(item.id)}>
+                        <span className={this.state.addId == item.id ? 'addIdStyle' : ''}>{item.text}</span>
+                    </div>
+                )
+
+
+        )
 
         let detailDom = detail.map((item, index) => (
             <div key={index}>

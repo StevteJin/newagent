@@ -188,7 +188,9 @@ class UserCenter extends React.Component {
                         subBranchName: this.state.cardInfo.subBranchName,
 
                     }, () => {
-
+                        this.getProvinceId();
+                        this.getcityId();
+                        this.getsubBranchId();
                     })
                 })
             }
@@ -253,11 +255,6 @@ class UserCenter extends React.Component {
                 visible: true,
                 msg: '请输入正确的身份证号'
             })
-        } else if (this.state.mobile.length != 11) {
-            this.setState({
-                visible: true,
-                msg: '请输入正确的手机号码'
-            })
         } else {
             let options = {
                 accountCode: this.state.accountCode,
@@ -286,7 +283,9 @@ class UserCenter extends React.Component {
             httpAxios(url, method, false, options).then(res => {
                 if (res.success == true) {
                     this.setState({
-                        bankShow: false
+                        bankShow: false,
+                        visible: true,
+                        msg: '修改成功'
                     })
                 }
             }, error => {
@@ -348,39 +347,39 @@ class UserCenter extends React.Component {
                 {bankShow == true ? (<div className='bankbox'>
                     <div className="bank">
                         <span className="title">开户银行</span>
-                        <Select value={bankId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }} disabled={cardInfo ? true : false}>
+                        <Select value={bankId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'bankId') }}>
                             {bankIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行省份</span>
-                        <Select value={provinceId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'provinceId') }} disabled={cardInfo ? true : false}>
+                        <Select value={provinceId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'provinceId') }}>
                             {provinceIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行城市</span>
-                        <Select value={cityId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'cityId') }} disabled={cardInfo ? true : false}>
+                        <Select value={cityId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'cityId') }}>
                             {cityIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">开户银行支行</span>
-                        <Select value={subBranchId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'subBranchId') }} disabled={cardInfo ? true : false}>
+                        <Select value={subBranchId} style={{ width: 300 }} onChange={(value, event) => { this.handelChangeOther(value, event, 'subBranchId') }}>
                             {subBranchIdDom}
                         </Select>
                     </div>
                     <div className="bank">
                         <span className="title">卡号</span>
-                        <Input style={{ width: 300 }} placeholder="请输入银行卡号" value={this.state.cardNo} onChange={e => this.setState({ cardNo: e.target.value })} disabled={cardInfo ? true : false} />
+                        <Input style={{ width: 300 }} placeholder="请输入银行卡号" value={this.state.cardNo} onChange={e => this.setState({ cardNo: e.target.value })} />
                     </div>
                     <div className="bank">
                         <span className="title">户名</span>
-                        <Input style={{ width: 300 }} placeholder="请输入银行卡户名" value={this.state.userName} onChange={e => this.setState({ userName: e.target.value })} disabled={cardInfo ? true : false}/>
+                        <Input style={{ width: 300 }} placeholder="请输入银行卡户名" value={this.state.userName} onChange={e => this.setState({ userName: e.target.value })} disabled={cardInfo ? true : false} />
                     </div>
                     <div className="bank">
                         <span className="title">身份证</span>
-                        <Input style={{ width: 300 }} placeholder="请输入身份证" value={this.state.identityNo} onChange={e => this.setState({ identityNo: e.target.value })} disabled={cardInfo ? true : false}/>
+                        <Input style={{ width: 300 }} placeholder="请输入身份证" value={this.state.identityNo} onChange={e => this.setState({ identityNo: e.target.value })} disabled={cardInfo ? true : false} />
                     </div>
                     <div className="bank">
                         <span className="title">会员ID</span>
@@ -393,7 +392,7 @@ class UserCenter extends React.Component {
                                 <div className="tt1">可提现金额：</div>
                                 <div className="tt2">{balance}</div>
                             </div>
-                            <div className="tb2" onClick={() => this.bandCard()}>绑定提现银行卡</div>
+                            <div className="tb2" onClick={() => this.bandCard()}>{cardInfo ? "修改银行卡" : "绑定提现银行卡"}</div>
                             <div className="tb3">
                                 <div className="ttb3">
                                     <div className="tt1">请输入您想要提现的金额:</div>

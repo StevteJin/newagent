@@ -101,7 +101,7 @@ class tixian extends React.Component {
                         <span className="red">{backableScale}</span>
                     </div>
                 </div>
-                <div className="list-item" onClick={() => this.goto("/card")} style={{ "marginTop": "10px" }}>
+                <div className="list-item" onClick={() => this.goto("/card/tixian")} style={{ "marginTop": "10px" }}>
                     <span>绑定提现银行卡</span>
                     <img className="right-icon" src={right} alt="" />
                 </div>

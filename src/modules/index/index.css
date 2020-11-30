@@ -198,3 +198,8 @@
     -webkit-background-clip: text;
     color: transparent;
 }
+
+.fix-iphonex-bottom {
+    height: 34px;
+    background-color: #ffffff;
+}

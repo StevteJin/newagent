@@ -37,7 +37,8 @@ class deposit extends React.Component {
             type: "",
             addType: "",
             fee: "",
-            financeData: ""
+            financeData: "",
+            financeRatio: ""
         }
     }
     componentDidMount = () => {
@@ -59,7 +60,8 @@ class deposit extends React.Component {
                 userInfo: res
             }, () => {
                 this.setState({
-                    allottedScale: this.state.userInfo.allottedScale
+                    allottedScale: this.state.userInfo.allottedScale,
+                    financeRatio: this.state.userInfo.financeRatio
                 })
                 this.financeScheme();
             });
@@ -265,9 +267,11 @@ class deposit extends React.Component {
         };
         // this.data.setSession('strategyData', JSON.stringify(data));
         // this.data.setSession('allottedScale2', this.userInfo.allottedScale);
+        
+        let goId = this.props.match.params.id;
+        // this.goto(goId, this.state.financeRatio, this.state.financeData[id].financeFeeRate);
         localStorage.setItem("strategyData", JSON.stringify(data));
         localStorage.setItem("allottedScale2", this.state.userInfo.allottedScale);
-        let goId = this.props.match.params.id;
         this.props.history.push('/strategy/' + goId);
         // this.data.goto('strategy');
 
@@ -278,6 +282,7 @@ class deposit extends React.Component {
             addType: type
         }, () => {
             // this.data.setSession('isAdd', type);
+            localStorage.setItem('isAdd', type);
             if (type) { // 增配
                 if (this.judge()) {
 
@@ -319,7 +324,13 @@ class deposit extends React.Component {
         if (this.state.msg == '请重新登录') {
             this.props.history.push('/login');
         }
-        if (this.state.msg == '是否确认入金') {console.log("我执行了");
+        if (this.state.msg.indexOf('预补足的费用') != -1) {
+            this.isAddFn();
+            let goId = this.props.match.params.id;
+            this.props.history.push('/strategy/' + goId);
+        }
+        if (this.state.msg == '是否确认入金') {
+            console.log("我执行了");
             if (this.state.addType) { // 增配
                 this.isAddFn();
             } else { // 非增配
