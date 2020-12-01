@@ -67,7 +67,7 @@ const menu = [{
 }, {
     path: '/ercode',
     key: 'ercode',
-    name: '邀请码',
+    name: '推广二维码',
 }];
 
 export const MENU = menu;

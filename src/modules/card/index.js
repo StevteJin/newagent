@@ -306,7 +306,7 @@ class card extends React.Component {
                         visible: true,
                         msg: '银行卡信息修改成功'
                     })
-                    this.props.history.push('/usercenter');
+                    this.props.history.push('/tixian');
                 }
             }, error => {
                 console.log(error.response)

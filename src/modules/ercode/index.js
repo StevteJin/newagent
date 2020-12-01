@@ -23,7 +23,7 @@ class ercode extends React.Component {
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
-        let qrUrl = window.location.href.split('#')[0] + localStorage.getItem('uri');
+        let qrUrl = 'http://47.102.151.13//h5tncl/' + localStorage.getItem('uri');
         this.setState({
             qrUrl: qrUrl
         })
@@ -92,7 +92,7 @@ class ercode extends React.Component {
             <div className="huibg">
                 <div className="navigation">
                     <div className="back" onClick={() => this.back()} ></div>
-                    <p className="navigation-title">邀请码</p>
+                    <p className="navigation-title">推广二维码</p>
                 </div>
                 <div>
                     <div className="ercode">

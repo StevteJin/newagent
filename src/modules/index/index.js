@@ -302,7 +302,7 @@ class MainContent extends React.Component {
                                             />
                                         </div>
                                     </div> : <div className='ercode'>
-                                        <div className='ertitle'>我的邀请码</div>
+                                        <div className='ertitle'>推广二维码</div>
                                         <div className='erimg'>
                                             <QRCode
                                                 value={this.state.qrUrl}

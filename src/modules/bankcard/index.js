@@ -58,6 +58,9 @@ class bankcard extends React.Component {
         if (this.state.msg == '请重新登录') {
             this.props.history.push('/login');
         }
+        if (this.state.msg == '充值已提交，请尽快充值，等待后台审核') {
+            this.props.history.push('/usercenter');
+        }
         this.setState({
             visible: false,
         });
@@ -125,7 +128,7 @@ class bankcard extends React.Component {
                 visible: true,
                 msg: "充值已提交，请尽快充值，等待后台审核"
             }, () => {
-                this.props.history.push('/usercenter');
+
             });
         });
     }

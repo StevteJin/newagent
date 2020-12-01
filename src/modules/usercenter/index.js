@@ -231,7 +231,7 @@ class usercenter extends React.Component {
                     <div className="box box2">
                         <div onClick={() => this.toWhere('/ercode')}>
                             <img src={ercode} />
-                            <div>邀请码</div>
+                            <div>推广二维码</div>
                         </div>
                         {allottedScale != 0 ? (
                             <div onClick={() => this.submit()}>

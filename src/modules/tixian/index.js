@@ -15,13 +15,15 @@ class tixian extends React.Component {
         super(props);
         this.state = {
             isPc: false,
-            backableScale: ""
+            backableScale: "",
+            cardNo: ""
         }
     }
     componentDidMount = () => {
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
+        this.getCardInfo();
         let backableScale = localStorage.getItem('balance') || 0;
         this.setState({
             backableScale: backableScale
@@ -55,7 +57,19 @@ class tixian extends React.Component {
             visible: false,
         });
     };
+    getCardInfo() {
+        let url = '/tn/tn/query/card', method = 'post', options = null;
+        httpAxios(url, method, false, options).then(res => {
+            if (res) {
+                this.setState({
+                    cardNo: res.cardNo || ""
+                }, () => {
+                    console.log('我是银行卡', this.state.cardNo);
+                })
+            }
 
+        });
+    }
     browserRedirect() {
         let isPc;
         var sUserAgent = navigator.userAgent.toLowerCase();
@@ -86,7 +100,7 @@ class tixian extends React.Component {
         this.props.history.push(where);
     }
     render() {
-        const { isPc, backableScale } = this.state;
+        const { isPc, backableScale, cardNo } = this.state;
         return (
             <div className="huibg">
                 <div className="navigation">
@@ -102,7 +116,7 @@ class tixian extends React.Component {
                     </div>
                 </div>
                 <div className="list-item" onClick={() => this.goto("/card/tixian")} style={{ "marginTop": "10px" }}>
-                    <span>绑定提现银行卡</span>
+                    <span>{cardNo ? ('银行卡号 : ' + cardNo) : ("绑定提现银行卡")}</span>
                     <img className="right-icon" src={right} alt="" />
                 </div>
             </div>
