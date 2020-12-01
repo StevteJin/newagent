@@ -163,7 +163,7 @@ class EditableTable extends React.Component {
 
         return (
             <div>
-                <Modal
+                {/* <Modal
                     title="提示"
                     centered
                     visible={this.state.visible}
@@ -172,6 +172,14 @@ class EditableTable extends React.Component {
                     okText="确定"
                     cancelText="取消"
                 >
+                    <p>{this.state.msg}</p>
+                </Modal> */}
+                <Modal
+                    title="提示"
+                    centered
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                    footer={[<Button key="submit" type="primary" onClick={this.handleOk}>确定</Button>]}>
                     <p>{this.state.msg}</p>
                 </Modal>
                 {

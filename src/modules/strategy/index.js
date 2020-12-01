@@ -436,7 +436,7 @@ class strategy extends React.Component {
     }
 
     render() {
-        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, separateFeeRate, tradeDay, chicangShow, positionRatio, secondBoardPositionRatio, a1, a2, a3, tiaoyue1, allottedScale,type } = this.state;
+        const { goId, info, isAdd, makeFeeRate, financeFee, manageFee, strategyType, separateFeeRate, tradeDay, chicangShow, positionRatio, secondBoardPositionRatio, a1, a2, a3, tiaoyue1, allottedScale, type } = this.state;
         return (
             <div>
                 <Modal
@@ -462,7 +462,7 @@ class strategy extends React.Component {
                     <p>8.利润分配：合作期间按免息盈利分成，账户持有个股在卖出时有盈利则分，无盈利则不分成；</p>
                     <p>9.结算期限及费用：免息日结算前清仓的，不收取管理费，如到时操盘手未清仓的，资金方将按天收取持仓市值的管理费；</p>
                 </Modal>
-                <Modal
+                {/* <Modal
                     title="提示"
                     centered
                     visible={this.state.visible}
@@ -470,6 +470,14 @@ class strategy extends React.Component {
                     onCancel={this.handleCancel}
                     okText="确定"
                     cancelText="取消">
+                    <p>{this.state.msg}</p>
+                </Modal> */}
+                <Modal
+                    title="提示"
+                    centered
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                    footer={[<Button key="submit" type="primary" onClick={this.handleOk}>确定</Button>]}>
                     <p>{this.state.msg}</p>
                 </Modal>
                 <Modal

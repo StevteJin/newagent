@@ -136,7 +136,7 @@ class bankcard extends React.Component {
         const { isPc, payType, cardInfro, amount, remark, qrUrl } = this.state;
         return (
             <div>
-                <Modal
+                {/* <Modal
                     title="提示"
                     centered
                     visible={this.state.visible}
@@ -144,6 +144,14 @@ class bankcard extends React.Component {
                     onCancel={this.handleCancel}
                     okText="确定"
                     cancelText="取消">
+                    <p>{this.state.msg}</p>
+                </Modal> */}
+                <Modal
+                    title="提示"
+                    centered
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                    footer={[<Button key="submit" type="primary" onClick={this.handleOk}>确定</Button>]}>
                     <p>{this.state.msg}</p>
                 </Modal>
                 <div className="navigation">

@@ -6,7 +6,7 @@ import store from '../../store/store'
 //引入请求接口
 import httpAxios from '../../helpers/request';
 import './index.css';
-import { Input, Modal, Radio, Checkbox } from 'antd';
+import { Input, Modal, Radio, Checkbox, Button } from 'antd';
 
 class UserCenter extends React.Component {
     constructor(props) {
@@ -504,7 +504,7 @@ class UserCenter extends React.Component {
              * columns为表格的描述配置，列明什么之类的
              */
             <div>
-                <Modal
+                {/* <Modal
                     title="提示"
                     centered
                     visible={this.state.visible}
@@ -513,6 +513,14 @@ class UserCenter extends React.Component {
                     okText="确定"
                     cancelText="取消"
                 >
+                    <p>{this.state.msg}</p>
+                </Modal> */}
+                <Modal
+                    title="提示"
+                    centered
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                    footer={[<Button key="submit" type="primary" onClick={this.handleOk}>确定</Button>]}>
                     <p>{this.state.msg}</p>
                 </Modal>
                 <Modal
