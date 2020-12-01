@@ -211,7 +211,7 @@ class capitalflow extends React.Component {
             </div>
         ))
         return (
-            <div>
+            <div className="capitalflow">
                 <div className="navigation">
                     <div className="back" onClick={() => this.back()}></div>
                     <p className="navigation-title">资金流水</p>

@@ -107,7 +107,7 @@ class tixian extends React.Component {
                     <div className="back" onClick={() => this.back()} ></div>
                     <p className="navigation-title">提现</p>
                 </div>
-                <div className="list-item" onClick={() => this.goto("/transfer")} style={{ "marginTop": "10px" }}>
+                <div className="list-item list-itema" onClick={() => this.goto("/transfer")}>
                     <span>人民币提现</span>
                     <img className="right-icon" src={right} alt="" />
                     <div>
@@ -115,7 +115,7 @@ class tixian extends React.Component {
                         <span className="red">{backableScale}</span>
                     </div>
                 </div>
-                <div className="list-item" onClick={() => this.goto("/card/tixian")} style={{ "marginTop": "10px" }}>
+                <div className="list-item list-itema" onClick={() => this.goto("/card/tixian")}>
                     <span>{cardNo ? ('银行卡号 : ' + cardNo) : ("绑定提现银行卡")}</span>
                     <img className="right-icon" src={right} alt="" />
                 </div>

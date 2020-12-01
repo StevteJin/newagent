@@ -257,7 +257,11 @@ class MainContent extends React.Component {
             } else if (item.path == '/ercode') {
                 item.where = ercode
             } else {
-                item.where = A
+                if (isPc) {
+                    item.where = A
+                } else {
+                    item.where = capitalflow
+                }
             }
             return item;
         })
@@ -332,7 +336,7 @@ class MainContent extends React.Component {
             ) : (
                     <div>
                         {routeDom}
-                        {tiao==true?(<div class="fix-iphonex-bottom"></div>):""}
+                        {tiao == true ? (<div class="fix-iphonex-bottom"></div>) : ""}
                         {path == '/plan' || path == '/mIndex' || path == '/usercenter' ? (
                             <div className="footer1" id="footer1">
                                 <div className="small-footer">

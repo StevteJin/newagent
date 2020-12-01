@@ -79,3 +79,7 @@
 .blue {
     color: #5473FF !important;
 }
+
+.ant-picker-date-range-wrapper {
+    width: 300px;
+}
