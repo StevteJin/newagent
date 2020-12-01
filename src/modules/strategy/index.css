@@ -189,3 +189,18 @@
     color: #fff;
     text-align: center;
 }
+
+.listcheck {
+    overflow: hidden;
+}
+
+.listcheck label {
+    float: left;
+    margin-right: 20px;
+    display: inline-block;
+}
+
+.listcheck .tiaoyue {
+    float: left;
+    display: inline-block;
+}

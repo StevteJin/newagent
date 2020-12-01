@@ -131,7 +131,7 @@ class recharge extends React.Component {
         })
     }
     setMoney = e => {
-        if (this.Decimal(Number(e.target.value)) <= 2 && Number(e.target.value) > 0 && Number(e.target.value) != null) {
+        if ( Number(e.target.value) > 0 && Number(e.target.value) != null) {
             this.setState({
                 money: e.target.value,
                 inputMoney: e.target.value

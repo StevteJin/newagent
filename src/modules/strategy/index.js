@@ -612,10 +612,10 @@ class strategy extends React.Component {
                                 <img className="right-icon" src={right} alt="" />
                             </div>
                             <div className="list-item">
-                                <div className="list-item-content" style={{ color: '#40affe' }}>
+                                <div className="list-item-content listcheck" style={{ color: '#40affe' }}>
                                     {/* <input type="checkbox" name="" id="" [checked]='agreement' [(ngModel)]="agreement" />
                                     <span (click)='attention()'>已阅读并同意《操盘规则》</span> */}
-                                    <Checkbox onChange={this.onChange}></Checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <Checkbox onChange={this.onChange}></Checkbox>
                                     <span className="tiaoyue" onClick={() => this.changeBool()}>已阅读并同意操盘规则</span>
                                 </div>
                             </div>
