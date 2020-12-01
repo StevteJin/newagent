@@ -130,6 +130,24 @@ class recharge extends React.Component {
             inputMoney: ""
         })
     }
+    setMoney = e => {
+        if (this.Decimal(Number(e.target.value)) <= 2 && Number(e.target.value) > 0 && Number(e.target.value) != null) {
+            this.setState({
+                money: e.target.value,
+                inputMoney: e.target.value
+            }, () => {
+
+            })
+        } else {
+            this.setState({
+                money: "",
+                inputMoney: ""
+            }, () => {
+
+            })
+        }
+
+    }
     selectPayType(type) {
         console.log('是我', type);
         this.setState({
@@ -247,7 +265,8 @@ class recharge extends React.Component {
                     <div className="money-div">
                         {listDom}
                         <div style={{ width: "100%" }}>
-                            <Input type="number" placeholder="输入充值金额" value={this.state.inputMoney} onChange={e => this.setState({ inputMoney: e.target.value, money: e.target.value })} />
+                            {/* <Input type="number" placeholder="输入充值金额" value={this.state.inputMoney} onChange={e => this.setState({ inputMoney: e.target.value, money: e.target.value })} /> */}
+                            <Input placeholder="输入充值金额" value={this.state.inputMoney} onChange={this.setMoney} />
                         </div>
                     </div>
                     {payWayConfigDom}
