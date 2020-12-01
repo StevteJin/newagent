@@ -146,11 +146,8 @@ class login extends React.Component {
                         title="提示"
                         centered
                         visible={this.state.visible}
-                        onOk={this.handleOk}
                         onCancel={this.handleCancel}
-                        okText="确定"
-                        cancelText="取消"
-                    >
+                        footer={[<Button key="submit" type="primary" onClick={this.handleOk}>确定</Button>]}>
                         <p>{this.state.msg}</p>
                     </Modal>
                     <div className="biglogin">
@@ -191,11 +188,8 @@ class login extends React.Component {
                             title="提示"
                             centered
                             visible={this.state.visible}
-                            onOk={this.handleOk}
                             onCancel={this.handleCancel}
-                            okText="确定"
-                            cancelText="取消"
-                        >
+                            footer={[<Button key="submit" type="primary" onClick={this.handleOk}>确定</Button>]}>
                             <p>{this.state.msg}</p>
                         </Modal>
                         <div className="input-div">
