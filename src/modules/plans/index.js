@@ -180,6 +180,18 @@ class UserCenter extends React.Component {
                             this.props.history.push('/index');
                         } else {
                         }
+                    }, error => {
+                        console.log(error.response)
+                        if (error.response.status == 400) {
+                            let data = JSON.stringify(error.response.data.resultInfo);
+                            data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                            this.setState({
+                                visible: true,
+                                msg: data
+                            }, () => {
+    
+                            })
+                        }
                     });
                 }, error => {
                     console.log(error.response)
@@ -268,6 +280,18 @@ class UserCenter extends React.Component {
                     } else {
 
                     }
+                }, error => {
+                    console.log(error.response)
+                    if (error.response.status == 400) {
+                        let data = JSON.stringify(error.response.data.resultInfo);
+                        data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                        this.setState({
+                            visible: true,
+                            msg: data
+                        }, () => {
+
+                        })
+                    }
                 });
             } else { // 非增配
                 let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
@@ -282,6 +306,18 @@ class UserCenter extends React.Component {
                         this.props.history.push('/index');
                     } else {
 
+                    }
+                }, error => {
+                    console.log(error.response)
+                    if (error.response.status == 400) {
+                        let data = JSON.stringify(error.response.data.resultInfo);
+                        data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+                        this.setState({
+                            visible: true,
+                            msg: data
+                        }, () => {
+
+                        })
                     }
                 });
             }
