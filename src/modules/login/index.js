@@ -154,7 +154,7 @@ class login extends React.Component {
                         <div className="leftLogin">
                             <div className="topLogin">
                                 <div className="t1">
-                                    <span>资管后台管理系统</span>&nbsp;
+                                    <span>业务系统</span>&nbsp;
                                 <img src={m2} alt="" />
                                 </div>
                                 <div className="t2">科技改变金融</div>
