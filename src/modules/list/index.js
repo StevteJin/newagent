@@ -1,6 +1,7 @@
 //此为列表页
 import React from 'react';
 import { Table, Pagination, Modal, Input, Button, DatePicker, Select, Tooltip, Popover } from 'antd';
+
 import { ORIGIN } from '../../constants/index'
 //二维码
 import QRCode from 'qrcode.react';
@@ -15,7 +16,7 @@ import locale from 'antd/es/date-picker/locale/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
-
+const { Option } = Select;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 //定义了一个来自React.Component的子类
@@ -26,7 +27,29 @@ class EditableTable extends React.Component {
       createTimeStart: "",
       createTimeEnd: "",
       data: [],
-      dateString: ""
+      dateString: "",
+      type: "",
+      typeList: [
+        { key: "", value: "所有" },
+        { key: 1, value: "充值" },
+        { key: 2, value: "提现" },
+        { key: 3, value: "资金调整" },
+        { key: 4, value: "入金" },
+        { key: 5, value: "出金" },
+        { key: 6, value: "管理费" },
+        { key: 7, value: "佣金转入" },
+        { key: 8, value: "补平亏损" },
+        { key: 9, value: "委托成交" },
+        { key: 10, value: "除息分红" },
+        { key: 11, value: "除权除息税费" },
+        { key: 12, value: "单票免息" }
+      ],
+      source: "",
+      sourceList: [
+        { key: "", value: "所有" },
+        { key: 1, value: "账户余额" },
+        { key: 2, value: "可用资金" }
+      ]
     };
   }
 
@@ -79,6 +102,8 @@ class EditableTable extends React.Component {
       let username = localStorage.getItem("username");
       let options = {
         accountCode: username,
+        type: this.state.type,
+        source: this.state.source,
         createTimeStart: this.state.createTimeStart,
         createTimeEnd: this.state.createTimeEnd
       }
@@ -140,11 +165,39 @@ class EditableTable extends React.Component {
     uniques = uniques;
     return uniques;
   }
-
+  //用来获取下拉选项
+  getDom(list) {
+    const mainArray = list;
+    return mainArray.map((item1, key1) => (
+      <Option value={item1.key}> {item1.value} </Option>
+    ))
+  }
+  handelChangeOther = (value, event, who) => {
+    console.log('我是值', value, event, who);
+    if (who == 'type') {
+      this.setState({
+        type: value || ""
+      })
+    } else if (who == 'source') {
+      this.setState({
+        source: value || ""
+      })
+    }
+  }
   render() {
-    const { data, dateString } = this.state;
+    const { data, dateString, type, typeList, source, sourceList } = this.state;
     //这里数据得自己处理
     let columns = [{
+      title: "会员ID",
+      dataIndex: "accountCode",
+      key: "accountCode",
+      align: 'center'
+    }, {
+      title: "会员名称",
+      dataIndex: "accountName",
+      key: "accountName",
+      align: 'center'
+    }, {
       title: "充值类型",
       dataIndex: "orderTypeDesc",
       key: "orderTypeDesc",
@@ -184,6 +237,18 @@ class EditableTable extends React.Component {
     return (
       <div>
         <div className="searchBox">
+          <div className='inputArray'>
+            <label>充值类型 :</label>
+            <Select style={{ width: 140 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'type') }} allowClear={true}>
+              {this.getDom(typeList)}
+            </Select>
+          </div>
+          <div className='inputArray'>
+            <label>资金类型 :</label>
+            <Select style={{ width: 140 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'source') }} allowClear={true}>
+              {this.getDom(sourceList)}
+            </Select>
+          </div>
           <div className='inputArray'>
             <label>日期 :</label>
             <RangePicker
