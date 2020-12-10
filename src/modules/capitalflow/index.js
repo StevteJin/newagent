@@ -167,6 +167,23 @@ class capitalflow extends React.Component {
         })
     }
 
+    onChange1 = (date, dateString) => {
+        console.log('开始:', date, dateString);
+        this.setState({
+            createTimeStart: dateString
+        }, () => {
+            this.getlist();
+        })
+    }
+    onChange2 = (date, dateString) => {
+        console.log('结束', date, dateString);
+        this.setState({
+            createTimeEnd: dateString
+        }, () => {
+            this.getlist();
+        })
+    }
+
     color(status) {
         if (status == 1) {
             return 'status green';
@@ -178,7 +195,7 @@ class capitalflow extends React.Component {
     }
 
     render() {
-        const { isPc, dateString, list } = this.state;
+        const { isPc, dateString, list, createTimeStart, createTimeEnd } = this.state;
         let listDom = list.map((item, index) => (
             <div className="flow-list" key={index}>
                 <div>
@@ -217,14 +234,19 @@ class capitalflow extends React.Component {
                     <p className="navigation-title">资金流水</p>
                 </div>
                 <div className="date-div">
-                    <span>查询日期</span>
+                    <span className="timetitle">开始</span>
                     <span className="timedate">
-                        <RangePicker
+                        {/* <RangePicker
                             onChange={this.onChangeTime}
                             locale={locale}
                             className='dateStyle'
                             placeholder={[dateString, dateString]}
-                        />
+                        /> */}
+                        <DatePicker onChange={this.onChange1} placeholder={createTimeStart} locale={locale} className='dateStyle' />
+                    </span><span>&nbsp;&nbsp;</span>
+                    <span className="timetitle">结束</span>
+                    <span className="timedate">
+                        <DatePicker onChange={this.onChange2} placeholder={createTimeEnd} locale={locale} className='dateStyle' />
                     </span>
                 </div>
                 <div className="flow-content">

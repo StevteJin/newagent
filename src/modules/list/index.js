@@ -142,7 +142,18 @@ class EditableTable extends React.Component {
       createTimeEnd: dateString[1]
     })
   }
-
+  onChange1 = (date, dateString) => {
+    console.log('开始:', date, dateString);
+    this.setState({
+      createTimeStart: dateString
+    })
+  }
+  onChange2 = (date, dateString) => {
+    console.log('结束', date, dateString);
+    this.setState({
+      createTimeEnd: dateString
+    })
+  }
   //数组去重
   deteleObject(obj) {
     let uniques = [];
@@ -172,6 +183,7 @@ class EditableTable extends React.Component {
       <Option value={item1.key}> {item1.value} </Option>
     ))
   }
+
   handelChangeOther = (value, event, who) => {
     console.log('我是值', value, event, who);
     if (who == 'type') {
@@ -185,7 +197,7 @@ class EditableTable extends React.Component {
     }
   }
   render() {
-    const { data, dateString, type, typeList, source, sourceList } = this.state;
+    const { data, dateString, type, typeList, source, sourceList, createTimeStart, createTimeEnd } = this.state;
     //这里数据得自己处理
     let columns = [{
       title: "会员ID",
@@ -250,13 +262,16 @@ class EditableTable extends React.Component {
             </Select>
           </div>
           <div className='inputArray'>
-            <label>日期 :</label>
-            <RangePicker
+            <label>开始日期 :</label>
+            <DatePicker onChange={this.onChange1} placeholder={createTimeStart} locale={locale} className='dateStyle' />&nbsp;&nbsp;
+            <label>结束日期 :</label>
+            <DatePicker onChange={this.onChange2} placeholder={createTimeEnd} locale={locale} className='dateStyle' />
+            {/* <RangePicker
               onChange={this.onChangeTime}
               locale={locale}
               className='dateStyle'
               placeholder={[dateString, dateString]}
-            />
+            /> */}
           </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div>

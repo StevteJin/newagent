@@ -20,11 +20,16 @@
 
 .date-div span {
     float: left;
+    display: inline-block;
 }
-
+.date-div .timetitle {
+    width:30px;
+    overflow: hidden;
+}
 .date-div .timedate {
-    width: 60%;
+    width: 38%;
     margin-top: 10px;
+    overflow: hidden;
 }
 
 .flow-content {
@@ -80,6 +85,6 @@
     color: #5473FF !important;
 }
 
-.ant-picker-date-range-wrapper {
+/* .ant-picker-date-range-wrapper {
     width: 300px;
-}
+} */
