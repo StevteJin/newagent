@@ -88,7 +88,7 @@ class MainContent extends React.Component {
         })
         let invite_code_desc = `${ORIGIN}` + '/h5tncl/' + localStorage.getItem('uri') || "";
         let referral_code_desc = localStorage.getItem('referral_code_desc') || "";
-        let username = localStorage.getItem('username');
+        let username = localStorage.getItem('username') || localStorage.getItem('loginName') || "";
         this.setState({
             qrUrl: invite_code_desc,
             qrUrl1: referral_code_desc,

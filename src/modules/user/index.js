@@ -33,8 +33,6 @@ class UserCenter extends React.Component {
                 allottedScale: res.allottedScale
             });
             console.log('我是信息', this.state);
-            //这里拿到的username要发出订阅出去，redux订阅
-            this.username(this.state.accountName);
         }, error => {
             console.log(error.response)
             if (error.response.status == 400) {
