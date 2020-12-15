@@ -27,6 +27,9 @@ class mIndex extends React.Component {
             }, {
                 id: 3,
                 text: '单票方案'
+            }, {
+                id: 4,
+                text: '策略方案'
             }],
             detail: [{
                 img: './img/banner1.png',
@@ -85,6 +88,22 @@ class mIndex extends React.Component {
                 diText: '1000元起',
                 //赢顾客
                 // diText: '无资金限制'
+            }, {
+                img: './img/banner1.png',
+                btn: './img/btn1.png',
+                id: 4,
+                num: 'NO.4',
+                amount: '1000元起',
+                multiple: '8',
+                date: '策略',
+                money: '3',
+                money2: '元',
+                text: '2个交易日',
+                style: 'span1',
+                btns: 'btn1',
+                text1: '按策略结算',
+                zhongText: '策略收益',
+                diText: '1000元起'
             }],
             addId: 0,
             shouldId: "",

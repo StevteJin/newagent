@@ -35,7 +35,7 @@ class strategy extends React.Component {
             peiziData: "",
             financeData: "",
             dateText: "",
-            dayType: ['day', 'week', 'month', 'single'],
+            dayType: ['day', 'week', 'month', 'single', 'strategy'],
             chicangShow: false,
             positionRatio: "",
             secondBoardPositionRatio: "",
@@ -130,6 +130,23 @@ class strategy extends React.Component {
                     } else if (this.state.peiziData.type == 2) {
                         this.setState({
                             financeData: res['resultInfo']['month']
+                        }, () => {
+                            this.state.financeData.forEach(element => {
+                                if (element['financeRatio'] == this.state.peiziData.mulType) {
+                                    this.setState({
+                                        financeFee: element['financeFeeRate'],
+                                        makeFeeRate: element['makeFeeRate'],
+                                        separateFeeRate: element['separateFeeRate']
+                                    }, () => {
+                                        let fwf = (Math.round(this.state.makeFeeRate * this.state.peiziData.mulType * this.state.peiziData.money * 100) / 100).toFixed(2);
+                                        this.state.info.fwf = fwf;
+                                    })
+                                }
+                            });
+                        })
+                    } else if (this.state.peiziData.type == 4) {
+                        this.setState({
+                            financeData: res['resultInfo']['strategy']
                         }, () => {
                             this.state.financeData.forEach(element => {
                                 if (element['financeRatio'] == this.state.peiziData.mulType) {
@@ -546,7 +563,7 @@ class strategy extends React.Component {
                                 {allottedScale == 0 ?
                                     (
                                         <span className="list-item-content">
-                                            {makeFeeRate}
+                                            {goId == 4 ? 0 : makeFeeRate}
                                         </span>) : (<span className="list-item-content">0</span>)}
                             </div>
                             <div className="list-item">
@@ -555,7 +572,7 @@ class strategy extends React.Component {
                                 </span>
                                 {allottedScale == 0 ? (
                                     <span className="list-item-content">
-                                        {financeFee}
+                                        {goId == 4 ? 0 : financeFee}
                                     </span>) : (<span className="list-item-content">0</span>)}
                             </div>
                             {type == 'month' ? (

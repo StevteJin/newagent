@@ -18,6 +18,7 @@ class UserCenter extends React.Component {
             day: [],
             month: [],
             single: [],
+            strategy: [],
             makeFeeRate: "",//建仓费率
             financeFee: "",//管理费率
             manageFee: "",//管理费
@@ -74,7 +75,8 @@ class UserCenter extends React.Component {
             this.setState({
                 day: resultInfo.day,
                 month: resultInfo.month,
-                single: resultInfo.single
+                single: resultInfo.single,
+                strategy: resultInfo.strategy
             }, () => { })
         }, error => {
             console.log(error.response)
@@ -140,14 +142,15 @@ class UserCenter extends React.Component {
     }
 
     deposit() {
-        console.log('操盘规则', this.state.tiaoyue)
-        if (this.state.amount % 1000 !== 0 || this.state.amount === null || this.state.amount <= 0) {
+        console.log('操盘规则', this.state.tiaoyue, this.state.type)
+        if ((this.state.amount % 1000 !== 0 && this.state.type != 'strategy') || (this.state.amount === null && this.state.type != 'strategy') || (this.state.amount <= 0 && this.state.type != 'strategy')) {
             this.setState({
                 visible: true,
                 msg: '投入金额必须是1000的倍数，且大于0'
             })
         } else {
-            if (!this.state.financeRatio) {
+            console.log('我是策略方案', this.state.financeRatio)
+            if (!this.state.financeRatio && this.state.financeRatio != 0) {
                 this.setState({
                     visible: true,
                     msg: '请先选择策略方案'
@@ -170,7 +173,7 @@ class UserCenter extends React.Component {
                     }
                     let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
                         newStrategy: res['allottedScale'] !== '0' ? false : true,
-                        financeRatio: this.state.financeRatio,
+                        financeRatio: this.state.type == 'strategy' ? 0 : this.state.financeRatio,
                         financePeriod: this.state.type,
                         amount: this.state.amount,
                         expandScale: expandScale
@@ -189,7 +192,7 @@ class UserCenter extends React.Component {
                                 visible: true,
                                 msg: data
                             }, () => {
-    
+
                             })
                         }
                     });
@@ -252,8 +255,8 @@ class UserCenter extends React.Component {
         } else {
             expandScale = false;
         }
-        console.log('我是对错', expandScale)
-        if (this.state.amount % 1000 !== 0 || this.state.amount === null || this.state.amount <= 0) {
+        console.log('我是对错', expandScale, this.state.type)
+        if ((this.state.amount % 1000 !== 0 && this.state.type != 'strategy') || (this.state.amount === null && this.state.type != 'strategy') || (this.state.amount <= 0 && this.state.type != 'strategy')) {
             this.setState({
                 visible: true,
                 msg: '投入金额必须是1000的倍数，且大于0'
@@ -269,7 +272,7 @@ class UserCenter extends React.Component {
             if (type) { // 增配
                 let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
                     newStrategy: this.state.allottedScale !== '0' ? false : true,
-                    financeRatio: this.state.financeRatio,
+                    financeRatio: this.state.type == 'strategy' ? 0 : this.state.financeRatio,
                     financePeriod: this.state.type,
                     amount: this.state.amount,
                     expandScale: expandScale
@@ -296,7 +299,7 @@ class UserCenter extends React.Component {
             } else { // 非增配
                 let urld = '/tn/tntg/deposit', methodd = 'post', optionsd = {
                     newStrategy: this.state.allottedScale !== '0' ? false : true,
-                    financeRatio: this.state.financeRatio,
+                    financeRatio: this.state.type == 'strategy' ? 0 : this.state.financeRatio,
                     financePeriod: this.state.type,
                     amount: this.state.amount,
                     expandScale: expandScale
@@ -472,12 +475,51 @@ class UserCenter extends React.Component {
                         })
                     }
                 });
+            } else if (who == 'strategy') {
+                this.state.strategy.forEach(element => {
+                    if (element['financeRatio'] == this.state.financeRatio) {
+                        that.setState({
+                            makeFeeRate: element['makeFeeRate'],//建仓费率
+                            financeFee: element['financeFeeRate'],//管理费率
+                            manageFee: element['makeFeeRate'],//管理费
+                            separateFeeRate: element['separateFeeRate'],//分成比例
+                            cordonLineRate: element['cordonLineRate'],//警戒线
+                            flatLineRate: element['flatLineRate'],//平仓线
+                            positionRatio: element['positionRatio'],
+                            secondBoardPositionRatio: element['secondBoardPositionRatio']
+                        }, () => {
+                            let fwf = (Math.round(that.state.makeFeeRate * that.state.financeRatio * that.state.amount * 100) / 100).toFixed(2);
+                            that.setState({
+                                fwf: fwf
+                            }, () => {
+                            })
+                            let cpje, cpje1, jjje, zsje;
+                            if (this.state.allottedScale == 0) {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) + that.state.allottedScale;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                            } else {
+                                cpje = that.state.amount * (that.state.financeRatio + 1) * 2;
+                                jjje = cpje * that.state.cordonLineRate;
+                                zsje = cpje * that.state.flatLineRate;
+                                cpje1 = parseInt(this.state.amount) + parseInt(this.state.financeRatio * this.state.amount) + parseInt(that.state.allottedScale)
+                            }
+                            that.setState({
+                                cpje: cpje,
+                                cpje1: cpje1,
+                                jjje: jjje,
+                                zsje: zsje
+                            }, () => {
+                            })
+                        })
+                    }
+                });
             }
         })
 
     }
     render() {
-        const { type, financeRatio, amount, day, month, single, fwf, makeFeeRate, financeFee, manageFee, separateFeeRate, cpje, cpje1, jjje, zsje, date, allottedScale, positionRatio, secondBoardPositionRatio, monthManageFee } = this.state;
+        const { type, financeRatio, amount, day, month, single, strategy, fwf, makeFeeRate, financeFee, manageFee, separateFeeRate, cpje, cpje1, jjje, zsje, date, allottedScale, positionRatio, secondBoardPositionRatio, monthManageFee } = this.state;
         let plandom;
         if (type == 'day') {
             plandom = day.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'day')}>
@@ -517,6 +559,24 @@ class UserCenter extends React.Component {
             ))
         } else if (type == 'single') {
             plandom = single.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'single')}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+            </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
+                </div>
+            </div>) : (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'}>
+                <div className="m1">
+                    <span className="mm1">{item.financeRatio}</span>倍
+                    </div>
+                <div className="m2">
+                    <span className="mm2">{item.financeRatio * amount}元</span>
+                </div>
+            </div>)
+
+            ))
+        } else if (type == 'strategy') {
+            plandom = strategy.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'strategy')}>
                 <div className="m1">
                     <span className="mm1">{item.financeRatio}</span>倍
             </div>
@@ -594,18 +654,28 @@ class UserCenter extends React.Component {
                         <span onClick={() => this.plans('single')}>
                             <div className={this.state.type === 'single' ? 'active2' : ''}></div>
                             <span className="a2">单票方案</span>
-                        </span></div>) : (<div><span>
-                            <div className={this.state.type === 'day' ? 'active' : ''} ></div>
-                            <span className="a">日方案</span>
                         </span>
-                            <span>
-                                <div className={this.state.type === 'month' ? 'active1' : ''}></div>
-                                <span className="a1">月方案</span>
-                            </span>
-                            <span>
-                                <div className={this.state.type === 'single' ? 'active2' : ''}></div>
-                                <span className="a2">单票方案</span>
-                            </span></div>)}
+                        <span onClick={() => this.plans('strategy')}>
+                            <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
+                            <span className="a3">策略方案</span>
+                        </span>
+                    </div>) : (<div><span>
+                        <div className={this.state.type === 'day' ? 'active' : ''} ></div>
+                        <span className="a">日方案</span>
+                    </span>
+                        <span>
+                            <div className={this.state.type === 'month' ? 'active1' : ''}></div>
+                            <span className="a1">月方案</span>
+                        </span>
+                        <span>
+                            <div className={this.state.type === 'single' ? 'active2' : ''}></div>
+                            <span className="a2">单票方案</span>
+                        </span>
+                        <span>
+                            <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
+                            <span className="a3">策略方案</span>
+                        </span>
+                    </div>)}
 
                 </div>
                 <div className="titlebox scrollbox">

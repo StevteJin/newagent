@@ -229,8 +229,8 @@
 }
 
 .addTabsBox {
-    width: 70%;
-    margin-left: 15%;
+    width: 80%;
+    margin-left: 10%;
     height: 30px;
     line-height: 30px;
     position: relative;
@@ -241,7 +241,7 @@
 .addTabs {
     float: left;
     /* box-shadow: 0px -10px 16px -8px grey; */
-    width: 33.33%;
+    width: 25%;
     text-align: center;
     font-size: 15px;
     color: rgb(99, 96, 96);

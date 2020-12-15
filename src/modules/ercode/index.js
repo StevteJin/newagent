@@ -23,7 +23,8 @@ class ercode extends React.Component {
         this.browserRedirect();
         let that = this;
         window.addEventListener('resize', that.box);
-        let qrUrl = 'http://47.102.151.13//h5tncl/' + localStorage.getItem('uri');
+        // let qrUrl = 'http://47.102.151.13//h5tncl/' + localStorage.getItem('uri');
+        let qrUrl = "http://" + window.location.host + '/app/#/main/signup/' + localStorage.getItem('uri');
         this.setState({
             qrUrl: qrUrl
         })

@@ -157,6 +157,22 @@ class deposit extends React.Component {
                             })
                         }
                     })
+                }else if (goId == 4) {
+                    this.setState({
+                        financeData: this.state.staticData['strategy'],
+                        nameMsg: '策略收益'
+                    }, () => {
+                        this.finance();
+                        if (this.state.userInfo.allottedScale == 0) {
+                            this.setState({
+                                mulType: this.state.detail[0].mul
+                            })
+                        } else {
+                            this.setState({
+                                mulType: this.state.userInfo.financeRatio
+                            })
+                        }
+                    })
                 } else {
                     this.setState({
                         financeData: this.state.staticData['single'],

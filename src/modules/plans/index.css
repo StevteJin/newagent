@@ -40,6 +40,7 @@
     background-color: #fff;
     position: absolute;
     left: 160px;
+    top: 0px;
 }
 
 .planmenu .a1 {
@@ -49,18 +50,39 @@
 }
 
 .planmenu .active2 {
+    width: 162px;
+    height: 30px;
+    transform: skew(50deg);
+    -webkit-transform: skew(50deg);
+    -moz-transform: skew(50deg);
+    -o-transform: skew(50deg);
+    -ms-transform: skew(50deg);
+    background-color: #fff;
+    position: absolute;
+    left: 330px;
+    top: 0px;
+}
+
+.planmenu .active3 {
     border-bottom: 30px solid #fff;
     border-left: 30px solid transparent;
     width: 162px;
     transform: rotateX(180deg);
     position: absolute;
-    left: 330px;
+    left: 500px;
     top: 0px;
 }
 
 .planmenu .a2 {
     position: absolute;
     left: 390px;
+    top: 1px;
+}
+
+
+.planmenu .a3 {
+    position: absolute;
+    left: 560px;
     top: 1px;
 }
 
