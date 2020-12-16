@@ -72,12 +72,38 @@ class UserCenter extends React.Component {
         let that = this;
         httpAxios(url, method, false, options).then(res => {
             let resultInfo = res.resultInfo;
-            this.setState({
-                day: resultInfo.day,
-                month: resultInfo.month,
-                single: resultInfo.single,
-                strategy: resultInfo.strategy
-            }, () => { })
+            console.log('我是结果', resultInfo);
+            if (JSON.stringify(resultInfo) != '{}') {
+                console.log('执行1');
+                let that = this;
+                for (let key in resultInfo) {
+                    if (key && key == 'day') {
+                        that.setState({
+                            day: resultInfo.day
+                        })
+                    } else if (key && key == 'month') {
+                        that.setState({
+                            month: resultInfo.month
+                        })
+                    } else if (key && key == 'single') {
+                        that.setState({
+                            single: resultInfo.single
+                        })
+                    } else if (key && key == 'strategy') {
+                        that.setState({
+                            strategy: resultInfo.strategy
+                        })
+                    }
+                }
+            } else {
+                console.log('执行2');
+                this.setState({
+                    day: "",
+                    month: "",
+                    single: "",
+                    strategy: ""
+                })
+            }
         }, error => {
             console.log(error.response)
             if (error.response.status == 400) {
@@ -521,7 +547,7 @@ class UserCenter extends React.Component {
     render() {
         const { type, financeRatio, amount, day, month, single, strategy, fwf, makeFeeRate, financeFee, manageFee, separateFeeRate, cpje, cpje1, jjje, zsje, date, allottedScale, positionRatio, secondBoardPositionRatio, monthManageFee } = this.state;
         let plandom;
-        if (type == 'day') {
+        if (type == 'day' && day.length > 0) {
             plandom = day.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'day')}>
                 <div className="m1">
                     <span className="mm1">{item.financeRatio}</span>倍
@@ -539,7 +565,7 @@ class UserCenter extends React.Component {
             </div>)
 
             ))
-        } else if (type == 'month') {
+        } else if (type == 'month' && month.length > 0) {
             plandom = month.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'month')}>
                 <div className="m1">
                     <span className="mm1">{item.financeRatio}</span>倍
@@ -557,7 +583,7 @@ class UserCenter extends React.Component {
             </div>)
 
             ))
-        } else if (type == 'single') {
+        } else if (type == 'single' && single.length > 0) {
             plandom = single.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'single')}>
                 <div className="m1">
                     <span className="mm1">{item.financeRatio}</span>倍
@@ -575,7 +601,7 @@ class UserCenter extends React.Component {
             </div>)
 
             ))
-        } else if (type == 'strategy') {
+        } else if (type == 'strategy' && strategy > 0) {
             plandom = strategy.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'strategy')}>
                 <div className="m1">
                     <span className="mm1">{item.financeRatio}</span>倍
@@ -643,109 +669,131 @@ class UserCenter extends React.Component {
                     <p>9.结算期限及费用：免息日结算前清仓的，不收取管理费，如到时操盘手未清仓的，资金方将按天收取持仓市值的管理费；</p>
                 </Modal>
                 <div className="planmenu">
-                    {allottedScale == 0 ? (<div><span onClick={() => this.plans('day')}>
-                        <div className={this.state.type === 'day' ? 'active' : ''} ></div>
-                        <span className="a">日方案</span>
-                    </span>
-                        <span onClick={() => this.plans('month')}>
-                            <div className={this.state.type === 'month' ? 'active1' : ''}></div>
-                            <span className="a1">月方案</span>
-                        </span>
-                        <span onClick={() => this.plans('single')}>
-                            <div className={this.state.type === 'single' ? 'active2' : ''}></div>
-                            <span className="a2">单票方案</span>
-                        </span>
-                        <span onClick={() => this.plans('strategy')}>
-                            <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
-                            <span className="a3">策略方案</span>
-                        </span>
-                    </div>) : (<div><span>
-                        <div className={this.state.type === 'day' ? 'active' : ''} ></div>
-                        <span className="a">日方案</span>
-                    </span>
-                        <span>
-                            <div className={this.state.type === 'month' ? 'active1' : ''}></div>
-                            <span className="a1">月方案</span>
-                        </span>
-                        <span>
-                            <div className={this.state.type === 'single' ? 'active2' : ''}></div>
-                            <span className="a2">单票方案</span>
-                        </span>
-                        <span>
-                            <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
-                            <span className="a3">策略方案</span>
-                        </span>
-                    </div>)}
+                    {allottedScale == 0 ? (
+                        <div>
+                            {day.length > 0 ? (<span onClick={() => this.plans('day')}>
+                                <div className={this.state.type === 'day' ? 'active' : ''} ></div>
+                                <span className="a">日方案</span>
+                            </span>) : ""}
+                            {month.length > 0 ? (
+                                <span onClick={() => this.plans('month')}>
+                                    <div className={this.state.type === 'month' ? 'active1' : ''}></div>
+                                    <span className="a1">月方案</span>
+                                </span>
+                            ) : ""}
+                            {single.length > 0 ? (
+                                <span onClick={() => this.plans('single')}>
+                                    <div className={this.state.type === 'single' ? 'active2' : ''}></div>
+                                    <span className="a2">单票方案</span>
+                                </span>
+                            ) : ""}
+                            {strategy.length > 0 ? (
+                                <span onClick={() => this.plans('strategy')}>
+                                    <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
+                                    <span className="a3">策略方案</span>
+                                </span>
+                            ) : ""}
+
+                        </div>) : (
+                            <div>
+                                {day.length > 0 ? (
+                                    <span>
+                                        <div className={this.state.type === 'day' ? 'active' : ''} ></div>
+                                        <span className="a">日方案</span>
+                                    </span>
+                                ) : ""}
+                                {month.length > 0 ? (
+                                    <span>
+                                        <div className={this.state.type === 'month' ? 'active1' : ''}></div>
+                                        <span className="a1">月方案</span>
+                                    </span>
+                                ) : ""}
+                                {single.length > 0 ? (
+                                    <span>
+                                        <div className={this.state.type === 'single' ? 'active2' : ''}></div>
+                                        <span className="a2">单票方案</span>
+                                    </span>
+                                ) : ""}
+                                {strategy.length > 0 ? (
+                                    <span>
+                                        <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
+                                        <span className="a3">策略方案</span>
+                                    </span>
+                                ) : ""}
+                            </div>)}
 
                 </div>
-                <div className="titlebox scrollbox">
-                    <div className="minscroll">
-                        <div className="tbox">
-                            <div className="toptitle1">1：请输入您的风险保证金 金额</div>
-                            <Input type="number" className="topinput" onChange={this.setmoney} placeholder="金额" />
-                        </div>
-                        <div className="tbox">
-                            <div className="toptitle2">2.请选择方案</div>
-                            <div>
-                                {plandom}
+                {day.length > 0 || month.length > 0 || single.length > 0 || strategy.length > 0 ? (
+                    <div className="titlebox scrollbox">
+                        <div className="minscroll">
+                            <div className="tbox">
+                                <div className="toptitle1">1：请输入您的风险保证金 金额</div>
+                                <Input type="number" className="topinput" onChange={this.setmoney} placeholder="金额" />
                             </div>
-                        </div>
-                        <div className="tbox">
-                            <div className="toptitle3">3.方案详情</div>
-                            <div className="strg">
+                            <div className="tbox">
+                                <div className="toptitle2">2.请选择方案</div>
                                 <div>
-                                    <span className="sleft">操盘资金</span>
-                                    {allottedScale == 0 ? (<span className="sright">{cpje}</span>) : (<span className="sright">{cpje1}</span>)}
+                                    {plandom}
                                 </div>
-                                <div>{allottedScale == 0 ? (<span className="sleft">保证金</span>) : (<span className="sleft">新增保证金</span>)}
-                                    <span className="sright">{amount}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">建仓费</span>
-                                    <span className="sright">{fwf}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">建仓费率</span>
-                                    {allottedScale == 0 ? (<span className="sright">{makeFeeRate}</span>) : (<span className="sright">0</span>)}
-                                </div>
-                                <div>
-                                    <span className="sleft">管理费率</span>
-                                    {allottedScale == 0 ? (<span className="sright">{financeFee}</span>) : (<span className="sright">0</span>)}
-                                </div>
-                                {type == 'month' ? (
+                            </div>
+                            <div className="tbox">
+                                <div className="toptitle3">3.方案详情</div>
+                                <div className="strg">
                                     <div>
-                                        <span className="sleft">本月管理费</span>
-                                        <span className="sright">{monthManageFee}</span>
+                                        <span className="sleft">操盘资金</span>
+                                        {allottedScale == 0 ? (<span className="sright">{cpje}</span>) : (<span className="sright">{cpje1}</span>)}
                                     </div>
-                                ) : ''}
-                                <div>
-                                    <span className="sleft">警戒线</span>
-                                    <span className="sright">{jjje}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">平仓线</span>
-                                    <span className="sright">{zsje}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">开始交易</span>
-                                    <span className="sright">{date}</span>
-                                </div>
-                                <div>
-                                    <span className="sleft">持仓限制</span>
-                                    <span className="sright">个股持仓比例：{positionRatio}&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;创业板持仓比例：{secondBoardPositionRatio}</span>
+                                    <div>{allottedScale == 0 ? (<span className="sleft">保证金</span>) : (<span className="sleft">新增保证金</span>)}
+                                        <span className="sright">{amount}</span>
+                                    </div>
+                                    <div>
+                                        <span className="sleft">建仓费</span>
+                                        <span className="sright">{fwf}</span>
+                                    </div>
+                                    <div>
+                                        <span className="sleft">建仓费率</span>
+                                        {allottedScale == 0 ? (<span className="sright">{makeFeeRate}</span>) : (<span className="sright">0</span>)}
+                                    </div>
+                                    <div>
+                                        <span className="sleft">管理费率</span>
+                                        {allottedScale == 0 ? (<span className="sright">{financeFee}</span>) : (<span className="sright">0</span>)}
+                                    </div>
+                                    {type == 'month' ? (
+                                        <div>
+                                            <span className="sleft">本月管理费</span>
+                                            <span className="sright">{monthManageFee}</span>
+                                        </div>
+                                    ) : ''}
+                                    <div>
+                                        <span className="sleft">警戒线</span>
+                                        <span className="sright">{jjje}</span>
+                                    </div>
+                                    <div>
+                                        <span className="sleft">平仓线</span>
+                                        <span className="sright">{zsje}</span>
+                                    </div>
+                                    <div>
+                                        <span className="sleft">开始交易</span>
+                                        <span className="sright">{date}</span>
+                                    </div>
+                                    <div>
+                                        <span className="sleft">持仓限制</span>
+                                        <span className="sright">个股持仓比例：{positionRatio}&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;创业板持仓比例：{secondBoardPositionRatio}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="tbox">
-                            <div className="ty">
-                                <Checkbox onChange={this.onChange}></Checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div className="tbox">
+                                <div className="ty">
+                                    <Checkbox onChange={this.onChange}></Checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
                             <span className="tiaoyue" onClick={() => this.changeBool()}>已阅读并同意操盘规则</span>
+                                </div>
+                                {allottedScale == 0 ? (<div className="apply" onClick={() => this.deposit()}>立即申请</div>) : (<div className="apply1"><span className="applya" onClick={() => this.add('true')}>加配</span>
+                                    <span className="applyb" onClick={() => this.add('false')}>补仓</span></div>)}
                             </div>
-                            {allottedScale == 0 ? (<div className="apply" onClick={() => this.deposit()}>立即申请</div>) : (<div className="apply1"><span className="applya" onClick={() => this.add('true')}>加配</span>
-                                <span className="applyb" onClick={() => this.add('false')}>补仓</span></div>)}
                         </div>
                     </div>
-                </div>
+                ) : (<div className='zanwu'>暂无资金方案</div>)}
+
             </div>
         );
     }
