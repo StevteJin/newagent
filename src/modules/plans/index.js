@@ -355,8 +355,17 @@ class UserCenter extends React.Component {
     }
 
     plans(type) {
+        this.setmoney="";
         this.setState({
-            type: type
+            type: type,
+            financeRatio: "",
+            cpje:"",
+            amount:0,
+            fwf:"",
+            makeFeeRate:"",
+            financeFee:"",
+            jjje:"",
+            zsje:""
         }, () => {
 
         })
@@ -601,7 +610,7 @@ class UserCenter extends React.Component {
             </div>)
 
             ))
-        } else if (type == 'strategy' && strategy > 0) {
+        } else if (type == 'strategy' && strategy.length > 0) {
             plandom = strategy.map(item => (allottedScale == 0 ? (<div key={item.id} className={financeRatio == item.financeRatio ? 'activeborder multiple' : 'multiple'} onClick={() => this.getFinanceRatio(item.financeRatio, 'strategy')}>
                 <div className="m1">
                     <span className="mm1">{item.financeRatio}</span>倍
