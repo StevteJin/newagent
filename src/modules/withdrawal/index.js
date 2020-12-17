@@ -6,7 +6,7 @@ import store from '../../store/store'
 //引入请求接口
 import httpAxios from '../../helpers/request';
 import './index.css';
-import { Input, Select, Modal,Button } from 'antd';
+import { Input, Select, Modal, Button } from 'antd';
 const { Option } = Select;
 
 class UserCenter extends React.Component {
@@ -78,6 +78,10 @@ class UserCenter extends React.Component {
             }
             let url = '/tn/tntg/lift', method = 'post';
             httpAxios(url, method, false, options).then(res => {
+                this.setState({
+                    visible: true,
+                    msg: "提现申请已提交,等待后台审核"
+                });
                 this.getBalance();
             }, error => {
                 console.log(error.response)
@@ -282,11 +286,19 @@ class UserCenter extends React.Component {
             let url = '/tn/tn/bind/card', method = 'post';
             httpAxios(url, method, false, options).then(res => {
                 if (res.success == true) {
-                    this.setState({
-                        bankShow: false,
-                        visible: true,
-                        msg: '修改成功'
-                    })
+                    this.getCardInfo();
+                    if (this.state.cardInfo) {
+                        this.setState({
+                            visible: true,
+                            msg: '银行卡信息修改成功'
+                        })
+                    } else {
+                        this.setState({
+                            visible: true,
+                            msg: '银行卡信息绑定成功'
+                        })
+                    }
+                    this.props.history.push('/withdrawal');
                 }
             }, error => {
                 console.log(error.response)
@@ -391,7 +403,9 @@ class UserCenter extends React.Component {
                     </div>
                     <div className="bank">
                         <span className="title">会员ID</span>
-                        <Input style={{ width: 300 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} disabled={cardInfo ? true : false} />
+                        {cardInfo ? (
+                            <Input style={{ width: 300 }} value={this.state.accountCode} disabled={true} />
+                        ) : (<Input style={{ width: 300 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} />)}
                     </div>
                     <div className="addSubmite" onClick={() => this.submite()}>完成</div>
                 </div>) : (

@@ -114,7 +114,7 @@ class transfer extends React.Component {
             httpAxios('/tn/tntg/lift', 'post', false, data).then(res => {
                 this.setState({
                     visible: true,
-                    msg: "提现申请已提交"
+                    msg: "提现申请已提交,等待后台审核"
                 });
                 this.props.history.push('/usercenter');
             }, error => {

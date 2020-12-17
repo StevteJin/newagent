@@ -302,10 +302,19 @@ class card extends React.Component {
             let url = '/tn/tn/bind/card', method = 'post';
             httpAxios(url, method, false, options).then(res => {
                 if (res.success == true) {
-                    this.setState({
-                        visible: true,
-                        msg: '银行卡信息修改成功'
-                    })
+                    this.getCardInfo();
+                    if (this.state.cardInfo) {
+                        this.setState({
+                            visible: true,
+                            msg: '银行卡信息修改成功'
+                        })
+                    } else {
+                        this.setState({
+                            visible: true,
+                            msg: '银行卡信息绑定成功'
+                        })
+                    }
+                    //需要请求银行卡信息
                     this.props.history.push('/tixian');
                 }
             }, error => {
@@ -323,7 +332,7 @@ class card extends React.Component {
 
     }
     render() {
-        const { isPc, cardInfo, bankIdList, provinceIdList, cityIdList, subBranchIdList, bankId, provinceId, cityId, subBranchId, bankName, provinceName, cityName, subBranchName, bankShow, balance, pathpath } = this.state;
+        const { isPc, cardInfo, accountCode, bankIdList, provinceIdList, cityIdList, subBranchIdList, bankId, provinceId, cityId, subBranchId, bankName, provinceName, cityName, subBranchName, bankShow, balance, pathpath } = this.state;
         let bankIdDom, provinceIdDom, cityIdDom, subBranchIdDom;
         if (bankIdList && bankIdList.length > 0) {
             bankIdDom = bankIdList.map(item => (
@@ -404,7 +413,9 @@ class card extends React.Component {
                     </div>
                     <div className="bank">
                         <span className="title">会员ID</span>
-                        <Input style={{ width: 240 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} disabled={cardInfo ? true : false} />
+                        {cardInfo ? (
+                            <Input style={{ width: 240 }} value={this.state.accountCode} disabled={true} />
+                        ) : (<Input style={{ width: 240 }} placeholder="请输入手机号" value={this.state.mobile} onChange={e => this.setState({ mobile: e.target.value })} />)}
                     </div>
                     {cardInfo && pathpath == '/card/tixian' ? "" : (
                         <div className="addSubmite1" onClick={() => this.submite()}>完成</div>
