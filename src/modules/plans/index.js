@@ -355,17 +355,17 @@ class UserCenter extends React.Component {
     }
 
     plans(type) {
-        this.setmoney="";
+        this.setmoney = "";
         this.setState({
             type: type,
             financeRatio: "",
-            cpje:"",
-            amount:0,
-            fwf:"",
-            makeFeeRate:"",
-            financeFee:"",
-            jjje:"",
-            zsje:""
+            cpje: "",
+            amount: 0,
+            fwf: "",
+            makeFeeRate: "",
+            financeFee: "",
+            jjje: "",
+            zsje: ""
         }, () => {
 
         })
@@ -680,53 +680,43 @@ class UserCenter extends React.Component {
                 <div className="planmenu">
                     {allottedScale == 0 ? (
                         <div>
-                            {day.length > 0 ? (<span onClick={() => this.plans('day')}>
-                                <div className={this.state.type === 'day' ? 'active' : ''} ></div>
-                                <span className="a">日方案</span>
+                            {day.length > 0 ? (<span onClick={() => this.plans('day')} className="afa" className={this.state.type == 'day' ? 'activestyle afa' : 'afa'}>
+                                <span className="astyle">日方案</span>
                             </span>) : ""}
                             {month.length > 0 ? (
-                                <span onClick={() => this.plans('month')}>
-                                    <div className={this.state.type === 'month' ? 'active1' : ''}></div>
-                                    <span className="a1">月方案</span>
+                                <span onClick={() => this.plans('month')} className={this.state.type == 'month' ? 'activestyle afa' : ' afa'}>
+                                    <span className="astyle">月方案</span>
                                 </span>
                             ) : ""}
                             {single.length > 0 ? (
-                                <span onClick={() => this.plans('single')}>
-                                    <div className={this.state.type === 'single' ? 'active2' : ''}></div>
-                                    <span className="a2">单票方案</span>
+                                <span onClick={() => this.plans('single')} className={this.state.type == 'single' ? 'activestyle afa' : ' afa'}>
+                                    <span className="astyle">单票方案</span>
                                 </span>
                             ) : ""}
                             {strategy.length > 0 ? (
-                                <span onClick={() => this.plans('strategy')}>
-                                    <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
-                                    <span className="a3">策略方案</span>
+                                <span onClick={() => this.plans('strategy')} className={this.state.type == 'strategy' ? 'activestyle afa' : ' afa'}>
+                                    <span className="astyle">策略方案</span>
                                 </span>
                             ) : ""}
 
                         </div>) : (
                             <div>
-                                {day.length > 0 ? (
-                                    <span>
-                                        <div className={this.state.type === 'day' ? 'active' : ''} ></div>
-                                        <span className="a">日方案</span>
-                                    </span>
-                                ) : ""}
+                                {day.length > 0 ? (<span className="afa" className={this.state.type == 'day' ? 'activestyle afa' : 'afa'}>
+                                    <span className="astyle">日方案</span>
+                                </span>) : ""}
                                 {month.length > 0 ? (
-                                    <span>
-                                        <div className={this.state.type === 'month' ? 'active1' : ''}></div>
-                                        <span className="a1">月方案</span>
+                                    <span className={this.state.type == 'month' ? 'activestyle afa' : ' afa'}>
+                                        <span className="astyle">月方案</span>
                                     </span>
                                 ) : ""}
                                 {single.length > 0 ? (
-                                    <span>
-                                        <div className={this.state.type === 'single' ? 'active2' : ''}></div>
-                                        <span className="a2">单票方案</span>
+                                    <span className={this.state.type == 'single' ? 'activestyle afa' : ' afa'}>
+                                        <span className="astyle">单票方案</span>
                                     </span>
                                 ) : ""}
                                 {strategy.length > 0 ? (
-                                    <span>
-                                        <div className={this.state.type === 'strategy' ? 'active3' : ''}></div>
-                                        <span className="a3">策略方案</span>
+                                    <span className={this.state.type == 'strategy' ? 'activestyle afa' : ' afa'}>
+                                        <span className="astyle">策略方案</span>
                                     </span>
                                 ) : ""}
                             </div>)}

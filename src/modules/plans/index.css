@@ -2,12 +2,12 @@
     height: 31px;
     background-color: #E5E5E5;
     position: relative;
+    padding-left: 17px;
 }
 
 .planmenu div {
     display: inline-block;
     height: 30px;
-    width: 162px;
     line-height: 30px;
     text-align: center;
     cursor: pointer;
@@ -270,6 +270,37 @@
 .zanwu {
     font-size: 40px;
     text-align: center;
-    margin-top:300px;
+    margin-top: 300px;
     font-weight: bold;
+}
+
+.astyle {
+    display: inline-block;
+    padding-left: 10px;
+}
+
+.afa {
+    display: inline-block;
+    width: 160px;
+    text-align: center;
+}
+
+.activestyle {
+    background-color: #fff;
+    transform: skew(-50deg);
+    -webkit-transform: skew(-50deg);
+    -moz-transform: skew(-50deg);
+    -o-transform: skew(-50deg);
+    -ms-transform: skew(-50deg);
+    background-color: #fff;
+    height: 30px;
+}
+
+.activestyle .astyle {
+    transform: skew(50deg);
+    -webkit-transform: skew(50deg);
+    -moz-transform: skew(50deg);
+    -o-transform: skew(50deg);
+    -ms-transform: skew(50deg);
+    height: 30px;
 }
