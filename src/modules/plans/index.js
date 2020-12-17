@@ -355,17 +355,17 @@ class UserCenter extends React.Component {
     }
 
     plans(type) {
-        this.setmoney = "";
+        // this.setmoney = "";
         this.setState({
             type: type,
-            financeRatio: "",
-            cpje: "",
-            amount: 0,
-            fwf: "",
-            makeFeeRate: "",
-            financeFee: "",
-            jjje: "",
-            zsje: ""
+            // financeRatio: "",
+            // cpje: "",
+            // amount: 0,
+            // fwf: "",
+            // makeFeeRate: "",
+            // financeFee: "",
+            // jjje: "",
+            // zsje: ""
         }, () => {
 
         })
