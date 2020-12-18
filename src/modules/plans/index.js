@@ -14,7 +14,7 @@ class UserCenter extends React.Component {
         this.state = {
             type: "day",
             financeRatio: "",
-            amount: 0,
+            amount: "",
             day: [],
             month: [],
             single: [],
@@ -358,16 +358,16 @@ class UserCenter extends React.Component {
         // this.setmoney = "";
         this.setState({
             type: type,
-            // financeRatio: "",
-            // cpje: "",
-            // amount: 0,
-            // fwf: "",
-            // makeFeeRate: "",
-            // financeFee: "",
-            // jjje: "",
-            // zsje: ""
+            financeRatio: "",
+            amount: "",
+            cpje: "",
+            fwf: "",
+            makeFeeRate: "",
+            financeFee: "",
+            jjje: "",
+            zsje: ""
         }, () => {
-
+            this.getFinanceRatio(this.state.financeRatio, this.state.type);
         })
     }
     getMonthManageFee() {
@@ -727,7 +727,7 @@ class UserCenter extends React.Component {
                         <div className="minscroll">
                             <div className="tbox">
                                 <div className="toptitle1">1：请输入您的风险保证金 金额</div>
-                                <Input type="number" className="topinput" onChange={this.setmoney} placeholder="金额" />
+                                <Input type="number" value={amount} className="topinput" onChange={this.setmoney} placeholder="金额" />
                             </div>
                             <div className="tbox">
                                 <div className="toptitle2">2.请选择方案</div>

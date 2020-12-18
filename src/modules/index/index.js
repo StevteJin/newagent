@@ -266,7 +266,7 @@ class MainContent extends React.Component {
             return item;
         })
         console.log('数组1', menuData1)
-        let token = localStorage.getItem('token');
+        let token = localStorage.getItem('markettoken');
         routeDom = menuData1.map((item, index) => (
             token ? (<Route exact path={item.path} component={item.where} key={item.key} />) : (<Redirect
                 to={{

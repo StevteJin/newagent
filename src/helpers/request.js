@@ -5,8 +5,7 @@ import { Table, Pagination, Modal, Input, Button, DatePicker, Select, Tooltip, P
 // 添加一个请求拦截器
 axios.interceptors.request.use(config => {
   //如果存在token,请求头里面设置
-  var token = localStorage.getItem("token") || '';
-  console.log('我是token', token)
+  var token = localStorage.getItem("markettoken") || '';
   if (token) {
     config.headers.Authorization = token;
   }

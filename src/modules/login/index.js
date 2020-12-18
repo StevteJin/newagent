@@ -54,7 +54,7 @@ class login extends React.Component {
             console.log(res);
             if (res.success == true) {
                 let resultInfo = res.resultInfo;
-                localStorage.setItem('token', resultInfo.token);
+                localStorage.setItem('markettoken', resultInfo.token);
                 localStorage.setItem('is_agent', resultInfo.is_agent);
                 localStorage.setItem('uri', resultInfo.uri);
                 localStorage.setItem('username', this.state.username);
