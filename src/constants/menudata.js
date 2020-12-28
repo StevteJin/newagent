@@ -21,6 +21,14 @@ const menu = [{
     filter: [],
     needTime: { key: 'create_time', value: 'RANGE' }
 }, {
+    path: '/orderSttleInvite',
+    key: 'orderSttleInvite',
+    name: '会员直推统计'
+}, {
+    path: '/inviteList',
+    key: 'inviteList',
+    name: '会员直推关系'
+}, {
     path: '/mIndex',
     key: 'mIndex',
     name: '首页',

@@ -32,6 +32,8 @@ import bankcard from '../bankcard/index';
 import tixian from '../tixian/index';
 import transfer from '../transfer/index';
 import ercode from '../ercode/index';
+import orderSttleInvite from '../orderSttleInvite/index';
+import inviteList from '../inviteList/index';
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -256,6 +258,10 @@ class MainContent extends React.Component {
                 }
             } else if (item.path == '/ercode') {
                 item.where = ercode
+            } else if (item.path == '/orderSttleInvite') {
+                item.where = orderSttleInvite
+            } else if (item.path == '/inviteList') {
+                item.where = inviteList
             } else {
                 if (isPc) {
                     item.where = A
