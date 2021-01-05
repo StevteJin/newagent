@@ -29,9 +29,17 @@ class EditableTable extends React.Component {
       startTime: "",
       endTime: "",
       current: 1,
+      reallyShow: false,
+      fromOne: "",
+      toOne: "",
+      isEdit: false,
       data: [],
       fromUser: "",
       fromUserName: "",
+      selectList: "",
+      selectList1: "",
+      selectDom: "",
+      selectDom1: "",
       dateString: "",
       total: "",
       type: "",
@@ -105,7 +113,131 @@ class EditableTable extends React.Component {
       }
     })
   }
+  getAccountList() {
+    let url = '/tn/tntg/agent-invite/edit-pre';
+    let method = 'post';
+    let beel = false;
+    let options = null;
+    httpAxios(url, method, beel, options).then(res => {
+      console.log('我是数据666', res)
+      this.setState({
+        selectList: res.data.fromUser,
+        selectList1: res.data.toUser
+      }, () => {
+        let selectDom, selectDom1;
+        if (this.state.selectList && this.state.selectList.length > 0) {
+          selectDom = this.state.selectList.map((item, index) => (
+            <Option value={item.key}>{item.value}</Option>
+          ))
+          selectDom1 = this.state.selectList1.map((item, index) => (
+            <Option value={item.key}>{item.value}</Option>
+          ))
+        } else {
+          selectDom = <Option value=''>无</Option>
+          selectDom1 = <Option value=''>无</Option>
+        }
+        this.setState({
+          selectDom: selectDom,
+          selectDom1: selectDom1
+        })
+      })
+    })
+  }
+  addNewNow() {
+    this.getAccountList();
+    this.setState({
+      reallyShow: true,
+      fromOne: "",
+      toOne: "",
+      isEdit: false
+    })
+  }
+  noShowReal() {
+    this.setState({
+      reallyShow: false
+    })
+  }
+  selectChange(selectedOption) {
+    if (!selectedOption) {
+      selectedOption = ''
+    }
+    console.log('没值', selectedOption)
+    this.setState({
+      fromOne: selectedOption
+    }, () => {
+      console.log('选择后', this.state.fromOne)
+    })
+  }
+  selectChange1(selectedOption) {
+    if (!selectedOption) {
+      selectedOption = ''
+    }
+    this.setState({
+      toOne: selectedOption
+    })
+  }
+  addNewPerson() {
+    if (this.state.selectList && this.state.selectList.length > 0) {
+      if (this.state.fromOne == this.state.toOne) {
+        this.setState({
+          visible: true,
+          msg: '推荐人和客户不能一样'
+        }, () => {
+          console.log('666', this.state.msg)
+        });
+      } else {
+        let url;
 
+        if (this.state.isEdit == true) {
+          url = '/tn/tntg/agent-invite/update';
+        } else {
+          url = '/tn/tntg/agent-invite/save';
+        }
+        let method = 'post';
+        let beel = false;
+        let options = {
+          fromUser: this.state.fromOne,
+          toUser: this.state.toOne
+        };
+        httpAxios(url, method, beel, options).then(res => {
+          if (res.code === 0) {
+            this.setState({
+              reallyShow: false,
+              visible: true,
+              msg: '推荐成功'
+            })
+            this.searchNow();
+          } else {
+            this.setState({
+              visible: true,
+              msg: res.info
+            }, () => {
+              console.log('666', this.state.msg)
+            });
+          }
+        }, error => {
+          console.log(error.response)
+          if (error.response.status == 400) {
+            let data = JSON.stringify(error.response.data.resultInfo);
+            data = data.replace(/^(\s|")+|(\s|")+$/g, '');
+            this.setState({
+              visible: true,
+              msg: data
+            })
+
+          }
+        })
+      }
+    } else {
+      this.setState({
+        visible: true,
+        msg: '没有推荐人和客户，不能提交'
+      }, () => {
+        console.log('666', this.state.msg)
+      });
+    }
+
+  }
   //分页改变
   onChange = page => {
     console.log(page);
@@ -147,6 +279,16 @@ class EditableTable extends React.Component {
     }
     var currentdate = year + seperator1 + month + seperator1 + strDate;
     return currentdate;
+  }
+  changeLast(text, record) {
+    this.getAccountList();
+    console.log('修改', text, record);
+    this.setState({
+      reallyShow: true,
+      fromOne: record.fromUser,
+      toOne: record.toUser,
+      isEdit: true
+    })
   }
   //时间改变
   onChangeTime = (value, dateString) => {
@@ -211,7 +353,7 @@ class EditableTable extends React.Component {
     }
   }
   render() {
-    const { data, total, dateString, type, typeList, source, sourceList, startTime, endTime } = this.state;
+    const { data, total, dateString, type, typeList, source, sourceList, startTime, endTime, reallyShow, isEdit, selectDom, selectDom1, toOne, fromOne } = this.state;
     //这里数据得自己处理
     let columns = [{
       title: "推荐人ID",
@@ -234,6 +376,15 @@ class EditableTable extends React.Component {
       dataIndex: "toUserName",
       key: "toUserName",
       align: 'center'
+    }, {
+      title: '操作',
+      key: 'operation',
+      align: 'center',
+      ellipsis: true,
+      width: 120,
+      dataIndex: 'operation',
+      render: (text, record) =>
+        <a onClick={() => this.changeLast(text, record)}>修改</a>
     }];
 
     return (
@@ -246,6 +397,27 @@ class EditableTable extends React.Component {
           footer={[<Button key="submit" type="primary" onClick={this.handleOk}>确定</Button>]}>
           <p>{this.state.msg}</p>
         </Modal>
+        {
+          reallyShow == true ?
+            <div className='bigSelectBox'>
+              <div className="selectBox">
+                <div className="closeNow" onClick={() => this.noShowReal()}>X</div>
+                <div className="tuijian">
+                  <label>客户 : </label>
+                  <Select style={{ width: 200 }} onChange={(e) => this.selectChange1(e)} defaultValue={toOne} disabled={isEdit == true} allowClear>
+                    {selectDom}
+                  </Select>
+                </div>
+                <div className="tuijian">
+                  <label>推荐人 : </label>
+                  <Select style={{ width: 200 }} onChange={(e) => this.selectChange(e)} defaultValue={fromOne} allowClear>
+                    {selectDom1}
+                  </Select>
+                </div>
+                <Button className="addBtn" type="primary" onClick={() => this.addNewPerson()}>确定</Button>
+              </div>
+            </div> : ''
+        }
         <div className="searchBox">
           <div className='inputArray'>
             <label>推荐人ID :</label>
@@ -256,6 +428,7 @@ class EditableTable extends React.Component {
             <Input className='searchSelect' placeholder="推荐人名称" value={this.state.fromUserName} onChange={e => this.setState({ fromUserName: e.target.value })} />
           </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
+          <Button className="searchBtn" type="primary" onClick={() => this.addNewNow()}>新增</Button>
         </div>
         <div className="tableBox">
           <Table size="small" columns={columns} dataSource={data} scroll={{ y: 670 }} pagination={false} />

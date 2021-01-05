@@ -30,6 +30,8 @@ class EditableTable extends React.Component {
       endTime: "",
       current: 1,
       data: [],
+      total_deal_amount: "",
+      total_deal_cnt: "",
       dateString: "",
       total: "",
       type: "",
@@ -96,7 +98,9 @@ class EditableTable extends React.Component {
               if (res.code == 200) {
                 this.setState({
                   data: res.data.rows,
-                  total: res.data.total
+                  total: res.data.total,
+                  total_deal_amount: res.data.ext.total_deal_amount,
+                  total_deal_cnt: res.data.ext.total_deal_cnt
                 })
               } else {
 
@@ -129,7 +133,9 @@ class EditableTable extends React.Component {
         if (res.code == 200) {
           this.setState({
             data: res.data.rows,
-            total: res.data.total
+            total: res.data.total,
+            total_deal_amount: res.data.ext.total_deal_amount,
+            total_deal_cnt: res.data.ext.total_deal_cnt
           })
         } else {
 
@@ -286,7 +292,7 @@ class EditableTable extends React.Component {
     }
   }
   render() {
-    const { data, total, dateString, type, typeList, source, sourceList, startTime, endTime } = this.state;
+    const { data, total, dateString, type, typeList, source, sourceList, startTime, endTime, total_deal_amount, total_deal_cnt } = this.state;
     //这里数据得自己处理
     let columns = [{
       title: "会员ID",
@@ -372,6 +378,12 @@ class EditableTable extends React.Component {
         <div className="tableBox">
           <Table size="small" columns={columns} dataSource={data} scroll={{ y: 670 }} pagination={false} />
           <div className="pagen">
+            <div className="tongji">
+              <span>统计</span>
+              <span>
+                总成交金额：{total_deal_amount}</span>
+              <span> 总成交数量：{total_deal_cnt}</span>
+            </div>
             <Pagination size="small" current={this.state.current} defaultPageSize={16} onChange={this.onChange} total={total} />
           </div>
         </div>
